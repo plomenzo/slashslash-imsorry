@@ -52,6 +52,14 @@ public class WebController {
         return "OK";
     }
 
+    @RequestMapping(value = "/cs480/isaac", method = RequestMethod.GET)
+    String isaac() {
+    	// You can replace this with other string,
+    	// and run the application locally to check your changes
+    	// with the URL: http://localhost:8080/
+        return "is awesome";
+    }
+    
     /**
      * This is a simple example of how to use a data manager
      * to retrieve the data and return it as an HTTP response.
