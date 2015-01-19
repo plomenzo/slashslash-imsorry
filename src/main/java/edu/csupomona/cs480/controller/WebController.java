@@ -68,6 +68,12 @@ public class WebController {
         return "I am testing the functionality for Assignment 3!";
     }
     
+    @RequestMapping(value = "/cs480/test_e", method = RequestMethod.GET)
+    String ethan() {
+    	//URL: http://localhost:8080/
+        return "WALL-E";
+    }
+    
     /**
      * This is a simple example of how to use a data manager
      * to retrieve the data and return it as an HTTP response.
