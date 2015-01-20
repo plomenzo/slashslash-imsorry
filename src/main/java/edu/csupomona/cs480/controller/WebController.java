@@ -71,7 +71,7 @@ public class WebController {
     @RequestMapping(value = "/cs480/test_e", method = RequestMethod.GET)
     String ethan() {
     	//URL: http://localhost:8080/
-        return "WALL-E";
+        return "WALL-E & Space";
     }
     
     /**
