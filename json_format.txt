@@ -1,0 +1,14 @@
+list
+{
+    item
+    {
+        quantity
+        price
+    },
+    
+    item2
+    {
+        quantity
+        price
+    }
+}
