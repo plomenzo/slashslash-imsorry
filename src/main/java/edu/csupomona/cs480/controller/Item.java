@@ -1,9 +1,11 @@
-package edu.csupomona.cs480.controller;
 /* Item Class: an object class designed to hold the instance variables for an item
  * Author: Vincent Koeten
  * Last Modified: 1/23/15
  * 		By: Vincent Koeten
  */
+
+package edu.csupomona.cs480.controller;
+
 public class Item 
 {
 	private String name;
