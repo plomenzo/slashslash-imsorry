@@ -1,6 +1,6 @@
 /* Item Class: an object class designed to hold the instance variables for an item
  * Author: Vincent Koeten
- * Last Modified: 1/23/15
+ * Last Modified: 1/24/15
  * 		By: Vincent Koeten
  */
 
@@ -66,5 +66,15 @@ public class Item
 		this.createdByUser = createdByUser;
 	}
 	
+	// Equals method to test for equality
+	// returns true if names of both items are the same
+	public boolean equals(Object o)
+	{
+		if((o instanceof Item) && (this.name.equals(((Item)o).name)))
+		{
+			return true;
+		}
+		return false;
+	}
 	
 }
