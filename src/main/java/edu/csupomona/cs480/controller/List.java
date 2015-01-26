@@ -7,10 +7,16 @@
 
 package edu.csupomona.cs480.controller;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.ArrayList;
 
 public class List 
 {
+	//String ID to access
+	@Id
+	private String id;
+	
 	private ArrayList<Item> list;
 	private ArrayList<String> history;
 

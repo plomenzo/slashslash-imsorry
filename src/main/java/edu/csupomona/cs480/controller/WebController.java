@@ -1,7 +1,7 @@
 package edu.csupomona.cs480.controller;
 
 import java.util.Arrays;
-import java.util.List;
+//import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,6 +66,8 @@ public class WebController {
 	 */
     @Autowired
     private UserManager userManager;
+    
+    
     
     //MongoDB Global Objects
     MongoClient mongoClient;
@@ -226,7 +228,7 @@ public class WebController {
     			BasicDBObject [] itemArray = items.toArray(new BasicDBObject[0]);
     			for(int i = 0 ; i < itemArray.length; i++)
     			{
-    				result+= itemArray[i].toString();
+    				result+= itemArray[i].toString() + " ";
     			}
     		}
     	} finally {
