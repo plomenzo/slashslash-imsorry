@@ -21,6 +21,7 @@ import edu.csupomona.cs480.App;
 import edu.csupomona.cs480.data.User;
 import edu.csupomona.cs480.data.provider.UserManager;
 
+
 //MongoDB imports
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
@@ -31,6 +32,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.ParallelScanOptions;
 
 import java.net.UnknownHostException;
@@ -72,14 +74,22 @@ public class WebController {
 	
 	//Constructor for WebController to handle 1 time MongoDB initializations
     public WebController() throws UnknownHostException{
-    	
     	//Initialize connection to MongoDB
     	//Do this once on the WebController constructor to prevent wasted connections
-    	mongoClient = new MongoClient( "localhost" , 27017 );
+    	Boolean useLocal = true;
     	
-    	//Initialize a reference to the specific db
-    	db = mongoClient.getDB( "test" );
-    	    	
+    	if(useLocal)
+    	{
+    		mongoClient = new MongoClient( "localhost" , 27017 );
+        	db = mongoClient.getDB( "test" );
+    	}
+    	else
+    	{
+    		//Uses mongolab mongodb in AWS
+        	mongoClient = new MongoClient(new MongoClientURI("mongodb://dev:devpassword@ds029811.mongolab.com:29811/list_manager_1"));
+        	db = mongoClient.getDB( "list_manager_1" );
+    	}
+        	    	
     	//Initialize references to collections
 		usersColl = db.getCollection("users");
 		listsColl = db.getCollection("lists");
