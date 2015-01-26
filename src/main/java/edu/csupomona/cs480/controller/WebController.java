@@ -1,5 +1,6 @@
 package edu.csupomona.cs480.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+
 import edu.csupomona.cs480.App;
 import edu.csupomona.cs480.data.User;
 import edu.csupomona.cs480.data.provider.UserManager;
+
+//MongoDB imports
+import com.mongodb.BasicDBObject;
+import com.mongodb.BulkWriteOperation;
+import com.mongodb.BulkWriteResult;
+import com.mongodb.Cursor;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.ParallelScanOptions;
+
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 /**
@@ -36,6 +62,30 @@ public class WebController {
 	 */
     @Autowired
     private UserManager userManager;
+    
+    //MongoDB Global Objects
+    MongoClient mongoClient;
+	DB db; 
+	DBCollection usersColl;
+	DBCollection listsColl;
+
+	
+	//Constructor for WebController to handle 1 time MongoDB initializations
+    public WebController() throws UnknownHostException{
+    	
+    	//Initialize connection to MongoDB
+    	//Do this once on the WebController constructor to prevent wasted connections
+    	mongoClient = new MongoClient( "localhost" , 27017 );
+    	
+    	//Initialize a reference to the specific db
+    	db = mongoClient.getDB( "test" );
+    	    	
+    	//Initialize references to collections
+		usersColl = db.getCollection("users");
+		listsColl = db.getCollection("lists");
+    }
+    
+    
 
     /**
      * This is a simple example of how the HTTP API works.
@@ -53,11 +103,43 @@ public class WebController {
     }
 
     @RequestMapping(value = "/cs480/isaac", method = RequestMethod.GET)
-    String isaac() {
+    String isaac() throws UnknownHostException {
+    	System.out.println("THe start of the end ==========");
+		
+		
+		List<Integer> books = Arrays.asList(27464, 747854);
+		DBObject person = new BasicDBObject("_id", "jo")
+		                            .append("name", "Jo Bloggs")
+		                            .append("address", new BasicDBObject("street", "123 Fake St")
+		                                                         .append("city", "Faketon")
+		                                                         .append("state", "MA")
+		                                                         .append("zip", 12345))
+		                            .append("books", books);
+		//coll.insert(person);
+		System.out.println(person.get("_id").toString());
+		DBObject myDoc = usersColl.findOne();
+		System.out.println(myDoc);
     	// You can replace this with other string,
     	// and run the application locally to check your changes
     	// with the URL: http://localhost:8080/
         return "is awesome";
+    }
+    
+    
+    /**
+     * userExists()
+     * Returns a boolean describing if there is a user in the userColl with the same name.
+     * @param userName
+     */
+    @RequestMapping(value = "/cs480/userExists/{userName}", method = RequestMethod.GET)
+    Boolean userExists(@PathVariable("userName") String userName) throws UnknownHostException {
+    	DBObject query = new BasicDBObject("userName", userName); 
+    	DBCursor cursor = usersColl.find(query);
+    	DBObject result = cursor.one();
+    	System.out.println("Call to userExists() :" + result);
+    	Boolean userExists = !(result == null);
+    	
+        return userExists;
     }
     
     @RequestMapping(value = "/cs480/vincent_test", method = RequestMethod.GET)
@@ -97,6 +179,28 @@ public class WebController {
     	User user = userManager.getUser(userId);
         return user;
     }
+    
+    /**
+     * createUser()
+     * Creates a new user in the database
+     * Note: Does not check for duplicates
+     * @param userName
+     * @param password
+     * @return
+     */
+    @RequestMapping(value = "/cs480/createUser/{userName}", method = RequestMethod.POST)
+    Boolean createUser(
+    		@PathVariable("userName") String userName ,
+    		@RequestParam("password") String pw){
+    	DBObject user = new BasicDBObject("userName", userName);
+    	
+    	usersColl.insert(user);
+    	
+    	System.out.println("Call to createUser() :" + user.toString());
+    	
+    	return true;
+    }
+    
 
     /**
      * This is an example of sending an HTTP POST request to
