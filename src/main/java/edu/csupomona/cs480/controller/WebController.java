@@ -254,7 +254,12 @@ public class WebController {
 			//Get the items part of the list DBObject and cast as a list
 			BasicDBList items = (BasicDBList)listObject.get("item");
             //Removes entry with item
-			items.remove(itemName);
+			boolean action =  items.remove(itemName);
+			if(!action)
+			{
+				cursor.close();
+				return "no such item in list";
+			}
 			//Removes item in new list
             update.put("item", items);
             //Replace old list with new list
