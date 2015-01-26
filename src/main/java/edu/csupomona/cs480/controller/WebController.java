@@ -239,7 +239,7 @@ public class WebController {
     
     //Basic API to remove item from list
     @RequestMapping(value = "/cs480/list/{listName}/{itemName}", method = RequestMethod.POST)
-    String removeItem(
+    boolean removeItem(
     		@PathVariable("listName") String listName,
     		@PathVariable("itemName") String itemName){
     	BasicDBObject query = new BasicDBObject("listName", listName);
@@ -248,7 +248,6 @@ public class WebController {
     	//Uses the first list found from search
     	DBObject listObject = cursor.one();
     	DBObject update = listObject;
-    	String result = "";
     	if(listObject != null)
     	{
 			//Get the items part of the list DBObject and cast as a list
@@ -258,7 +257,7 @@ public class WebController {
 			if(!action)
 			{
 				cursor.close();
-				return "no such item in list";
+				return false;
 			}
 			//Removes item in new list
             update.put("item", items);
@@ -268,10 +267,10 @@ public class WebController {
     	else
     	{
     		cursor.close();  	
-    		return "no_list";
+    		return false;
     	}
     	cursor.close();  	
-    	return result;
+    	return true;
     }
 
     
