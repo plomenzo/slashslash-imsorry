@@ -17,6 +17,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.WriteResult;
 
 import edu.csupomona.cs480.App;
 import edu.csupomona.cs480.data.User;
@@ -26,6 +27,7 @@ import edu.csupomona.cs480.data.provider.UserManager;
 import com.mongodb.BasicDBList;
 //MongoDB imports
 import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBList;
 import com.mongodb.BulkWriteOperation;
 import com.mongodb.BulkWriteResult;
 import com.mongodb.Cursor;
@@ -68,7 +70,7 @@ public class WebController {
     private UserManager userManager;
     
     
-    
+
     //MongoDB Global Objects
     MongoClient mongoClient;
 	DB db; 
@@ -282,6 +284,44 @@ public class WebController {
     }
 
     
+    // edits the item properties(name,quantity,price)
+    @RequestMapping(value = "/cs480/editItem/{oldName}", method = RequestMethod.POST)
+    Boolean editItem(
+    		@PathVariable("oldName") String oldName,
+    		@RequestParam("name") String name,
+    		@RequestParam("quantity") int quantity,
+    		@RequestParam("price") int price ) {
+    	DBObject query = new BasicDBObject("name", oldName);
+    	DBCursor cursor = listsColl.find(query);
+    	DBObject result = cursor.one();
+    	DBObject update = new BasicDBObject("name", name)
+    					.append("quantity", quantity)
+    					.append("price", price);
+    	listsColl.update(result, update);
+    	System.out.println("Successfully edit item:" + oldName);
+    	return true;
+    	
+    }
+    // Adds a list to a user
+    @RequestMapping(value = "/cs480/{user}/{groupId}", method = RequestMethod.POST)
+    Boolean inviteUser(
+    		@PathVariable("user") String user,
+    		@PathVariable("groupID") String groupId){
+    	BasicDBObject query = new BasicDBObject("user", user);
+    	DBCursor cursor = usersColl.find(query);
+    	DBObject result = cursor.one();
+    	DBObject update = result;
+    	
+    	// gets the list of groups the user is a  part of
+    	BasicDBList groups = (BasicDBList)result.get("groups");
+    	// adds the new group id to the users group list
+    	groups.add(groupId);
+    	update.put("groups",groups);
+    	usersColl.update(result, update);
+    	
+    	return true;
+    }
+
     /**
      * This is an example of sending an HTTP POST request to
      * update a user's information (or create the user if not

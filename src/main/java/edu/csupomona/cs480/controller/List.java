@@ -140,4 +140,12 @@ public class List
 			history.add(index, name);
 		}
 	}
+	// you give an item 
+	// it will find and replace the same item in the list  
+	// anything can be different
+	public void editItem(Item itemOld, Item item)
+	{
+		int index = list.indexOf(itemOld);
+		list.set(index, item);
+	}
 }

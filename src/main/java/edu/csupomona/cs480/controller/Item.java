@@ -76,5 +76,18 @@ public class Item
 		}
 		return false;
 	}
-	
+	/* needed for sorting
+	public boolean equals(Object o) 
+	{
+		  if (!(o instanceof Item)) {
+		    return false;
+		  }
+		  Item other = (Item) o;
+		  return name.equalsIgnoreCase(other.getName());
+	}
+	public int hashCode() 
+	{
+		  return name.hashCode();
+	}
+	*/
 }
