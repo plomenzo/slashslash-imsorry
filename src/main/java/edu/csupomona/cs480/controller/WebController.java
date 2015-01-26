@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -21,6 +22,9 @@ import edu.csupomona.cs480.App;
 import edu.csupomona.cs480.data.User;
 import edu.csupomona.cs480.data.provider.UserManager;
 
+
+
+import com.mongodb.BasicDBList;
 //MongoDB imports
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
@@ -69,7 +73,6 @@ public class WebController {
 	DBCollection usersColl;
 	DBCollection listsColl;
 
-	
 	//Constructor for WebController to handle 1 time MongoDB initializations
     public WebController() throws UnknownHostException{
     	
@@ -199,6 +202,37 @@ public class WebController {
     	System.out.println("Call to createUser() :" + user.toString());
     	
     	return true;
+    }
+    
+    //Basic API to retrieve list
+    @RequestMapping(value = "/cs480/list/{listName}", method = RequestMethod.GET)
+    String getList(
+    		@PathVariable("listName") String listName){
+    	BasicDBObject query = new BasicDBObject("listName", listName);
+    	
+    	DBCursor cursor = listsColl.find(query);
+    	
+    	String result = "";
+    	try{
+    		while(cursor.hasNext()) {
+    			//Get the list object from the database
+    			DBObject listObject = cursor.next();
+    			System.out.println(listObject.toString());
+    			
+    			//Get the items part of the list DBObject and cast as a list
+    			BasicDBList items = (BasicDBList)listObject.get("item");
+    			System.out.println(items.toString());
+    			
+    			BasicDBObject [] itemArray = items.toArray(new BasicDBObject[0]);
+    			for(int i = 0 ; i < itemArray.length; i++)
+    			{
+    				result+= itemArray[i].toString();
+    			}
+    		}
+    	} finally {
+    		cursor.close();
+    	}
+    	return result;
     }
     
 
