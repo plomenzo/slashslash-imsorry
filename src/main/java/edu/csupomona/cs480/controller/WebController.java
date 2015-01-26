@@ -237,7 +237,39 @@ public class WebController {
     	return result;
     }
     
+    //Basic API to remove item from list
+    @RequestMapping(value = "/cs480/list/{listName}/{itemName}", method = RequestMethod.POST)
+    String removeItem(
+    		@PathVariable("listName") String listName,
+    		@PathVariable("itemName") String itemName){
+    	BasicDBObject query = new BasicDBObject("listName", listName);
+    	
+    	DBCursor cursor = listsColl.find(query);
+    	//Uses the first list found from search
+    	DBObject listObject = cursor.one();
+    	DBObject update = listObject;
+    	String result = "";
+    	if(listObject != null)
+    	{
+			//Get the items part of the list DBObject and cast as a list
+			BasicDBList items = (BasicDBList)listObject.get("item");
+            //Removes entry with item
+			items.remove(itemName);
+			//Removes item in new list
+            update.put("item", items);
+            //Replace old list with new list
+            listsColl.update(listObject,update);
+    	}
+    	else
+    	{
+    		cursor.close();  	
+    		return "no_list";
+    	}
+    	cursor.close();  	
+    	return result;
+    }
 
+    
     /**
      * This is an example of sending an HTTP POST request to
      * update a user's information (or create the user if not
