@@ -1,7 +1,7 @@
 package edu.csupomona.cs480.controller;
 
 import java.util.Arrays;
-import java.util.List;
+//import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -22,6 +23,7 @@ import edu.csupomona.cs480.data.User;
 import edu.csupomona.cs480.data.provider.UserManager;
 
 
+import com.mongodb.BasicDBList;
 //MongoDB imports
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
@@ -65,13 +67,14 @@ public class WebController {
     @Autowired
     private UserManager userManager;
     
+    
+    
     //MongoDB Global Objects
     MongoClient mongoClient;
 	DB db; 
 	DBCollection usersColl;
 	DBCollection listsColl;
 
-	
 	//Constructor for WebController to handle 1 time MongoDB initializations
     public WebController() throws UnknownHostException{
     	//Initialize connection to MongoDB
@@ -211,7 +214,74 @@ public class WebController {
     	return true;
     }
     
+    //Basic API to retrieve list
+    @RequestMapping(value = "/cs480/list/{listName}", method = RequestMethod.GET)
+    String getList(
+    		@PathVariable("listName") String listName){
+    	BasicDBObject query = new BasicDBObject("listName", listName);
+    	
+    	DBCursor cursor = listsColl.find(query);
+    	//Uses the first list found from search
+    	DBObject listObject = cursor.one();
+    	String result = "";
+    	if(listObject != null)
+    	{
+			//Get the items part of the list DBObject and cast as a list
+			BasicDBList items = (BasicDBList)listObject.get("item");
+			System.out.println(items.toString());
+			
+			BasicDBObject [] itemArray = items.toArray(new BasicDBObject[0]);
+			for(int i = 0 ; i < itemArray.length; i++)
+			{
+				result+= itemArray[i].toString() + " ";
+			}
+    	}
+    	else
+    	{
+    		cursor.close();  	
+    		return "no_list";
+    	}
+    	cursor.close();  	
+    	return result;
+    }
+    
+    //Basic API to remove item from list
+    @RequestMapping(value = "/cs480/list/{listName}/{itemName}", method = RequestMethod.POST)
+    boolean removeItem(
+    		@PathVariable("listName") String listName,
+    		@PathVariable("itemName") String itemName){
+    	BasicDBObject query = new BasicDBObject("listName", listName);
+    	
+    	DBCursor cursor = listsColl.find(query);
+    	//Uses the first list found from search
+    	DBObject listObject = cursor.one();
+    	DBObject update = listObject;
+    	if(listObject != null)
+    	{
+			//Get the items part of the list DBObject and cast as a list
+			BasicDBList items = (BasicDBList)listObject.get("item");
+            //Removes entry with item
+			boolean action =  items.remove(itemName);
+			if(!action)
+			{
+				cursor.close();
+				return false;
+			}
+			//Removes item in new list
+            update.put("item", items);
+            //Replace old list with new list
+            listsColl.update(listObject,update);
+    	}
+    	else
+    	{
+    		cursor.close();  	
+    		return false;
+    	}
+    	cursor.close();  	
+    	return true;
+    }
 
+    
     /**
      * This is an example of sending an HTTP POST request to
      * update a user's information (or create the user if not
