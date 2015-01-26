@@ -213,27 +213,27 @@ public class WebController {
     	BasicDBObject query = new BasicDBObject("listName", listName);
     	
     	DBCursor cursor = listsColl.find(query);
-    	
+    	//Uses the first list found from search
+    	DBObject listObject = cursor.one();
     	String result = "";
-    	try{
-    		while(cursor.hasNext()) {
-    			//Get the list object from the database
-    			DBObject listObject = cursor.next();
-    			System.out.println(listObject.toString());
-    			
-    			//Get the items part of the list DBObject and cast as a list
-    			BasicDBList items = (BasicDBList)listObject.get("item");
-    			System.out.println(items.toString());
-    			
-    			BasicDBObject [] itemArray = items.toArray(new BasicDBObject[0]);
-    			for(int i = 0 ; i < itemArray.length; i++)
-    			{
-    				result+= itemArray[i].toString() + " ";
-    			}
-    		}
-    	} finally {
-    		cursor.close();
+    	if(listObject != null)
+    	{
+			//Get the items part of the list DBObject and cast as a list
+			BasicDBList items = (BasicDBList)listObject.get("item");
+			System.out.println(items.toString());
+			
+			BasicDBObject [] itemArray = items.toArray(new BasicDBObject[0]);
+			for(int i = 0 ; i < itemArray.length; i++)
+			{
+				result+= itemArray[i].toString() + " ";
+			}
     	}
+    	else
+    	{
+    		cursor.close();  	
+    		return "no_list";
+    	}
+    	cursor.close();  	
     	return result;
     }
     
