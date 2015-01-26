@@ -299,8 +299,7 @@ public class WebController {
     					.append("price", price);
     	listsColl.update(result, update);
     	System.out.println("Successfully edit item:" + oldName);
-    	return true;
-    	
+    	return true;	
     }
     // Adds a list to a user
     @RequestMapping(value = "/cs480/{user}/{groupId}", method = RequestMethod.POST)
