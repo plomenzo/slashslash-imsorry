@@ -101,46 +101,6 @@ public class WebController {
     }
     
     
-
-    /**
-     * This is a simple example of how the HTTP API works.
-     * It returns a String "OK" in the HTTP response.
-     * To try it, run the web application locally,
-     * in your web browser, type the link:
-     * 	http://localhost:8080/cs480/ping
-     */
-    @RequestMapping(value = "/cs480/ping", method = RequestMethod.GET)
-    String healthCheck() {
-    	// You can replace this with other string,
-    	// and run the application locally to check your changes
-    	// with the URL: http://localhost:8080/
-        return "OK";
-    }
-
-    @RequestMapping(value = "/cs480/isaac", method = RequestMethod.GET)
-    String isaac() throws UnknownHostException {
-    	System.out.println("THe start of the end ==========");
-		
-		
-		List<Integer> books = Arrays.asList(27464, 747854);
-		DBObject person = new BasicDBObject("_id", "jo")
-		                            .append("name", "Jo Bloggs")
-		                            .append("address", new BasicDBObject("street", "123 Fake St")
-		                                                         .append("city", "Faketon")
-		                                                         .append("state", "MA")
-		                                                         .append("zip", 12345))
-		                            .append("books", books);
-		//coll.insert(person);
-		System.out.println(person.get("_id").toString());
-		DBObject myDoc = usersColl.findOne();
-		System.out.println(myDoc);
-    	// You can replace this with other string,
-    	// and run the application locally to check your changes
-    	// with the URL: http://localhost:8080/
-        return "is awesome";
-    }
-    
-    
     /**
      * userExists()
      * Returns a boolean describing if there is a user in the userColl with the same name.
@@ -155,44 +115,6 @@ public class WebController {
     	Boolean userExists = !(result == null);
     	
         return userExists;
-    }
-    
-    @RequestMapping(value = "/cs480/vincent_test", method = RequestMethod.GET)
-    String vincent() {
-    	// You can replace this with other string,
-    	// and run the application locally to check your changes
-    	// with the URL: http://localhost:8080/
-        return "I am testing the functionality for Assignment 3!";
-    }
-    
-    @RequestMapping(value = "/cs480/test_e", method = RequestMethod.GET)
-    String ethan() {
-    	//URL: http://localhost:8080/
-        return "WALL-E & Space";
-    }
-    
-    @RequestMapping(value = "/cs480/mitchell", method = RequestMethod.GET)
-    String mitchell() {
-    	// You can replace this with other string,
-    	// and run the application locally to check your changes
-    	// with the URL: http://localhost:8080/
-        return "potato";
-    }
-    
-    /**
-     * This is a simple example of how to use a data manager
-     * to retrieve the data and return it as an HTTP response.
-     * <p>
-     * Note, when it returns from the Spring, it will be
-     * automatically converted to JSON format.
-     * <p>
-     * Try it in your web browser:
-     * 	http://localhost:8080/cs480/user/user101
-     */
-    @RequestMapping(value = "/cs480/user/{userId}", method = RequestMethod.GET)
-    User getUser(@PathVariable("userId") String userId) {
-    	User user = userManager.getUser(userId);
-        return user;
     }
     
     /**
@@ -342,6 +264,7 @@ public class WebController {
     	System.out.println("Successfully edit item:" + oldName);
     	return true;	
     }
+    
     // Adds a list to a user
     @RequestMapping(value = "/cs480/{user}/{groupId}", method = RequestMethod.POST)
     Boolean inviteUser(
@@ -362,6 +285,89 @@ public class WebController {
     	return true;
     }
 
+    
+//////////////////////////////////////OLD CODE/////////////////////////////////////////////    
+//////////////////////////////////////OLD CODE/////////////////////////////////////////////    
+//////////////////////////////////////OLD CODE/////////////////////////////////////////////    
+//////////////////////////////////////OLD CODE/////////////////////////////////////////////    
+
+    /**
+     * This is a simple example of how the HTTP API works.
+     * It returns a String "OK" in the HTTP response.
+     * To try it, run the web application locally,
+     * in your web browser, type the link:
+     * 	http://localhost:8080/cs480/ping
+     */
+    @RequestMapping(value = "/cs480/ping", method = RequestMethod.GET)
+    String healthCheck() {
+    	// You can replace this with other string,
+    	// and run the application locally to check your changes
+    	// with the URL: http://localhost:8080/
+        return "OK";
+    }
+
+    @RequestMapping(value = "/cs480/isaac", method = RequestMethod.GET)
+    String isaac() throws UnknownHostException {
+    	System.out.println("THe start of the end ==========");
+		
+		
+		List<Integer> books = Arrays.asList(27464, 747854);
+		DBObject person = new BasicDBObject("_id", "jo")
+		                            .append("name", "Jo Bloggs")
+		                            .append("address", new BasicDBObject("street", "123 Fake St")
+		                                                         .append("city", "Faketon")
+		                                                         .append("state", "MA")
+		                                                         .append("zip", 12345))
+		                            .append("books", books);
+		//coll.insert(person);
+		System.out.println(person.get("_id").toString());
+		DBObject myDoc = usersColl.findOne();
+		System.out.println(myDoc);
+    	// You can replace this with other string,
+    	// and run the application locally to check your changes
+    	// with the URL: http://localhost:8080/
+        return "is awesome";
+    }
+    
+    @RequestMapping(value = "/cs480/vincent_test", method = RequestMethod.GET)
+    String vincent() {
+    	// You can replace this with other string,
+    	// and run the application locally to check your changes
+    	// with the URL: http://localhost:8080/
+        return "I am testing the functionality for Assignment 3!";
+    }
+    
+    @RequestMapping(value = "/cs480/test_e", method = RequestMethod.GET)
+    String ethan() {
+    	//URL: http://localhost:8080/
+        return "WALL-E & Space";
+    }
+    
+    @RequestMapping(value = "/cs480/mitchell", method = RequestMethod.GET)
+    String mitchell() {
+    	// You can replace this with other string,
+    	// and run the application locally to check your changes
+    	// with the URL: http://localhost:8080/
+        return "potato";
+    }
+    
+    /**
+     * This is a simple example of how to use a data manager
+     * to retrieve the data and return it as an HTTP response.
+     * <p>
+     * Note, when it returns from the Spring, it will be
+     * automatically converted to JSON format.
+     * <p>
+     * Try it in your web browser:
+     * 	http://localhost:8080/cs480/user/user101
+     */
+    @RequestMapping(value = "/cs480/user/{userId}", method = RequestMethod.GET)
+    User getUser(@PathVariable("userId") String userId) {
+    	User user = userManager.getUser(userId);
+        return user;
+    }
+    
+  
     /**
      * This is an example of sending an HTTP POST request to
      * update a user's information (or create the user if not
