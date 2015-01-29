@@ -216,6 +216,47 @@ public class WebController {
     	return true;
     }
     
+    /**
+     * createList()
+     * Creates a new list in the database
+     * Note: Does not check for duplicates
+     * List JSON Object format
+    	  List
+    	  {
+    	  	listname: name
+    	  	items:
+    	  	{
+    	  		item
+    	  		item
+    	  	}
+    	  	userAccess:
+    	  	{
+    	  		userID: name
+    	  		userID: name
+    	  	}
+    	  }
+     * @param listName
+     * @param userAccess
+     * @return
+     */
+    @RequestMapping(value = "/cs480/createList/{listName}", method = RequestMethod.POST)
+    Boolean createList(
+    		@PathVariable("listName") String listName ,
+    		@RequestParam("creatorUserID") String creatorUserID){
+  
+    	DBObject list = new BasicDBObject("listName", listName)
+    					.append("items", new BasicDBObject() )
+    					.append("userAccess", new BasicDBObject("userID" , creatorUserID))
+    					.append("itemHistory", new BasicDBObject() );
+    	
+    	listsColl.insert(list);
+    	
+    	System.out.println("Call to createList() :" + list.toString());
+    	
+    	return true;
+    }
+    
+    
     //Basic API to retrieve list
     @RequestMapping(value = "/cs480/list/{listName}", method = RequestMethod.GET)
     String getList(
