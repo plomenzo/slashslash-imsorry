@@ -3,6 +3,8 @@ package edu.csupomona.cs480.controller;
 import java.util.Arrays;
 //import java.util.List;
 
+
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,6 @@ import com.mongodb.WriteResult;
 import edu.csupomona.cs480.App;
 import edu.csupomona.cs480.data.User;
 import edu.csupomona.cs480.data.provider.UserManager;
-
 
 import com.mongodb.BasicDBList;
 //MongoDB imports
@@ -81,7 +82,7 @@ public class WebController {
     public WebController() throws UnknownHostException{
     	//Initialize connection to MongoDB
     	//Do this once on the WebController constructor to prevent wasted connections
-    	Boolean useLocal = true;
+    	Boolean useLocal = false;
     	
     	if(useLocal)
     	{
@@ -179,35 +180,24 @@ public class WebController {
     }
     
     
-    //Basic API to retrieve list
-    @RequestMapping(value = "/cs480/list/{listName}", method = RequestMethod.GET)
-    String getList(
-    		@PathVariable("listName") String listName){
-    	BasicDBObject query = new BasicDBObject("listName", listName);
+    /**
+     * getList()
+     * Returns a list object matching the specified $oid of the list from the database.
+     * @param id
+     */    
+    @RequestMapping(value = "/cs480/list/{id}", method = RequestMethod.GET)
+    DBObject getList(
+    		@PathVariable("id") String id){
+    	BasicDBObject query = new BasicDBObject("_id", new ObjectId(id));
     	
     	DBCursor cursor = listsColl.find(query);
     	//Uses the first list found from search
     	DBObject listObject = cursor.one();
-    	String result = "";
-    	if(listObject != null)
-    	{
-			//Get the items part of the list DBObject and cast as a list
-			BasicDBList items = (BasicDBList)listObject.get("item");
-			System.out.println(items.toString());
-			
-			BasicDBObject [] itemArray = items.toArray(new BasicDBObject[0]);
-			for(int i = 0 ; i < itemArray.length; i++)
-			{
-				result+= itemArray[i].toString() + " ";
-			}
-    	}
-    	else
-    	{
-    		cursor.close();  	
-    		return "no_list";
-    	}
+    	
     	cursor.close();  	
-    	return result;
+    	System.out.println("Call to getList() : " + listObject.toString());
+
+    	return listObject;
     }
     
     //Basic API to remove item from list
