@@ -275,6 +275,32 @@ public class WebController {
     	return true;
     }
 
+ // edits the item properties(name,quantity,price)
+    @RequestMapping(value = "/cs480/addItem/{listName}/{userName}", method = RequestMethod.POST)
+    Boolean addItemToList(
+    		@PathVariable("listName") String listName,
+    		@PathVariable("userName") String userName,
+    		@RequestParam("itemName") String name,
+    		@RequestParam("price") double price,
+    		@RequestParam("quantity") int quantity) {
+    	
+    	/*
+    	BasicDBObject query = new BasicDBObject("listName", listName);
+    	DBCursor cursor = listsColl.find(query);
+    	
+    	DBObject result = cursor.one();
+    	if(result != null)
+    	{
+    		System.out.println("Item already exits: " + name);
+    		return false;
+    	}
+    	DBObject newItem = new BasicDBObject("name", name)
+    					.append("quantity", quantity)
+    					.append("userName", userName);
+    	listsColl.update(result, newItem);
+    	System.out.println("Successfully added " + name + " to list.");*/
+    	return true;	
+    }
     
 //////////////////////////////////////OLD CODE/////////////////////////////////////////////    
 //////////////////////////////////////OLD CODE/////////////////////////////////////////////    
