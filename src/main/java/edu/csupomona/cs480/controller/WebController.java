@@ -4,6 +4,8 @@ import java.util.Arrays;
 //import java.util.List;
 
 
+
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,8 +41,10 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.ParallelScanOptions;
+import com.mongodb.QueryBuilder;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -168,7 +172,7 @@ public class WebController {
     		@RequestParam("creatorUserID") String creatorUserID){
   
     	DBObject list = new BasicDBObject("listName", listName)
-    					.append("items", new BasicDBObject() )
+    					.append("items", new BasicDBList() )
     					.append("userAccess", new BasicDBObject("userID" , creatorUserID))
     					.append("itemHistory", new BasicDBObject() );
     	
@@ -200,42 +204,65 @@ public class WebController {
     	return listObject;
     }
     
-    //Basic API to remove item from list
-    @RequestMapping(value = "/cs480/list/{listName}/{itemName}", method = RequestMethod.POST)
+    /**
+     * removeItem()
+     * Removes an item from a list specified from the $oid of the list in the database
+     * @param id $oid of list
+     * @param itemName name of item to remove
+     * @return the boolean value of true if item was removed, false if item failed to remove
+     */
+    @RequestMapping(value = "/cs480/list/{id}/{itemName}", method = RequestMethod.POST)
     boolean removeItem(
-    		@PathVariable("listName") String listName,
+    		@PathVariable("id") String id,
     		@PathVariable("itemName") String itemName){
-    	BasicDBObject query = new BasicDBObject("listName", listName);
-    	
-    	DBCursor cursor = listsColl.find(query);
-    	//Uses the first list found from search
-    	DBObject listObject = cursor.one();
-    	DBObject update = listObject;
-    	if(listObject != null)
-    	{
-			//Get the items part of the list DBObject and cast as a list
-			BasicDBList items = (BasicDBList)listObject.get("item");
-            //Removes entry with item
-			boolean action =  items.remove(itemName);
-			if(!action)
-			{
-				cursor.close();
-				return false;
-			}
-			//Removes item in new list
-            update.put("item", items);
-            //Replace old list with new list
-            listsColl.update(listObject,update);
-    	}
-    	else
-    	{
-    		cursor.close();  	
-    		return false;
-    	}
-    	cursor.close();  	
-    	return true;
+    	//List that we want to find
+    	BasicDBObject list = new BasicDBObject("_id",new ObjectId(id));
+    	//Item that we want to remove
+    	DBObject item = new BasicDBObject("items", new BasicDBObject("name", itemName));
+        //Remove item from list
+        listsColl.update(list,new BasicDBObject("$pull", item), false, false);
+        return true;
     }
+    
+    /**
+     * Adds item to list
+     * @param id List ID
+     * @param name Item name
+     * @param quantity item quantity
+     * @param price item price
+     * @return 
+     */
+    @RequestMapping(value = "/cs480/list/{id}/add", method = RequestMethod.POST)
+    boolean addItem(
+    		@PathVariable("id") String id,
+    		@RequestParam("name") String name,
+    		@RequestParam("quantity") int quantity,
+    		@RequestParam("price") int price ){
+    	BasicDBObject query = new BasicDBObject("_id",new ObjectId(id));
+    	DBCursor cursor = listsColl.find(query);
+    	DBObject listObject = cursor.one();
 
+		//Get the items part of the list DBObject and cast as a list
+		BasicDBList items = (BasicDBList) listObject.get("items");
+
+		//Create new item
+		BasicDBObject item = new BasicDBObject("name", name)
+								.append("quantity", quantity)
+								.append("price", price);
+		//add item to list
+		items.add(item);
+		//Removes item in new list
+        listObject.put("items", items);        
+        //Copy constructor does not work for some reason
+        //Thus orig = listObject will give us effectively
+        //2 listObjects
+    	DBCursor cursor2 = listsColl.find(query);
+    	DBObject orig = cursor.one();
+    	//Replace old list with new list
+    	System.out.println("Call to addItem() : "  +  listObject.toString());
+        listsColl.update(orig,listObject);
+        return true;
+    }
     
     // edits the item properties(name,quantity,price)
     @RequestMapping(value = "/cs480/editItem/{oldName}", method = RequestMethod.POST)
