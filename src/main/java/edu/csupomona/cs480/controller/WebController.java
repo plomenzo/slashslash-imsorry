@@ -161,6 +161,7 @@ public class WebController {
     	  		userID
     	  		userID
     	  	]
+    	  	createdBy: userID
     	  }
      * @param listName
      * @param userAccess
@@ -175,7 +176,8 @@ public class WebController {
     	DBObject list = new BasicDBObject("listName", listName)
     					.append("items", new BasicDBList() )
     					.append("userAccess", userAccess)
-    					.append("itemHistory", new BasicDBObject() );
+    					.append("itemHistory", new BasicDBObject() 
+    					.append("createdBy", creatorUserID));
     	
     	listsColl.insert(list);
     	
