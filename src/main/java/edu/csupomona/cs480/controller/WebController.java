@@ -190,7 +190,7 @@ public class WebController {
      * @param id
      */    
     @RequestMapping(value = "/cs480/list/{id}", method = RequestMethod.GET)
-    DBObject getList(
+    String getList(
     		@PathVariable("id") String id){
     	BasicDBObject query = new BasicDBObject("_id", new ObjectId(id));
     	
@@ -201,7 +201,7 @@ public class WebController {
     	cursor.close();  	
     	System.out.println("Call to getList() : " + listObject.toString());
 
-    	return listObject;
+    	return listObject.toString();
     }
     
     /**
@@ -221,6 +221,7 @@ public class WebController {
     	DBObject item = new BasicDBObject("items", new BasicDBObject("name", itemName));
         //Remove item from list
         listsColl.update(list,new BasicDBObject("$pull", item), false, false);
+        System.out.println("Call to removeItem()");
         return true;
     }
     

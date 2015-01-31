@@ -1,0 +1,40 @@
+<html>
+	<head>
+	    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>    
+	    <script src="js/custom.js"></script>
+	</head>
+	<body>
+	    <table border="1">            
+            <tr>
+                <td>List ID</td>
+            </tr>
+            <list>
+                    <tr>
+                        <td><input type="text" id="listIDGet"></td>
+                        <td><button onclick="getList()">Get List</button></td>
+                    </tr>
+                <tr>
+                    <td>List</td>
+                </tr>
+                <tr>
+                    <td><label id="results"></td>
+                </tr>
+            </list>
+        </table>
+        <table border = "1">
+                    <tr>
+                <td>List ID</td>
+                <td>Item</td>
+            </tr>
+            <list>
+                     <tr>
+                        <td><input type="text" id="listIDRemove"></td>
+                        <td><input type="text" id="itemRemove"></td>
+                        <td><button onclick="removeItem()">Remove Item</button></td>
+                    </tr>
+            </list>
+        </table>
+		<p id="demo"></p>
+	
+	</body>
+</html>
