@@ -152,15 +152,15 @@ public class WebController {
     	  {
     	  	listname: name
     	  	items:
-    	  	{
+    	  	[
     	  		item
     	  		item
-    	  	}
+    	  	]
     	  	userAccess:
-    	  	{
-    	  		userID: name
-    	  		userID: name
-    	  	}
+    	  	[
+    	  		userID
+    	  		userID
+    	  	]
     	  }
      * @param listName
      * @param userAccess
@@ -170,10 +170,11 @@ public class WebController {
     Boolean createList(
     		@PathVariable("listName") String listName ,
     		@RequestParam("creatorUserID") String creatorUserID){
-  
+    	BasicDBList userAccess = new BasicDBList();
+    	userAccess.add(creatorUserID);
     	DBObject list = new BasicDBObject("listName", listName)
     					.append("items", new BasicDBList() )
-    					.append("userAccess", new BasicDBObject("userID" , creatorUserID))
+    					.append("userAccess", userAccess)
     					.append("itemHistory", new BasicDBObject() );
     	
     	listsColl.insert(list);
@@ -258,7 +259,6 @@ public class WebController {
         //Copy constructor does not work for some reason
         //Thus orig = listObject will give us effectively
         //2 listObjects
-    	DBCursor cursor2 = listsColl.find(query);
     	DBObject orig = cursor.one();
     	//Replace old list with new list
     	System.out.println("Call to addItem() : "  +  listObject.toString());
@@ -266,41 +266,65 @@ public class WebController {
         return true;
     }
     
-    // edits the item properties(name,quantity,price)
-    @RequestMapping(value = "/cs480/editItem/{oldName}", method = RequestMethod.POST)
+    /**
+     * Edits item in list
+     * @param id List ID
+     * @param oldName old Item(before edit) name
+     * @param name new name of item
+     * @param user user whos is editing
+     * @param quantity item quantity
+     * @param price item price
+     * @return 
+     */
+    //TODO use $set instead of other functions
+    @RequestMapping(value = "/cs480/editItem/{id}/{oldName}", method = RequestMethod.POST)
     Boolean editItem(
+    		@PathVariable("id") String listId,
     		@PathVariable("oldName") String oldName,
     		@RequestParam("name") String name,
+    		@RequestParam("user") String userName,
     		@RequestParam("quantity") int quantity,
     		@RequestParam("price") int price ) {
-    	DBObject query = new BasicDBObject("name", oldName);
-    	DBCursor cursor = listsColl.find(query);
-    	DBObject result = cursor.one();
-    	DBObject update = new BasicDBObject("name", name)
-    					.append("quantity", quantity)
-    					.append("price", price);
-    	listsColl.update(result, update);
-    	System.out.println("Successfully edit item:" + oldName);
+    	
+    	// remove the old item from the list
+    	removeItem(listId,oldName);
+    	
+    	// add the new item to the list
+    	addItemToList(listId,userName,name,price,quantity);
+
     	return true;	
-    }
+    }	  
     
-    // Adds a list to a user
-    @RequestMapping(value = "/cs480/{user}/{groupId}", method = RequestMethod.POST)
+    /**
+     * Adds user to userAccess
+     * @param id List ID
+     * @param userId The user id you are adding
+     * @return 
+     */
+    @RequestMapping(value = "/cs480/inviteUser/{id}/{userId}", method = RequestMethod.POST)
     Boolean inviteUser(
-    		@PathVariable("user") String user,
-    		@PathVariable("groupID") String groupId){
-    	BasicDBObject query = new BasicDBObject("user", user);
-    	DBCursor cursor = usersColl.find(query);
-    	DBObject result = cursor.one();
-    	DBObject update = result;
+    		@PathVariable("id") String listId,
+    		@PathVariable("userId") String userId){
+    	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listId));
+    	DBCursor cursor = listsColl.find(query);
+    	DBObject userObject = cursor.one();
+    	// check to see if they are already added to the list *not implemented yet
     	
-    	// gets the list of groups the user is a  part of
-    	BasicDBList groups = (BasicDBList)result.get("groups");
-    	// adds the new group id to the users group list
-    	groups.add(groupId);
-    	update.put("groups",groups);
-    	usersColl.update(result, update);
+		//Get the UserAccess list
+    	BasicDBList users = (BasicDBList) userObject.get("userAccess");
     	
+		//add user to userId
+		users.add(userId);
+		
+		// Add the user to userAccess
+        userObject.put("userAccess", users);
+        
+        //orig = userObject will give us 2 user objects
+    	DBObject orig = cursor.one();
+    	
+    	//update the list collection with new user object
+    	listsColl.update(orig,userObject);
+    	System.out.println("Call to inviteUser() : " + userObject.toString());
     	return true;
     }
 
