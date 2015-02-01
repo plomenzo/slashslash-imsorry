@@ -221,7 +221,7 @@ public class WebController {
      * @param itemName name of item to remove
      * @return the boolean value of true if item was removed, false if item failed to remove
      */
-    @RequestMapping(value = "/cs480/list/{id}/{itemName}", method = RequestMethod.POST)
+    @RequestMapping(value = "/cs480/removeItem/{id}/{itemName}", method = RequestMethod.POST)
     boolean removeItem(
     		@PathVariable("id") String id,
     		@PathVariable("itemName") String itemName){
