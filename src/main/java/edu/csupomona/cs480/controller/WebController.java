@@ -134,10 +134,11 @@ public class WebController {
     Boolean createUser(
     		@PathVariable("userName") String userName ,
     		@RequestParam("password") String pw){
-    	DBObject user = new BasicDBObject("userName", userName);
+    	DBObject user = new BasicDBObject("userName", userName)
+    	                    .append("password", pw);
     	
     	usersColl.insert(user);
-    	
+   
     	System.out.println("Call to createUser() :" + user.toString());
     	
     	return true;
