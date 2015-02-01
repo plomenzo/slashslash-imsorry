@@ -226,12 +226,15 @@ public class WebController {
     		@PathVariable("id") String id,
     		@PathVariable("itemName") String itemName){
     	//List that we want to find
-    	BasicDBObject list = new BasicDBObject("_id",new ObjectId(id));
+    	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));
     	//Item that we want to remove
     	DBObject item = new BasicDBObject("items", new BasicDBObject("name", itemName));
         //Remove item from list
-        listsColl.update(list,new BasicDBObject("$pull", item), false, false);
-        System.out.println("Call to removeItem()");
+        listsColl.update(listObject,new BasicDBObject("$pull", item), false, false);
+        // Updates lastUpdated to current time
+        DBObject lastUpdated = new BasicDBObject("lastModified", System.currentTimeMillis());
+        listsColl.update(listObject, new BasicDBObject("$set", lastUpdated), false, false);
+        System.out.println("Call to removeItem: " + itemName);
         return true;
     }
     
@@ -272,6 +275,10 @@ public class WebController {
     	//Replace old list with new list
     	System.out.println("Call to addItem() : "  +  listObject.toString());
         listsColl.update(orig,listObject);
+        // Updates lastUpdated to current time
+        DBObject lastUpdated = new BasicDBObject("lastModified", System.currentTimeMillis());
+        listsColl.update(listObject, new BasicDBObject("$set", lastUpdated), false, false);
+        
         return true;
     }
     
