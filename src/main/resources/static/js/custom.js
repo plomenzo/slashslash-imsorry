@@ -44,7 +44,7 @@ function removeItem() {
 
 
 //Returns list object of the given listID
-function getList(listID) {
+function getList(listID, callback) {
     $.ajax(
         {
             type : "GET",
@@ -52,11 +52,21 @@ function getList(listID) {
             data : {
             },
             success : function(result) {
-                console.log(result);
+            	callback(result);
                 return result;
             },
             error: function (jqXHR, exception) {
                 alert("Failed to get list. Please check the inputs.");
             }
         });
+}
+
+function getItemsFromList(listID)
+{
+    getList(listID, function(result) {
+
+        var items = result.items;
+        console.log(items);
+        return items;
+    });
 }
