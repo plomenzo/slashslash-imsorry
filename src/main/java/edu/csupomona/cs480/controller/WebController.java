@@ -162,11 +162,12 @@ public class WebController {
     	  		userID
     	  	]
     	  	itemHistory:
-    	  	[
+    	  	{
     	  		item
     	  		item
-    	  	]
+    	  	}
     	  	createdBy: userID
+    	  	lastModified: (time_in_millis)
     	  }
      * @param listName
      * @param userAccess
@@ -179,10 +180,11 @@ public class WebController {
     	BasicDBList userAccess = new BasicDBList();
     	userAccess.add(creatorUserID);
     	DBObject list = new BasicDBObject("listName", listName)
-    					.append("items", new BasicDBList() )
+    					.append("items", new BasicDBList())
     					.append("userAccess", userAccess)
     					.append("itemHistory", new BasicDBObject())
-    					.append("createdBy", creatorUserID);
+    					.append("createdBy", creatorUserID)
+    					.append("lastModified", System.currentTimeMillis());
     	
     	listsColl.insert(list);
     	
