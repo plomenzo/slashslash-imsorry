@@ -193,7 +193,7 @@ public class WebController {
      * @param id
      */    
     @RequestMapping(value = "/cs480/list/{id}", method = RequestMethod.GET)
-    String getList(
+    DBObject getList(
     		@PathVariable("id") String id){
     	BasicDBObject query = new BasicDBObject("_id", new ObjectId(id));
     	
@@ -204,7 +204,7 @@ public class WebController {
     	cursor.close();  	
     	System.out.println("Call to getList() : " + listObject.toString());
 
-    	return listObject.toString();
+    	return listObject;
     }
     
     /**

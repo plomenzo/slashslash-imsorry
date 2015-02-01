@@ -3,8 +3,9 @@ var dummyItem;
 var dummyList;
 
 
-function getList() {
+function getListTest() {
 	var listID = $('#listIDGet').val();
+    console.log(listID)
 
 	$.ajax(
 			{
@@ -13,7 +14,8 @@ function getList() {
 				data : {
 				},
 				success : function(result) {
-					$('#results').text(result);
+                    //console.log(result)
+					$('#results').text(JSON.stringify(result));
 				},
 				error: function (jqXHR, exception) {
 					alert("Failed to get list. Please check the inputs.");
@@ -38,4 +40,23 @@ function removeItem() {
 					alert("Failed to remove item. Please check inputs.");
 				}
 			});
+}
+
+
+//Returns list object of the given listID
+function getList(listID) {
+    $.ajax(
+        {
+            type : "GET",
+            url  : "/cs480/list/" + listID,
+            data : {
+            },
+            success : function(result) {
+                console.log(result);
+                return result;
+            },
+            error: function (jqXHR, exception) {
+                alert("Failed to get list. Please check the inputs.");
+            }
+        });
 }
