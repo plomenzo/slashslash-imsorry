@@ -6,7 +6,14 @@ import java.util.Arrays;
 
 
 
+
+
+
+
 import org.bson.types.ObjectId;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +50,7 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.ParallelScanOptions;
 import com.mongodb.QueryBuilder;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -345,6 +353,69 @@ public class WebController {
     	return true;
     }
 
+    /**
+     * Prints out the items listed in the store's online advertisement
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/cs480/storeprice/", method = RequestMethod.GET)
+    String getStorePrice() throws IOException{
+    	String result = "";
+    	//Make the url's dynamic
+    	String albertsonsURL = "http://albertsons.mywebgrocer.com/Circular/San-Dimas/8C4073634/Weekly/2/";
+    	String ralphsURL = "http://ralphs.mywebgrocer.com/Circular/RALPHS-626/000592641/Weekly/1/";
+    	//Arraylist?
+    	String[] stores = new String[2];
+    	stores[0] = albertsonsURL;
+    	stores[1] = ralphsURL;
+    	String[]storeName = new String[2];
+    	storeName[0] = "Albertsons";
+    	storeName[1] = "Ralphs";
+    	for(int j = 0; j < stores.length; j++)
+    	{
+    		result+="***********************\n";
+    		result+="***********************\n";
+    		result+="Store " + storeName[j] +"\n";
+    		result+="***********************\n";
+    		result+="***********************\n";
+
+        	try{
+            	int page = 1;
+        		while(true)
+        		{
+            		String pageURL = stores[j] + page;
+            		System.out.println(pageURL);
+                	Document store = Jsoup.connect(pageURL).get();
+                	if((store.location().contains("2/1") || store.location().contains("1/1")) & page >1)
+                	{
+                		throw new NullPointerException();
+                	}
+                	Elements saleItems = store.select("p.itemTitle");
+                	Elements salePrice = store.select("p.itemPrice");
+                	for(int i = 0; i < saleItems.size(); i++)
+                	{
+                		String item = String.format("Item       %s \n", saleItems.get(i).text());
+                		System.out.print(item);
+                		result+=item;
+                		//May want to add a condition, i.e. membership card, buy 4, etc
+                		//Instead of having it included in the sale price
+                		String price = String.format("Sale Price %s \n", salePrice.get(i).text());
+                		System.out.print(price);
+                		result+=price;
+                		result+="-----------------------\n";
+
+                	}
+                	page++;
+        		}
+
+        	}catch(Exception e)
+        	{
+        		continue;
+        	}
+    	}
+    	return result;
+
+    }
 //////////////////////////////////////OLD CODE/////////////////////////////////////////////    
 //////////////////////////////////////OLD CODE/////////////////////////////////////////////    
 //////////////////////////////////////OLD CODE/////////////////////////////////////////////    
