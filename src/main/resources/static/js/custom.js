@@ -61,12 +61,13 @@ function getList(listID, callback) {
         });
 }
 
-function getItemsFromList(listID)
+function getItemsFromList(listID, callback)
 {
     getList(listID, function(result) {
 
         var items = result.items;
         console.log(items);
+        callback(items);
         return items;
     });
 }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/custom.js"></script>
+
+    <title>My Lists</title>
+
+    <!--Bootstrap-->
+     <!--Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <!-- AngularJS -->
+    <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+
+    <!-- Sortable.js -->
+    <script src="http://rubaxa.github.io/Sortable/Sortable.js"></script>
+
+    <!-- ng-sortable.js -->
+    <script src="http://rubaxa.github.io/Sortable/ng-sortable.js"></script>
+
+    <!--Custom Assets-->
+    <link rel="stylesheet" href="css/custom.css">
+    <script src="js/custom.js"></script>
+    <script src="js/controllers.js"></script>
+</head>
+<body ng-app="listView">
+    <div ng-controller="itemsController">
+        <div ng-repeat="item in itemList">
+
+
+            <div class="list-group" style="width:25%">
+
+                <a class="list-group-item" >
+                    <p>{{item.name}}
+                        <!--Control if quantity should show. Do not display if quantity is <= 1 -->
+                        <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
+                    </p>
+                </a>
+
+            </div>
+            <!--<p>{{item.name}}-->
+                <!--&lt;!&ndash;Control if quantity should show. Do not display if quantity is <= 1 &ndash;&gt;-->
+                <!--<span ng-if="item.quantity > 1">x {{item.quantity}}</span>-->
+            <!--</p>-->
+        </div>
+    </div>
+
+</body>
+</html>
