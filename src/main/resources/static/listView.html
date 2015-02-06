@@ -29,17 +29,21 @@
 </head>
 <body ng-app="listView">
     <div ng-controller="itemsController">
-        <div ng-repeat="item in itemList">
+        Name of list: {{itemList.listName}}
+        <br>
+        Last modified: {{itemList.lastModified}}
+        <div ng-repeat="item in itemList.items">
 
 
             <div class="list-group" style="width:25%">
 
-                <a class="list-group-item" >
-                    <p>{{item.name}}
+                <!--<a class="list-group-item" >-->
+                    <input type="checkbox" id="{{$index}}" >
+                    <span>{{item.name}}
                         <!--Control if quantity should show. Do not display if quantity is <= 1 -->
                         <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
-                    </p>
-                </a>
+                    </span>
+                <!--</a>-->
 
             </div>
             <!--<p>{{item.name}}-->

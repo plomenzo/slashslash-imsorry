@@ -10,7 +10,7 @@ angular.module('listView', []);
 
 function itemsController($scope) {
 
-    getItemsFromList(REPLACE_WITH_SESSION_SAVED_OID, function(result) {
+    getEntireList(REPLACE_WITH_SESSION_SAVED_OID, function(result) {
 
         $scope.$apply(function(){
 

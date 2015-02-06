@@ -71,3 +71,19 @@ function getItemsFromList(listID, callback)
         return items;
     });
 }
+
+function getEntireList(listID, callback)
+{
+    getList(listID, function(result) {
+
+        var list = result;
+        console.log(list);
+        callback(list);
+        return list;
+    });
+}
+
+function toggleCheckedStatus(index){
+
+
+}
