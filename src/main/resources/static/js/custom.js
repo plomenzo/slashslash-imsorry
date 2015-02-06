@@ -87,3 +87,30 @@ function toggleCheckedStatus(index){
 
 
 }
+
+function addItemToListAJAX(listID, userName, itemName, price, quantity, callback) {
+    $.ajax(
+        {
+            type : "POST",
+            url  : "/cs480/addItem/" + listID + "/" + userName,
+            data : {
+                "itemName" : itemName,
+                "price" : price,
+                "quantity": quantity
+            },
+            success : function(result) {
+                callback(result);
+                return result;
+            },
+            error: function (jqXHR, exception) {
+                alert("Failed to add item");
+            }
+        });
+}
+
+function testAdd(){
+    addItemToListAJAX("54cebe0d17ef75cddfb06a35","isaac","ISAAC APPLES",45,2, function(){
+        console.log("inside testAdd() callback");
+    })
+}
+
