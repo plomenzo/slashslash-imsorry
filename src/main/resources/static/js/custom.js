@@ -88,7 +88,7 @@ function toggleCheckedStatus(index){
 
 }
 
-function addItemToListAJAX(listID, userName, itemName, price, quantity, callback) {
+function addItemToListAJAX(listID, userName, itemName, price, quantity, isChecked, callback) {
     $.ajax(
         {
             type : "POST",
@@ -97,6 +97,7 @@ function addItemToListAJAX(listID, userName, itemName, price, quantity, callback
                 "itemName" : itemName,
                 "price" : price,
                 "quantity": quantity
+                "isChecked": isChecked
             },
             success : function(result) {
                 callback(result);
@@ -109,7 +110,7 @@ function addItemToListAJAX(listID, userName, itemName, price, quantity, callback
 }
 
 function testAdd(){
-    addItemToListAJAX("54cebe0d17ef75cddfb06a35","isaac","ISAAC APPLES",45,2, function(){
+    addItemToListAJAX("54cebe0d17ef75cddfb06a35","isaac","ISAAC APPLES",45,2,false, function(){
         console.log("inside testAdd() callback");
     })
 }

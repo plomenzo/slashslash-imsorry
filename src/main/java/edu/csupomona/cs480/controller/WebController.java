@@ -255,6 +255,7 @@ public class WebController {
      * @param name Item name
      * @param quantity item quantity
      * @param price item price
+     * @param isChecked is item "checked"
      * @return 
      */
     @RequestMapping(value = "/cs480/addItem/{listName}/{userName}", method = RequestMethod.POST)
@@ -263,7 +264,8 @@ public class WebController {
     		@PathVariable("userName") String userName,
     		@RequestParam("itemName") String name,
     		@RequestParam("price") double price,
-    		@RequestParam("quantity") int quantity){
+    		@RequestParam("quantity") int quantity,
+    		@RequestParam("isChecked") boolean isChecked){
     	BasicDBObject query = new BasicDBObject("_id",new ObjectId(id));
     	DBCursor cursor = listsColl.find(query);
     	DBObject listObject = cursor.one();
@@ -274,7 +276,8 @@ public class WebController {
 		//Create new item
 		BasicDBObject item = new BasicDBObject("name", name)
 								.append("quantity", quantity)
-								.append("price", price);
+								.append("price", price)
+								.append("isChecked", isChecked);
 		//add item to list
 		items.add(item);
 		//Removes item in new list
@@ -301,6 +304,7 @@ public class WebController {
      * @param user user whos is editing
      * @param quantity item quantity
      * @param price item price
+     * @param isChecked is item "checked"
      * @return 
      */
     //TODO use $set instead of other functions
@@ -311,13 +315,14 @@ public class WebController {
     		@RequestParam("name") String name,
     		@RequestParam("user") String userName,
     		@RequestParam("quantity") int quantity,
-    		@RequestParam("price") int price ) {
+    		@RequestParam("price") int price,
+    		@RequestParam("isChecked") boolean isChecked) {
     	
     	// remove the old item from the list
     	removeItem(listId,oldName);
     	
     	// add the new item to the list
-    	addItemToList(listId,userName,name,price,quantity);
+    	addItemToList(listId,userName,name,price,quantity,isChecked);
 
     	return true;	
     }	  
