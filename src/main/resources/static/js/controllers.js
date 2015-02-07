@@ -6,23 +6,44 @@
  */
 
 var REPLACE_WITH_SESSION_SAVED_OID =  "54cebe0d17ef75cddfb06a35";
+var REFRESH_INTERVAL = 5000;
+
+//Warning: Changing AUTOUPDATE flag will cause the list to autoupdate,
+// which will use lots of GET AJAX calls
+var AUTOUPDATE = false;
+
 angular.module('listView', []);
 
 function itemsController($scope) {
+    pullListAndUpdate();
 
-    getEntireList(REPLACE_WITH_SESSION_SAVED_OID, function(result) {
+    if(AUTOUPDATE){
+        setInterval(function(){
+            pullListAndUpdate();
 
-        $scope.$apply(function(){
 
-            $scope.itemList = result;
+        },REFRESH_INTERVAL);
+    }
 
-        })
+    function pullListAndUpdate(){
+        getEntireList(REPLACE_WITH_SESSION_SAVED_OID, function(result) {
 
-    });
+            $scope.$apply(function(){
+
+                $scope.itemList = result;
+
+            })
+
+        });
+
+    }
+
+
 
 //    $scope.add = function(item) {
 //        $scope.items.push(item);
 //    };
 
 }
+
 
