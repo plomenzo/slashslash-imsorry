@@ -3,12 +3,10 @@ package edu.csupomona.cs480.controller;
 import java.util.Arrays;
 //import java.util.List;
 
-<<<<<<< HEAD
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
-=======
 
 
 
@@ -19,7 +17,7 @@ import org.apache.commons.math3.linear.RealMatrix;
 
 
 
->>>>>>> Added authentication and delete list method. Also assignment 5 library
+
 import org.bson.types.ObjectId;
 import org.jsoup.Jsoup;
 import org.joda.time.DateTime;
@@ -486,14 +484,14 @@ public class WebController {
     @RequestMapping(value = "/cs480/deleteList/{id}", method = RequestMethod.POST)
     boolean deleteList(
     		@PathVariable("id") String id){
-    	
-    	//List that we want to find
+
+	   	//List that we want to find
     	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));
-    	
-        //Remove list
-        listsColl.remove(listObject);
-        System.out.println("Call to removeList: " + id);
-        return true;
+	    	
+	    //Remove list
+	    listsColl.remove(listObject);
+	    System.out.println("Call to removeList: " + id);
+	    return true;
     }
     
     /**
@@ -540,6 +538,7 @@ public class WebController {
     }
     
     /**
+     * ASSIGNMENT 5
      * Prints the date in LA
      * @return
      */
