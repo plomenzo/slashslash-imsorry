@@ -3,12 +3,30 @@ package edu.csupomona.cs480.controller;
 import java.util.Arrays;
 //import java.util.List;
 
+<<<<<<< HEAD
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+=======
+
+
+
+
+
+
+
+
+
+
+>>>>>>> Added authentication and delete list method. Also assignment 5 library
 import org.bson.types.ObjectId;
 import org.jsoup.Jsoup;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -298,7 +316,7 @@ public class WebController {
      * @param id List ID
      * @param oldName old Item(before edit) name
      * @param name new name of item
-     * @param user user whos is editing
+     * @param user user who's is editing
      * @param quantity item quantity
      * @param price item price
      * @param isChecked is item "checked"
@@ -334,9 +352,11 @@ public class WebController {
     Boolean inviteUser(
     		@PathVariable("id") String listId,
     		@PathVariable("userId") String userId){
+    	
     	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listId));
     	DBCursor cursor = listsColl.find(query);
     	DBObject userObject = cursor.one();
+    	
     	// check to see if they are already added to the list *not implemented yet
     	
 		//Get the UserAccess list
@@ -354,6 +374,7 @@ public class WebController {
     	//update the list collection with new user object
     	listsColl.update(orig,userObject);
     	System.out.println("Call to inviteUser() : " + userObject.toString());
+    	
     	return true;
     }
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
@@ -424,6 +445,7 @@ public class WebController {
     	return result;
 
     }
+
     
     /**
      * Tests out the Apache Commons Math for Assignment 5
@@ -455,6 +477,88 @@ public class WebController {
     }
     
     
+
+    /**
+     * Deletes an entire list
+     * @param id List ID
+     * @return 
+     */
+    @RequestMapping(value = "/cs480/deleteList/{id}", method = RequestMethod.POST)
+    boolean deleteList(
+    		@PathVariable("id") String id){
+    	
+    	//List that we want to find
+    	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));
+    	
+        //Remove list
+        listsColl.remove(listObject);
+        System.out.println("Call to removeList: " + id);
+        return true;
+    }
+    
+    /**
+     * Authenticates a user/password
+     * @param userName user name
+     * @param password password
+     * @return true if password is correct
+     * @return false if password is incorrect
+     * @return false if user doesn't not exist
+     */
+    @RequestMapping(value = "/cs480/authenticate/{userName}", method = RequestMethod.POST)
+    boolean authenticate(
+    		@PathVariable("userName") String userName,
+    		@RequestParam("password") String password){
+    	// find the user given the user name
+    	DBObject query = new BasicDBObject("userName", userName); 
+    	DBCursor cursor = usersColl.find(query);
+    	
+    	try
+    	{
+	    	DBObject result = cursor.one();
+	    	
+	    	BasicDBObject userObject = new BasicDBObject("userName",userName).append("password", password);
+	    	// check to see if the passwords match
+	    	if(userObject.get("password").equals(result.get("password")))
+	    	{   	
+	    		// password is correct
+	    		System.out.println(userName + "authenticated");
+	    		return true;
+	    	}	
+	    	else
+	    	{
+	    		// password is incorrect
+	    		System.out.println("password is incorrect");
+	    		return false;
+	    	}
+    	}
+    	catch (Exception e)
+    	{
+    		// user name does not exist
+    		System.out.println(userName + " doesn't exist");
+    		return false;
+    	}
+    }
+    
+    /**
+     * Prints the date in LA
+     * @return
+     */
+    @RequestMapping(value = "/cs480/getDate", method = RequestMethod.GET)
+    boolean getDate(){
+    	
+    	// set up Data for LA
+    	DateTime utc = new DateTime(DateTimeZone.UTC);
+    	DateTimeZone tz = DateTimeZone.forID("America/Los_Angeles");
+    	DateTime losAngelesDateTime = utc.toDateTime(tz);
+    	
+    	// Format the time to day/month/year
+    	DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yy");
+    	//print the time
+    	System.out.println(fmt.print(losAngelesDateTime));
+    	
+    	return true;
+    }
+
     
 //////////////////////////////////////OLD CODE/////////////////////////////////////////////    
 //////////////////////////////////////OLD CODE/////////////////////////////////////////////    
