@@ -1,32 +1,47 @@
 package edu.csupomona.cs480.controller;
 
-import java.util.Arrays;
-//import java.util.List;
+//Project imports
+import edu.csupomona.cs480.App;
+import edu.csupomona.cs480.data.User;
+import edu.csupomona.cs480.data.provider.UserManager;
 
+//Java imports
+import java.util.Arrays;
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import static java.util.concurrent.TimeUnit.SECONDS;
+
+//Apache imports
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
-
-
-
-
-
-
-
-
-
-
-import org.bson.types.ObjectId;
-import org.jsoup.Jsoup;
+//Joda Library
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+//Jsoup Library
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+
+//Bson Object import
+import org.bson.types.ObjectId;
+
+//Google? import
+import static com.google.common.base.Preconditions.*;
+
+//Object Mapper? 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+//Spring Framework
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,19 +50,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.WriteResult;
-
-import edu.csupomona.cs480.App;
-import edu.csupomona.cs480.data.User;
-import edu.csupomona.cs480.data.provider.UserManager;
-
-import com.mongodb.BasicDBList;
 //MongoDB imports
 import com.mongodb.BasicDBObject;
 import com.mongodb.BasicDBList;
@@ -62,16 +64,15 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.ParallelScanOptions;
 import com.mongodb.QueryBuilder;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.WriteResult;
+import com.mongodb.BasicDBList;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static com.google.common.base.Preconditions.*;
 
 
 /**
