@@ -5,7 +5,7 @@
  * Time: 2:36 PM
  */
 
-var REPLACE_WITH_SESSION_SAVED_OID =  "54cebe0d17ef75cddfb06a35";
+var REPLACE_WITH_SESSION_SAVED_OID =  "54d6631c0fdcf8e36aa174d8";
 var REFRESH_INTERVAL = 5000;
 
 //Warning: Changing AUTOUPDATE flag will cause the list to autoupdate,
@@ -15,7 +15,12 @@ var AUTOUPDATE = false;
 angular.module('listView', []);
 
 function itemsController($scope) {
-    pullListAndUpdate();
+
+    //TODO pull list of lists, possibly oids, listNames, need to write AJAX call/api method
+    $scope.lists = ['54d6631c0fdcf8e36aa174d8','54d6625a0fdcf0e2679092ad', '54cebe0d17ef75cddfb06a35']
+
+
+    pullListAndUpdate(REPLACE_WITH_SESSION_SAVED_OID);
 
     if(AUTOUPDATE){
         setInterval(function(){
@@ -25,8 +30,8 @@ function itemsController($scope) {
         },REFRESH_INTERVAL);
     }
 
-    function pullListAndUpdate(){
-        getEntireList(REPLACE_WITH_SESSION_SAVED_OID, function(result) {
+    function pullListAndUpdate(listOID){
+        getEntireList(listOID, function(result) {
 
             $scope.$apply(function(){
 
@@ -37,6 +42,14 @@ function itemsController($scope) {
         });
 
     }
+
+    function setCurrentList(listOID){
+        console.log("setCurrentList()"+"Switching lists to: " + listOID)
+        pullListAndUpdate(listOID)
+
+    }
+
+    $scope.setCurrentList = setCurrentList;
 
 
 

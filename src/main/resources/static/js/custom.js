@@ -96,7 +96,7 @@ function addItemToListAJAX(listID, userName, itemName, price, quantity, isChecke
             data : {
                 "itemName" : itemName,
                 "price" : price,
-                "quantity": quantity
+                "quantity": quantity,
                 "isChecked": isChecked
             },
             success : function(result) {
