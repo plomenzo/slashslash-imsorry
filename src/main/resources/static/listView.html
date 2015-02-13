@@ -16,55 +16,71 @@
     <!-- AngularJS -->
     <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
 
-    <!-- Sortable.js -->
-    <script src="http://rubaxa.github.io/Sortable/Sortable.js"></script>
+    <script src="js/jquery.mmenu.min.all.js"></script>
+    <link rel="stylesheet" href="css/jquery.mmenu.all.css">
 
-    <!-- ng-sortable.js -->
-    <script src="http://rubaxa.github.io/Sortable/ng-sortable.js"></script>
 
     <!--Custom Assets-->
-    <link rel="stylesheet" href="css/custom.css">
+    <!--<link rel="stylesheet" href="css/custom.css">-->
     <script src="js/custom.js"></script>
     <script src="js/controllers.js"></script>
 </head>
-<body ng-app="listView">
-    <div ng-controller="itemsController">
+<body ng-app="listView" ng-controller="itemsController">
+<div id="menu">
+        <a href="#my-menu">Open the menu</a>
 
+
+    <nav id="my-menu">
         <!--List of List Names-->
-        <h1>v HARD CODED LIST OIDS v</h1>
-        <span ng-repeat="list in lists">
-            <span ng-click="setCurrentList(list)">{{list}}</span>
-        </span>
+        <ul>
+            <li
+                    ng-repeat="list in lists"
+                    ng-click="setCurrentList(list)">
+                <a >{{list}}</a>
+            </li>
 
-         <br>           <br>
+        </ul>
+    </nav>
+</div><!--Overall Wrapper for menu-->
 
-        <!--List Info-->
-        Name of list: {{itemList.listName}}
-        <br>
-        Last modified: {{itemList.lastModified}}
-        <br><br>
+<div id="page">
 
-        <!--Items in List-->
-        <div ng-repeat="item in itemList.items">
+    <div>
+
+             <br>           <br>
+
+            <!--List Info-->
+            Name of list: {{itemList.listName}}
+            <br>
+            Last modified: {{itemList.lastModified}}
+            <br><br>
+
+            <!--Items in List-->
+            <div ng-repeat="item in itemList.items">
 
 
-            <div class="list-group" style="width:25%">
+                <div class="list-group" style="width:25%">
 
-                <!--<a class="list-group-item" >-->
-                    <input type="checkbox" ng-checked="item.isChecked" id="{{$index}}" >
-                    <span>{{item.name}}
-                        <!--Control if quantity should show. Do not display if quantity is <= 1 -->
-                        <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
-                    </span>
-                <!--</a>-->
+                    <!--<a class="list-group-item" >-->
+                        <input type="checkbox" ng-checked="item.isChecked" id="{{$index}}" >
+                        <span>{{item.name}}
+                            <!--Control if quantity should show. Do not display if quantity is <= 1 -->
+                            <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
+                        </span>
+                    <!--</a>-->
+
+                </div>
 
             </div>
-            <!--<p>{{item.name}}-->
-                <!--&lt;!&ndash;Control if quantity should show. Do not display if quantity is <= 1 &ndash;&gt;-->
-                <!--<span ng-if="item.quantity > 1">x {{item.quantity}}</span>-->
-            <!--</p>-->
         </div>
     </div>
-
 </body>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#my-menu").mmenu({
+
+        });
+    });
+</script>
 </html>
