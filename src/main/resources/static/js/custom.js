@@ -41,7 +41,22 @@ function removeItem() {
 				}
 			});
 }
-
+//Duplicate as do not know if will need old remove item
+function removeItem(listID, item) {
+    $.ajax(
+            {
+                type : "POST",
+                url  : "/cs480/removeItem/" + listID +"/" + item,
+                data : {
+                },
+                success : function(result) {
+                //need to find a way to refresh list
+                },
+                error: function (jqXHR, exception) {
+                    alert("Failed to remove item. Please check inputs.");
+                }
+            });
+}
 
 //Returns list object of the given listID
 function getList(listID, callback) {

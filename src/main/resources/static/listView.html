@@ -63,10 +63,15 @@
 
                     <!--<a class="list-group-item" >-->
                         <input type="checkbox" ng-checked="item.isChecked" id="{{$index}}" >
+                        
                         <span>{{item.name}}
                             <!--Control if quantity should show. Do not display if quantity is <= 1 -->
                             <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
                         </span>
+                        
+                        <button ng-click="removeItem(listID, item.name)">Remove Item</button>
+                        
+
                     <!--</a>-->
 
                 </div>

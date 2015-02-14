@@ -18,8 +18,8 @@ function itemsController($scope) {
 
     //TODO pull list of lists, possibly oids, listNames, need to write AJAX call/api method
     $scope.lists = ['54d6631c0fdcf8e36aa174d8','54d6625a0fdcf0e2679092ad', '54cebe0d17ef75cddfb06a35']
-
-
+    
+    
     pullListAndUpdate(REPLACE_WITH_SESSION_SAVED_OID);
 
     if(AUTOUPDATE){
@@ -36,13 +36,14 @@ function itemsController($scope) {
             $scope.$apply(function(){
 
                 $scope.itemList = result;
+                $scope.listID = listOID;
 
             })
 
         });
 
     }
-
+    
     function setCurrentList(listOID){
         console.log("setCurrentList()"+"Switching lists to: " + listOID)
         pullListAndUpdate(listOID)
@@ -52,11 +53,28 @@ function itemsController($scope) {
     $scope.setCurrentList = setCurrentList;
 
 
-
 //    $scope.add = function(item) {
 //        $scope.items.push(item);
 //    };
 
+    //Added remove item due to nodejs scope issues
+	function removeItem(listID, item) {
+	    $.ajax(
+	            {
+	                type : "POST",
+	                url  : "/cs480/removeItem/" + listID +"/" + item,
+	                data : {
+	                },
+	                success : function(result) {
+	                	pullListAndUpdate(listID);
+	                },
+	                error: function (jqXHR, exception) {
+	                    alert("Failed to remove item. Please check inputs.");
+	                }
+	            });
+	}
+    $scope.removeItem = removeItem;
+    
 }
 
 
