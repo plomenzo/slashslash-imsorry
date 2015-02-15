@@ -75,6 +75,29 @@ function itemsController($scope) {
 	}
     $scope.removeItem = removeItem;
     
+    
+    //add item to list
+    //Modified to streamline adding from page
+    function addItem(listID, userName, itemName, quantity) {
+	    $.ajax(
+	        {
+	            type : "POST",
+	            url  : "/cs480/addItem/" + listID + "/" + userName,
+	            data : {
+	                "itemName" : itemName,
+	                "price" : -1,
+	                "quantity": quantity,
+	                "isChecked": false
+	            },
+	            success : function(result) {
+	                return result;
+	            },
+	            error: function (jqXHR, exception) {
+	                alert("Failed to add item");
+	            }
+	        });
+	}
+	$scope.addItem = addItem;
 }
 
 
