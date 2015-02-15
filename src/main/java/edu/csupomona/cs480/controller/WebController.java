@@ -159,7 +159,8 @@ public class WebController {
     		@PathVariable("userName") String userName ,
     		@RequestParam("password") String pw){
     	DBObject user = new BasicDBObject("userName", userName)
-    	                    .append("password", pw);
+    	                    .append("password", pw)
+    						.append("userAccessibleLists", new BasicDBList());
     	
     	usersColl.insert(user);
    
@@ -354,24 +355,43 @@ public class WebController {
     	
     	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listId));
     	DBCursor cursor = listsColl.find(query);
-    	DBObject userObject = cursor.one();
+    	DBObject listObject = cursor.one();
     	
     	// check to see if they are already added to the list *not implemented yet
     	
 		//Get the UserAccess list
-    	BasicDBList users = (BasicDBList) userObject.get("userAccess");
+    	BasicDBList users = (BasicDBList) listObject.get("userAccess");
     	
 		//add user to userId
 		users.add(userId);
 		
 		// Add the user to userAccess
-        userObject.put("userAccess", users);
+        listObject.put("userAccess", users);
         
-        //orig = userObject will give us 2 user objects
-    	DBObject orig = cursor.one();
+        //orig = listObject will give us 2 list objects
+    	DBObject origList = cursor.one();
     	
     	//update the list collection with new user object
-    	listsColl.update(orig,userObject);
+    	listsColl.update(origList,listObject);
+    	
+    	// get user object
+    	BasicDBObject queryUser = new BasicDBObject("_id", new ObjectId(userId));
+    	DBCursor cursorUser = usersColl.find(queryUser);
+    	//Uses the first User found from search
+    	DBObject userObject = cursorUser.one();
+    	// get the lists that the user has access to
+    	BasicDBList usersLists = (BasicDBList) userObject.get("userAccessibleLists");
+    	// add new list id
+    	usersLists.add(listId);
+    	// put back the user accessible lists list
+    	userObject.put("userAccessibleLists", usersLists);
+    	// get original user
+    	DBObject origUser = cursor.one();
+    	// update user object
+    	usersColl.update(origUser, userObject);
+    	// close cursor to user
+    	cursorUser.close();  	
+    	
     	System.out.println("Call to inviteUser() : " + userObject.toString());
     	
     	return true;
