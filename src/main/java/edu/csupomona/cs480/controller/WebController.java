@@ -376,6 +376,68 @@ public class WebController {
     	
     	return true;
     }
+    
+    /**
+     * Deletes an entire list
+     * @param id List ID
+     * @return 
+     */
+    @RequestMapping(value = "/cs480/deleteList/{id}", method = RequestMethod.POST)
+    boolean deleteList(
+    		@PathVariable("id") String id){
+
+	   	//List that we want to find
+    	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));
+	    	
+	    //Remove list
+	    listsColl.remove(listObject);
+	    System.out.println("Call to removeList: " + id);
+	    return true;
+    }
+    
+    /**
+     * Authenticates a user/password
+     * @param userName user name
+     * @param password password
+     * @return true if password is correct
+     * @return false if password is incorrect
+     * @return false if user doesn't not exist
+     */
+    @RequestMapping(value = "/cs480/authenticate/{userName}", method = RequestMethod.POST)
+    boolean authenticate(
+    		@PathVariable("userName") String userName,
+    		@RequestParam("password") String password){
+    	// find the user given the user name
+    	DBObject query = new BasicDBObject("userName", userName); 
+    	DBCursor cursor = usersColl.find(query);
+    	
+    	try
+    	{
+	    	DBObject result = cursor.one();
+	    	
+	    	BasicDBObject userObject = new BasicDBObject("userName",userName).append("password", password);
+	    	// check to see if the passwords match
+	    	if(userObject.get("password").equals(result.get("password")))
+	    	{   	
+	    		// password is correct
+	    		System.out.println(userName + "authenticated");
+	    		return true;
+	    	}	
+	    	else
+	    	{
+	    		// password is incorrect
+	    		System.out.println("password is incorrect");
+	    		return false;
+	    	}
+    	}
+    	catch (Exception e)
+    	{
+    		// user name does not exist
+    		System.out.println(userName + " doesn't exist");
+    		return false;
+    	}
+    }
+    
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
@@ -473,69 +535,6 @@ public class WebController {
     	// Invert p, using LU decomposition
     	RealMatrix pInverse = new LUDecomposition(p).getSolver().getInverse();
     	return pInverse.toString();
-    }
-    
-    
-
-    /**
-     * Deletes an entire list
-     * @param id List ID
-     * @return 
-     */
-    @RequestMapping(value = "/cs480/deleteList/{id}", method = RequestMethod.POST)
-    boolean deleteList(
-    		@PathVariable("id") String id){
-
-	   	//List that we want to find
-    	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));
-	    	
-	    //Remove list
-	    listsColl.remove(listObject);
-	    System.out.println("Call to removeList: " + id);
-	    return true;
-    }
-    
-    /**
-     * Authenticates a user/password
-     * @param userName user name
-     * @param password password
-     * @return true if password is correct
-     * @return false if password is incorrect
-     * @return false if user doesn't not exist
-     */
-    @RequestMapping(value = "/cs480/authenticate/{userName}", method = RequestMethod.POST)
-    boolean authenticate(
-    		@PathVariable("userName") String userName,
-    		@RequestParam("password") String password){
-    	// find the user given the user name
-    	DBObject query = new BasicDBObject("userName", userName); 
-    	DBCursor cursor = usersColl.find(query);
-    	
-    	try
-    	{
-	    	DBObject result = cursor.one();
-	    	
-	    	BasicDBObject userObject = new BasicDBObject("userName",userName).append("password", password);
-	    	// check to see if the passwords match
-	    	if(userObject.get("password").equals(result.get("password")))
-	    	{   	
-	    		// password is correct
-	    		System.out.println(userName + "authenticated");
-	    		return true;
-	    	}	
-	    	else
-	    	{
-	    		// password is incorrect
-	    		System.out.println("password is incorrect");
-	    		return false;
-	    	}
-    	}
-    	catch (Exception e)
-    	{
-    		// user name does not exist
-    		System.out.println(userName + " doesn't exist");
-    		return false;
-    	}
     }
     
     /**
