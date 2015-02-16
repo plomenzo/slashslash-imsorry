@@ -63,7 +63,7 @@ function getList(listID, callback) {
     $.ajax(
         {
             type : "GET",
-            url  : "/cs480/list/" + listID,
+            url  : "/cs480/getList/" + listID,
             data : {
             },
             success : function(result) {
