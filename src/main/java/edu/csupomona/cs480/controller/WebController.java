@@ -6,6 +6,7 @@ import edu.csupomona.cs480.data.User;
 import edu.csupomona.cs480.data.provider.UserManager;
 
 
+
 //Java imports
 import java.util.Arrays;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
+
 
 
 //Apache imports
@@ -39,11 +41,13 @@ import org.jsoup.select.Elements;
 import org.bson.types.ObjectId;
 
 
+
 //Google? import
 import static com.google.common.base.Preconditions.*;
 
 //Object Mapper? 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 
 //Spring Framework
@@ -54,6 +58,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
 
 
 //MongoDB imports
@@ -496,21 +501,37 @@ public class WebController {
     
     /**
      * getUserLists()
-     * Returns an object with oids of all the lists the user has access to.
+     * Returns a list with objects containing both the oids  and names
+     * of all the lists the user has access to.
      * @param userId
      */    
     @RequestMapping(value = "/cs480/getUserLists/{userId}", method = RequestMethod.GET)
     BasicDBList getUserLists(
     		@PathVariable("userId") String userId){
-    	BasicDBObject query = new BasicDBObject("_id", new ObjectId(userId));
+    	BasicDBObject userQuery = new BasicDBObject("_id", new ObjectId(userId));
     	
-    	DBCursor cursor = usersColl.find(query);
+    	DBCursor userCursor = usersColl.find(userQuery);
     	//Uses the first User found from search
-    	DBObject userObject = cursor.one();
-    	cursor.close();  	
+    	DBObject userObject = userCursor.one();
+    	
+    	BasicDBList usersListsOIDs = (BasicDBList)userObject.get("userAccessibleLists");
+    	BasicDBList lists = new BasicDBList();
+    	
+    	for(int i=0; i<usersListsOIDs.size(); i++)
+    	{
+    		BasicDBObject listQuery = new BasicDBObject("_id", new ObjectId(usersListsOIDs.get(i).toString()));
+    		DBCursor listCursor = listsColl.find(listQuery);
+    		DBObject listObj = listCursor.one();
+    		String listName = (String)(listObj.get("listName"));
+    		BasicDBObject currentList = new BasicDBObject("oid", usersListsOIDs.get(i))
+    											.append("name", listName);
+    		listCursor.close();
+    		lists.add(currentList);
+    	}
+    	userCursor.close();  	
     	System.out.println("Call to getUserLists() of user: " + userObject.toString());
     	
-    	return (BasicDBList)userObject.get("userAccessibleLists");
+    	return lists;
     }
     
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
