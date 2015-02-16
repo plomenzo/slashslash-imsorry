@@ -136,7 +136,7 @@ public class WebController {
      * @param userName
      */
     @RequestMapping(value = "/cs480/userExists/{userName}", method = RequestMethod.GET)
-    Boolean userExists(@PathVariable("userName") String userName) throws UnknownHostException {
+    public Boolean userExists(@PathVariable("userName") String userName) throws UnknownHostException {
     	DBObject query = new BasicDBObject("userName", userName); 
     	DBCursor cursor = usersColl.find(query);
     	DBObject result = cursor.one();
@@ -412,7 +412,7 @@ public class WebController {
      * @return 
      */
     @RequestMapping(value = "/cs480/deleteList/{id}", method = RequestMethod.POST)
-    boolean deleteList(
+    public boolean deleteList(
     		@PathVariable("id") String id){
 
 	   	//List that we want to find
