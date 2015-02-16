@@ -225,7 +225,7 @@ public class WebController {
      * Returns a list object matching the specified $oid of the list from the database.
      * @param id
      */    
-    @RequestMapping(value = "/cs480/list/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/cs480/getList/{id}", method = RequestMethod.GET)
     DBObject getList(
     		@PathVariable("id") String id){
     	BasicDBObject query = new BasicDBObject("_id", new ObjectId(id));
