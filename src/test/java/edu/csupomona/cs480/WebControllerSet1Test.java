@@ -41,4 +41,23 @@ public class WebControllerSet1Test
 		assertNull(result);
 	}
 	
+	@Test
+	public void testAuthenticate()
+	{ 
+		//Authenticate an existing user  
+		String result = web.authenticate("testUser","testPassword");
+		
+		assertNotNull(result);
+		assertEquals(result, "54cebe2117ef75cddfb06a36");
+		
+		//Authenticate a non-existing user  
+		result = web.authenticate("gibberish","testPassword");
+				
+		assertNotNull(result);
+		assertEquals(result, "Login Failed");
+			
+	}
+	
+	
+	
 }

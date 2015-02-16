@@ -459,7 +459,7 @@ public class WebController {
      * @return false if user doesn't not exist
      */
     @RequestMapping(value = "/cs480/authenticate/{userName}", method = RequestMethod.POST)
-    String authenticate(
+    public String authenticate(
     		@PathVariable("userName") String userName,
     		@RequestParam("password") String password){
     	// find the user given the user name
