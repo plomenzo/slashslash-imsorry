@@ -5,6 +5,7 @@ import edu.csupomona.cs480.App;
 import edu.csupomona.cs480.data.User;
 import edu.csupomona.cs480.data.provider.UserManager;
 
+
 //Java imports
 import java.util.Arrays;
 import java.io.IOException;
@@ -12,7 +13,9 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 import static java.util.concurrent.TimeUnit.SECONDS;
+
 
 //Apache imports
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
@@ -35,11 +38,13 @@ import org.jsoup.select.Elements;
 //Bson Object import
 import org.bson.types.ObjectId;
 
+
 //Google? import
 import static com.google.common.base.Preconditions.*;
 
 //Object Mapper? 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 //Spring Framework
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +54,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
 
 //MongoDB imports
 import com.mongodb.BasicDBObject;
@@ -109,7 +115,7 @@ public class WebController {
     public WebController() throws UnknownHostException{
     	//Initialize connection to MongoDB
     	//Do this once on the WebController constructor to prevent wasted connections
-    	Boolean useLocal = false;
+    	Boolean useLocal = true;
     	
     	if(useLocal)
     	{
@@ -199,7 +205,7 @@ public class WebController {
      * @param userAccess
      * @return
      */
-    @RequestMapping(value = "/cs480/createList/{listName}", method = RequestMethod.POST)
+	@RequestMapping(value = "/cs480/createList/{listName}", method = RequestMethod.POST)
     Boolean createList(
     		@PathVariable("listName") String listName ,
     		@RequestParam("creatorUserID") String creatorUserID){
@@ -213,6 +219,26 @@ public class WebController {
     					.append("lastModified", System.currentTimeMillis());
     	
     	listsColl.insert(list);
+    	
+    	// get the list oid to add to the user 
+    	String listId = (list.get("_id")).toString();
+    	// get user object
+    	BasicDBObject queryUser = new BasicDBObject("_id", new ObjectId(creatorUserID));
+    	DBCursor cursorUser = usersColl.find(queryUser);
+    	//Use the first user found from search
+    	DBObject userObject = cursorUser.one();
+    	// get the lists that the user has access to
+    	BasicDBList usersLists = (BasicDBList) userObject.get("userAccessibleLists");
+    	// add new list id
+    	usersLists.add(listId);
+    	// put back the user accessible lists list
+    	userObject.put("userAccessibleLists", usersLists);
+    	// get original user
+    	DBObject origUser = cursorUser.one();
+    	// update user object
+    	usersColl.update(origUser, userObject);
+    	// close cursor to user
+    	cursorUser.close();
     	
     	System.out.println("Call to createList() :" + list.toString());
     	
@@ -354,7 +380,7 @@ public class WebController {
     /**
      * Adds user to userAccess
      * @param id List ID
-     * @param userId The user id you are adding
+     * @param userId The user oid you are adding
      * @return 
      */
     @RequestMapping(value = "/cs480/inviteUser/{id}/{userId}", method = RequestMethod.POST)
@@ -386,7 +412,7 @@ public class WebController {
     	// get user object
     	BasicDBObject queryUser = new BasicDBObject("_id", new ObjectId(userId));
     	DBCursor cursorUser = usersColl.find(queryUser);
-    	//Uses the first User found from search
+    	//Use the first user found from search
     	DBObject userObject = cursorUser.one();
     	// get the lists that the user has access to
     	BasicDBList usersLists = (BasicDBList) userObject.get("userAccessibleLists");
@@ -395,7 +421,7 @@ public class WebController {
     	// put back the user accessible lists list
     	userObject.put("userAccessibleLists", usersLists);
     	// get original user
-    	DBObject origUser = cursor.one();
+    	DBObject origUser = cursorUser.one();
     	// update user object
     	usersColl.update(origUser, userObject);
     	// close cursor to user
@@ -466,6 +492,55 @@ public class WebController {
     		System.out.println(userName + " doesn't exist");
     		return "Login Failed";
     	}
+    }
+    
+    /**
+     * getUserLists()
+     * Returns an object with oids of all the lists the user has access to.
+     * @param userId
+     */    
+    @RequestMapping(value = "/cs480/getUserLists/{userId}", method = RequestMethod.GET)
+    BasicDBList getUserLists(
+    		@PathVariable("userId") String userId){
+    	BasicDBObject query = new BasicDBObject("_id", new ObjectId(userId));
+    	
+    	DBCursor cursor = usersColl.find(query);
+    	//Uses the first User found from search
+    	DBObject userObject = cursor.one();
+    	cursor.close();  	
+    	System.out.println("Call to getUserLists() of user: " + userObject.toString());
+    	
+    	return (BasicDBList)userObject.get("userAccessibleLists");
+    	
+/*    	// find the user given the user name
+    	DBObject query = new BasicDBObject("userName", userName); 
+    	DBCursor cursor = usersColl.find(query);
+    	
+    	try
+    	{
+	    	DBObject result = cursor.one();
+	    	
+	    	BasicDBObject userObject = new BasicDBObject("userName",userName).append("password", password);
+	    	// check to see if the passwords match
+	    	if(userObject.get("password").equals(result.get("password")))
+	    	{   	
+	    		// password is correct
+	    		System.out.println(userName + "authenticated");
+	    		return true;
+	    	}	
+	    	else
+	    	{
+	    		// password is incorrect
+	    		System.out.println("password is incorrect");
+	    		return false;
+	    	}
+    	}
+    	catch (Exception e)
+    	{
+    		// user name does not exist
+    		System.out.println(userName + " doesn't exist");
+    		return false;
+    	}*/
     }
     
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
