@@ -23,6 +23,7 @@ function attemptLogin() {
                 if(result == "Login Failed")
                     alert("Invalid Login")
                 else {
+                    saveDataAndTransitionPage(result)
 
                 }
 
@@ -31,4 +32,15 @@ function attemptLogin() {
                 alert("Error during login.");
             }
         });
+}
+
+function saveDataAndTransitionPage(userOID){
+    var _account = {
+        UserOID: userOID
+    };
+    //converts to JSON string the Object Literal
+    _account = JSON.stringify(_account);
+    localStorage.setItem('_Account', _account);
+
+    window.location.href = "listView.html";
 }
