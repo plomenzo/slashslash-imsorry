@@ -511,36 +511,6 @@ public class WebController {
     	System.out.println("Call to getUserLists() of user: " + userObject.toString());
     	
     	return (BasicDBList)userObject.get("userAccessibleLists");
-    	
-/*    	// find the user given the user name
-    	DBObject query = new BasicDBObject("userName", userName); 
-    	DBCursor cursor = usersColl.find(query);
-    	
-    	try
-    	{
-	    	DBObject result = cursor.one();
-	    	
-	    	BasicDBObject userObject = new BasicDBObject("userName",userName).append("password", password);
-	    	// check to see if the passwords match
-	    	if(userObject.get("password").equals(result.get("password")))
-	    	{   	
-	    		// password is correct
-	    		System.out.println(userName + "authenticated");
-	    		return true;
-	    	}	
-	    	else
-	    	{
-	    		// password is incorrect
-	    		System.out.println("password is incorrect");
-	    		return false;
-	    	}
-    	}
-    	catch (Exception e)
-    	{
-    		// user name does not exist
-    		System.out.println(userName + " doesn't exist");
-    		return false;
-    	}*/
     }
     
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
