@@ -120,7 +120,7 @@ public class WebController {
     public WebController() throws UnknownHostException{
     	//Initialize connection to MongoDB
     	//Do this once on the WebController constructor to prevent wasted connections
-    	Boolean useLocal = false;
+    	Boolean useLocal = true;
     	
     	if(useLocal)
     	{
@@ -609,6 +609,7 @@ public class WebController {
      * @return
      */
     @RequestMapping(value = "/cs480/commonsMathExample/", method = RequestMethod.GET)
+	public
     String commonsMathExample()
     {
     	// Create a real matrix with two rows and three columns, using a factory
