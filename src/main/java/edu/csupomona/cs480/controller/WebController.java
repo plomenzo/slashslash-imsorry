@@ -109,7 +109,7 @@ public class WebController {
     public WebController() throws UnknownHostException{
     	//Initialize connection to MongoDB
     	//Do this once on the WebController constructor to prevent wasted connections
-    	Boolean useLocal = false;
+    	Boolean useLocal = true;
     	
     	if(useLocal)
     	{
@@ -302,11 +302,12 @@ public class WebController {
         //2 listObjects
     	DBObject orig = cursor.one();
     	//Replace old list with new list
-    	System.out.println("Call to addItem() : "  +  listObject.toString());
         listsColl.update(orig,listObject);
         // Updates lastUpdated to current time
         DBObject lastUpdated = new BasicDBObject("lastModified", System.currentTimeMillis());
         listsColl.update(listObject, new BasicDBObject("$set", lastUpdated), false, false);
+        //print to console
+    	System.out.println("Call to addItem() : "  +  listObject.toString());
         
         return true;
     }
@@ -388,7 +389,7 @@ public class WebController {
     	// get original user
     	DBObject origUser = cursor.one();
     	// update user object
-    	usersColl.update(origUser, userObject);
+    	usersColl.update(userObject, origUser);
     	// close cursor to user
     	cursorUser.close();  	
     	
