@@ -27,14 +27,14 @@ public class WebControllerSet1Test
 	public void testDeleteItem()
 	{   //Note that right now it does not matter if the user
 		//Tries to delete an item that is not on the list
-		boolean result = web.removeItem("54d6631c0fdcf8e36aa174d8", "apple");
+		boolean result = web.removeItem("54d6625a0fdcf0e2679092ad", "apple");
 		assertTrue(result);
 	}
 	
 	@Test
 	public void testGetList()
 	{ //Should be non null since list is present
-		DBObject result = web.getList("54d6631c0fdcf8e36aa174d8");
+		DBObject result = web.getList("54d6625a0fdcf0e2679092ad");
 		assertNotNull(result);
 		//Should be null as this is an invalid list ID
 		result = web.getList("ase");
