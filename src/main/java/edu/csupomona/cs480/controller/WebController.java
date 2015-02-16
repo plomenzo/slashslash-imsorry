@@ -120,7 +120,7 @@ public class WebController {
     public WebController() throws UnknownHostException{
     	//Initialize connection to MongoDB
     	//Do this once on the WebController constructor to prevent wasted connections
-    	Boolean useLocal = true;
+    	Boolean useLocal = false;
     	
     	if(useLocal)
     	{
