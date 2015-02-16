@@ -78,7 +78,9 @@ function itemsController($scope) {
     
     //add item to list
     //Modified to streamline adding from page
-    function addItem(listID, userName, itemName, quantity) {
+    function addItemToList(listID, userName) {
+	    var itemName = $('#itemName').val();
+	    var itemQuantity = $('#itemQuantity').val();
 	    $.ajax(
 	        {
 	            type : "POST",
@@ -86,18 +88,18 @@ function itemsController($scope) {
 	            data : {
 	                "itemName" : itemName,
 	                "price" : -1,
-	                "quantity": quantity,
+	                "quantity": itemQuantity,
 	                "isChecked": false
 	            },
 	            success : function(result) {
-	                return result;
+	                	pullListAndUpdate(listID);
 	            },
 	            error: function (jqXHR, exception) {
 	                alert("Failed to add item");
 	            }
 	        });
 	}
-	$scope.addItem = addItem;
+	$scope.addItemToList = addItemToList;
 }
 
 
