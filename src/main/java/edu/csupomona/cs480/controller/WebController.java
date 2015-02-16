@@ -425,7 +425,7 @@ public class WebController {
      * @return false if user doesn't not exist
      */
     @RequestMapping(value = "/cs480/authenticate/{userName}", method = RequestMethod.POST)
-    boolean authenticate(
+    String authenticate(
     		@PathVariable("userName") String userName,
     		@RequestParam("password") String password){
     	// find the user given the user name
@@ -442,20 +442,21 @@ public class WebController {
 	    	{   	
 	    		// password is correct
 	    		System.out.println(userName + "authenticated");
-	    		return true;
+	    		System.out.println(result.get("_id").toString());
+	    		return result.get("_id").toString();
 	    	}	
 	    	else
 	    	{
 	    		// password is incorrect
 	    		System.out.println("password is incorrect");
-	    		return false;
+	    		return "Login failed";
 	    	}
     	}
     	catch (Exception e)
     	{
     		// user name does not exist
     		System.out.println(userName + " doesn't exist");
-    		return false;
+    		return "Login Failed";
     	}
     }
     
