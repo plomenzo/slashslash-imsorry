@@ -109,7 +109,7 @@ public class WebController {
     public WebController() throws UnknownHostException{
     	//Initialize connection to MongoDB
     	//Do this once on the WebController constructor to prevent wasted connections
-    	Boolean useLocal = true;
+    	Boolean useLocal = false;
     	
     	if(useLocal)
     	{
@@ -389,7 +389,7 @@ public class WebController {
     	// get original user
     	DBObject origUser = cursor.one();
     	// update user object
-    	usersColl.update(userObject, origUser);
+    	usersColl.update(origUser, userObject);
     	// close cursor to user
     	cursorUser.close();  	
     	
