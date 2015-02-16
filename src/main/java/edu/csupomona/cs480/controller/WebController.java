@@ -226,18 +226,25 @@ public class WebController {
      * @param id
      */    
     @RequestMapping(value = "/cs480/getList/{id}", method = RequestMethod.GET)
+	public
     DBObject getList(
     		@PathVariable("id") String id){
-    	BasicDBObject query = new BasicDBObject("_id", new ObjectId(id));
-    	
-    	DBCursor cursor = listsColl.find(query);
-    	//Uses the first list found from search
-    	DBObject listObject = cursor.one();
-    	
-    	cursor.close();  	
-    	System.out.println("Call to getList() : " + listObject.toString());
-
-    	return listObject;
+    	try{
+	    	BasicDBObject query = new BasicDBObject("_id", new ObjectId(id));
+	    	DBCursor cursor = listsColl.find(query);
+	    	//Uses the first list found from search
+			DBObject listObject = cursor.one();
+	    	cursor.close();  	
+	    	System.out.println("Call to getList() : " + listObject.toString());
+	
+	    	return listObject;
+    	}
+    	catch(Exception e)
+    	{
+    		//TEMP FIX: Return null object as the list is not present
+    		//ObjectId(id) throws error if the id given is invalid
+    		return null;
+    	}
     }
     
     /**
@@ -248,6 +255,7 @@ public class WebController {
      * @return the boolean value of true if item was removed, false if item failed to remove
      */
     @RequestMapping(value = "/cs480/removeItem/{id}/{itemName}", method = RequestMethod.POST)
+	public
     boolean removeItem(
     		@PathVariable("id") String id,
     		@PathVariable("itemName") String itemName){
