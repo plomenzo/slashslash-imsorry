@@ -33,6 +33,7 @@ public class WebControllerSet2Test
 	@Test
 	public void testUserExists() throws UnknownHostException
 	{
+		web.createUser("test123","a");
 		boolean result = web.userExists("test123");
 		assertTrue(result);
 	}

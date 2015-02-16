@@ -166,7 +166,7 @@ public class WebController {
      * @return
      */
     @RequestMapping(value = "/cs480/createUser/{userName}", method = RequestMethod.POST)
-    Boolean createUser(
+    public Boolean createUser(
     		@PathVariable("userName") String userName ,
     		@RequestParam("password") String pw){
     	DBObject user = new BasicDBObject("userName", userName)
