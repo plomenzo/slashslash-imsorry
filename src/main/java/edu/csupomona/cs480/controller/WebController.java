@@ -224,16 +224,19 @@ public class WebController {
     					.append("lastModified", System.currentTimeMillis());
     	
     	listsColl.insert(list);
-    	
+
     	// get the list oid to add to the user 
     	String listId = (list.get("_id")).toString();
+
     	// get user object
     	BasicDBObject queryUser = new BasicDBObject("_id", new ObjectId(creatorUserID));
     	DBCursor cursorUser = usersColl.find(queryUser);
     	//Use the first user found from search
     	DBObject userObject = cursorUser.one();
+
     	// get the lists that the user has access to
     	BasicDBList usersLists = (BasicDBList) userObject.get("userAccessibleLists");
+
     	// add new list id
     	usersLists.add(listId);
     	// put back the user accessible lists list
@@ -380,7 +383,21 @@ public class WebController {
     	addItemToList(listId,userName,name,price,quantity,isChecked);
 
     	return true;	
-    }	  
+    }	
+    
+    /**
+     * gets the user oid from userName
+     * @param userName
+     * @return oid
+     */
+    String getUserOIDFromName(String userName)
+    {
+    	DBObject query = new BasicDBObject("userName", userName); 
+    	DBCursor cursor = usersColl.find(query);
+    	DBObject result = cursor.one();
+    	//return the oid
+    	return result.get("_id").toString();
+    }
     
     /**
      * Adds user to userAccess
@@ -388,15 +405,17 @@ public class WebController {
      * @param userId The user oid you are adding
      * @return 
      */
-    @RequestMapping(value = "/cs480/inviteUser/{id}/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/cs480/inviteUser/{id}", method = RequestMethod.POST)
     Boolean inviteUser(
     		@PathVariable("id") String listId,
-    		@PathVariable("userId") String userId){
+    		@RequestParam("userName") String userName){
+    	// Get The id using the username
+    	String userId = getUserOIDFromName(userName);
     	
     	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listId));
     	DBCursor cursor = listsColl.find(query);
     	DBObject listObject = cursor.one();
-    	
+    	System.out.println(listObject);
     	// check to see if they are already added to the list *not implemented yet
     	
 		//Get the UserAccess list
