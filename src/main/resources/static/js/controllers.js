@@ -107,9 +107,9 @@ function itemsController($scope) {
 	//May want to add to custom.js and callback later
 	function editItem(listID, itemName, userName, checked, price)
 	{
-	        var newItemName = $('#newItemName').val();
-	        var itemQuantity = $('#itemQuantity').val();
-	        //var price = $('#itemPrice').val();
+	        var newItemName = $('#' + itemName + 'newItemName').val();
+	        var itemQuantity = $('#' + itemName + 'quantity').val();
+	        //var price = $('#' + itemName + 'itemPrice').val();
 			$.ajax(
 	        {
 	            type : "POST",

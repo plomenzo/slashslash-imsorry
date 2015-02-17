@@ -73,9 +73,9 @@
                         <br>
                         <list id = "{{item.name}}">
                     	    <tr>
-	                        	<td><input type = "text" id = newItemName value = "{{item.name}}"></td>
-	                        	<td><input type = "text" id = itemQuantity value = "{{item.quantity}}"></td>
-	                            <!--<td><input type = "text" id = itemPrice value = "{{item.price}}"></td>-->
+	                        	<td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}"></td>
+	                        	<td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}"></td>
+	                            <!--<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>-->
 	                        	<td><button ng-click = "editItem(listID, item.name, itemList.userAccess[0], item.isChecked, item.price)">Edit Item</button></td
                         	</tr>
                         </list>
