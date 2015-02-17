@@ -132,7 +132,7 @@ function itemsController($scope) {
 	        });
 	}
     $scope.editItem = editItem;
-
+    
 	//removes element that calls function
 	$scope.remove = function() 
 	{
@@ -196,5 +196,6 @@ function itemsController($scope) {
 
 
 }
+
 
 

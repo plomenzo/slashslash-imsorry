@@ -68,10 +68,10 @@
                             <!--Control if quantity should show. Do not display if quantity is <= 1 -->
                             <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
                         </span>
-                        <!--<button ng-click = "editItemDisplay(item.name)">Edit Item</button>-->
+                        <button ng-click = "edit = ! edit">Edit Item</button>
                         <button ng-click="removeItem(listID, item.name)">Remove Item</button>
                         <br>
-                        <list id = "{{item.name}}">
+                        <list ng-show = "edit">
                     	    <tr>
 	                        	<td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}"></td>
 	                        	<td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}"></td>
