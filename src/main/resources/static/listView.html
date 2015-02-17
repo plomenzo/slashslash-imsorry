@@ -68,10 +68,17 @@
                             <!--Control if quantity should show. Do not display if quantity is <= 1 -->
                             <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
                         </span>
-                        
+                        <!--<button ng-click = "editItemDisplay(item.name)">Edit Item</button>-->
                         <button ng-click="removeItem(listID, item.name)">Remove Item</button>
-                        
-
+                        <br>
+                        <list id = "{{item.name}}">
+                    	    <tr>
+	                        	<td><input type = "text" id = newItemName value = "{{item.name}}"></td>
+	                        	<td><input type = "text" id = itemQuantity value = "{{item.quantity}}"></td>
+	                            <!--<td><input type = "text" id = itemPrice value = "{{item.price}}"></td>-->
+	                        	<td><button ng-click = "editItem(listID, item.name, itemList.userAccess[0], item.isChecked, item.price)">Edit Item</button></td
+                        	</tr>
+                        </list>
                     <!--</a>-->
 
                 </div>
@@ -83,6 +90,7 @@
                 	<td><input type = "text" id = "itemName"></td>
                 	<td><a>Item Quantity</a></td>
                 	<td><input type = "text" id = "itemQuantity"></td>
+                	<!-- add in ng-keyup="event=$event" with keycode = 13 for enter key -->
                 	<td><button ng-click="addItemToList(listID,itemList.userAccess[0])">Add item</button>
                 </tr>
             </list>

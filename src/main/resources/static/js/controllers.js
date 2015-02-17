@@ -58,6 +58,7 @@ function itemsController($scope) {
 //    };
 
     //Added remove item due to nodejs scope issues
+    //May want to change to be a callback
 	function removeItem(listID, item) {
 	    $.ajax(
 	            {
@@ -78,6 +79,7 @@ function itemsController($scope) {
     
     //add item to list
     //Modified to streamline adding from page
+    //May want to change to be a callback
     function addItemToList(listID, userName) {
 	    var itemName = $('#itemName').val();
 	    var itemQuantity = $('#itemQuantity').val();
@@ -100,6 +102,40 @@ function itemsController($scope) {
 	        });
 	}
 	$scope.addItemToList = addItemToList;
+	
+	//Edit item
+	//May want to add to custom.js and callback later
+	function editItem(listID, itemName, userName, checked, price)
+	{
+	        var newItemName = $('#newItemName').val();
+	        var itemQuantity = $('#itemQuantity').val();
+	        //var price = $('#itemPrice').val();
+			$.ajax(
+	        {
+	            type : "POST",
+	            url  : "/cs480/editItem/" + listID + "/" + itemName,
+	            data : {
+	                "name" : newItemName,
+	                "user" : userName,
+	                "quantity": itemQuantity,
+	                "price" : price,
+	                "isChecked": false
+	            },
+	            success : function(result) {
+	                	pullListAndUpdate(listID);
+	            },
+	            error: function (jqXHR, exception) {
+	                alert("Failed to add item");
+	            }
+	        });
+	}
+    $scope.editItem = editItem;
+
+	//removes element that calls function
+	$scope.remove = function() 
+	{
+		elt.html('');
+	}
 }
 
 
