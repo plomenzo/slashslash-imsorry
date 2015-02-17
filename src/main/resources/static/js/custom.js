@@ -130,21 +130,6 @@ function testAdd(){
     })
 }
 
-function loadUserData(){
-    var _account = localStorage.getItem('_Account');
-    //parse to Object Literal the JSON object
-    if(_account) _account = JSON.parse(_account);
-    //Checks whether the stored data exists
-    if(_account) {
-        console.log(_account)
-        //TODO: call getUserLists(_account.UserOID), then populate angular $scope.lists with it
 
-        //(_account.User, _account.Pass);
-        //If you want to delete the object
-        //localStorage.removeItem('_Account');
-    }
-    else{
-        alert("You have not logged in.")
-    }
-}
+
 

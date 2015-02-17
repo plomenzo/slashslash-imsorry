@@ -35,8 +35,8 @@
         <ul>
             <li
                     ng-repeat="list in lists"
-                    ng-click="setCurrentList(list)">
-                <a >{{list}}</a>
+                    ng-click="setCurrentList(list.oid)">
+                <a >{{list.name}}</a>
             </li>
 
         </ul>
@@ -99,10 +99,9 @@
 </body>
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        $("#my-menu").mmenu({
 
-        });
+    $(document).ready(function() {
+        $("#my-menu").mmenu();
     });
 </script>
 </html>

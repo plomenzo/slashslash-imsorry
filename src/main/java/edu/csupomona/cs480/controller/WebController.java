@@ -441,6 +441,9 @@ public class WebController {
     	// get the lists that the user has access to
     	BasicDBList usersLists = (BasicDBList) userObject.get("userAccessibleLists");
     	// add new list id
+    	System.out.println(usersLists);
+    	System.out.println(listId);
+
     	usersLists.add(listId);
     	// put back the user accessible lists list
     	userObject.put("userAccessibleLists", usersLists);

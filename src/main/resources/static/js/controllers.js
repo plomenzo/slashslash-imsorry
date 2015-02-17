@@ -15,6 +15,7 @@ var AUTOUPDATE = false;
 angular.module('listView', []);
 
 function itemsController($scope) {
+    loadUserData();
 
     //TODO pull list of lists, possibly oids, listNames, need to write AJAX call/api method
     $scope.lists = ['54d6631c0fdcf8e36aa174d8','54d6625a0fdcf0e2679092ad', '54cebe0d17ef75cddfb06a35']
@@ -81,28 +82,29 @@ function itemsController($scope) {
     //Modified to streamline adding from page
     //May want to change to be a callback
     function addItemToList(listID, userName) {
-	    var itemName = $('#itemName').val();
-	    var itemQuantity = $('#itemQuantity').val();
-	    $.ajax(
-	        {
-	            type : "POST",
-	            url  : "/cs480/addItem/" + listID + "/" + userName,
-	            data : {
-	                "itemName" : itemName,
-	                "price" : -1,
-	                "quantity": itemQuantity,
-	                "isChecked": false
-	            },
-	            success : function(result) {
-	                	pullListAndUpdate(listID);
-	            },
-	            error: function (jqXHR, exception) {
-	                alert("Failed to add item");
-	            }
-	        });
-	}
+        var itemName = $('#itemName').val();
+        var itemQuantity = $('#itemQuantity').val();
+
+        $.ajax(
+            {
+                type: "POST",
+                url: "/cs480/addItem/" + listID + "/" + userName,
+                data: {
+                    "itemName": itemName,
+                    "price": -1,
+                    "quantity": itemQuantity,
+                    "isChecked": false
+                },
+                success: function (result) {
+                    pullListAndUpdate(listID);
+                },
+                error: function (jqXHR, exception) {
+                    alert("Failed to add item");
+                }
+            });
+    }
 	$scope.addItemToList = addItemToList;
-	
+
 	//Edit item
 	//May want to add to custom.js and callback later
 	function editItem(listID, itemName, userName, checked, price)
@@ -136,6 +138,63 @@ function itemsController($scope) {
 	{
 		elt.html('');
 	}
+
+    //Invite user
+    function inviteUser(listID, userID) {
+
+    }
+    $scope.inviteUser = inviteUser;
+
+
+
+    function getUserLists(userID) {
+        $.ajax(
+            {
+                type : "GET",
+                url  : "/cs480/getUserLists/" + userID,
+                data : {
+
+                },
+                success : function(result) {
+                    //callback(result);
+                    console.log("Results of getUserLists()")
+                    console.log(result)
+
+                    $scope.$apply(function() {
+                        $scope.lists = result;
+                    })
+
+
+                    return result;
+                },
+                error: function (jqXHR, exception) {
+                    alert("Failed to add item");
+                }
+            });
+    }
+
+    function loadUserData(){
+        var _account = localStorage.getItem('_Account');
+        //parse to Object Literal the JSON object
+        if(_account) _account = JSON.parse(_account);
+        //Checks whether the stored data exists
+        if(_account) {
+            console.log(_account)
+            //TODO: call getUserLists(_account.UserOID), then populate angular $scope.lists with it
+            console.log("hello workd from loadUserData")
+            getUserLists(_account.UserOID)
+
+            //(_account.User, _account.Pass);
+            //If you want to delete the object
+            //localStorage.removeItem('_Account');
+        }
+        else{
+            alert("You have not logged in.")
+        }
+    }
+
+
+
 }
 
 
