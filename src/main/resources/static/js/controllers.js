@@ -174,6 +174,14 @@ function itemsController($scope) {
     	 });
      }
      $scope.removeListAndUpdate = removeListAndUpdate;
+
+    function updateCheckedState(itemName, newState){
+        console.log("Updating Checked State of: "+itemName +" -> "+newState)
+
+
+
+    }
+    $scope.updateCheckedState = updateCheckedState;
 }
 
 

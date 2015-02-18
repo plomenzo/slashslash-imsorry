@@ -72,7 +72,7 @@
                 <div class="list-group" style="width:25%">
 
                     <!--<a class="list-group-item" >-->
-                        <input type="checkbox" ng-checked="item.isChecked" id="{{$index}}" >
+                        <input type="checkbox" ng-checked="item.isChecked" id="{{$index}}" ng-model="checkedState" ng-change="updateCheckedState( item.name,checkedState )" >
                         
                         <span>{{item.name}}
                             <!--Control if quantity should show. Do not display if quantity is <= 1 -->
