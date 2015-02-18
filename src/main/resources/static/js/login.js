@@ -16,7 +16,7 @@ function attemptLogin() {
             type : "POST",
             url  : "/cs480/authenticate/" + userName,
             data : {
-                password: password
+                "password" : password
             },
             success : function(result) {
             //console.log(result)

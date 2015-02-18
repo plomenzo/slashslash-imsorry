@@ -13,7 +13,7 @@ function attemptSignup() {
             type : "POST",
             url  : "/cs480/createUser/" + userName,
             data : {
-                password: password
+                "password": password
             },
             success : function(result) {
                 //console.log(result)
