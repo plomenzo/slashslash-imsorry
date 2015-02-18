@@ -80,6 +80,24 @@ function getEntireList(listID, callback)
     });
 }
 
+function removeList(listID, callback)
+{
+	    $.ajax(
+        {
+            type : "POST",
+            url  : "/cs480/deleteList/" + listID,
+            data : {
+            },
+            success : function(result) {
+            	callback(result);
+                return result;
+            },
+            error: function (jqXHR, exception) {
+                alert("Failed to remove list. Please check the inputs.");
+            }
+        });
+}
+
 function toggleCheckedStatus(index){
 
 

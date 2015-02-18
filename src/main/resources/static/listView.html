@@ -72,12 +72,14 @@
                         <button ng-click="removeItemAndUpdate(listID, item.name)">Remove Item</button>
                         <br>
                         <div ng-show = "edit">
-                    	    <tr>
-	                        	<td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}"></td>
-	                        	<td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}"></td>
-	                            <!--<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>-->
-	                        	<td><button ng-click = "editItemAndUpdate(listID, item.name, UserOID, item.isChecked, item.price)">Confirm</button></td
-                        	</tr>
+                        	<table border = "1">
+	                    	    <tr>
+		                        	<td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}"></td>
+		                        	<td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}"></td>
+		                            <!--<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>-->
+		                        	<td><button ng-click = "editItemAndUpdate(listID, item.name, UserOID, item.isChecked, item.price)">Confirm</button></td
+	                        	</tr>
+                        	</table>
                         </div>
                     <!--</a>-->
 
@@ -94,6 +96,8 @@
                 	<td><button ng-click="addItemToList(listID,UserOID)">Add item</button>
                 </tr>
             </list>
+            <br>
+            <button ng-click = "removeListAndUpdate(listID,UserOID)">Delete List</button>
         </div>
     </div>
 </body>

@@ -109,8 +109,6 @@ function itemsController($scope) {
     }
     $scope.inviteUser = inviteUser;
 
-
-
     function getUserLists(userID) {
         $.ajax(
             {
@@ -163,8 +161,19 @@ function itemsController($scope) {
         }
     }
 
-
-
+	//Removes the list
+	function removeListAndUpdate(listID,UserOID){
+		removeList(listID, function(result){
+		    
+		    $scope.$apply(function(result){
+		    	//As we have deleted a list remotely, we have to
+		    	//Change the lists locally
+				//Reload lists from remote
+				getUserLists(UserOID);	
+	    	})
+    	 });
+     }
+     $scope.removeListAndUpdate = removeListAndUpdate;
 }
 
 

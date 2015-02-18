@@ -470,8 +470,18 @@ public class WebController {
 
 	   	//List that we want to find
     	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));
-	    	
-	    //Remove list
+		
+    	//TEMP SOLUTION
+    	//We find the list in the db
+    	DBCursor listCursor = listsColl.find(listObject);
+		DBObject listObj = listCursor.one();
+        //We remove the list from each of the user's userAccessibleLists
+		BasicDBList userList =  (BasicDBList)(listObj.get("userAccess"));
+        for(int i = 0; i < userList.size(); i++)
+        {
+        	removeListFromUser((String)userList.get(i),listObject);
+        }
+		//Remove list
 	    listsColl.remove(listObject);
 	    System.out.println("Call to removeList: " + id);
 	    return true;
@@ -549,12 +559,66 @@ public class WebController {
     											.append("name", listName);
     		listCursor.close();
     		lists.add(currentList);
+
     	}
     	userCursor.close();  	
     	System.out.println("Call to getUserLists() of user: " + userObject.toString());
     	
     	return lists;
     }
+    
+    /**
+     * Removes a list from a user
+     * @param userQuery User that we want to remove a list from
+     * @param listObject List that we want to remove from the user
+     */
+    private void removeListFromUser(String userID, DBObject listObject)
+    {
+    	//We find the user
+    	BasicDBObject userQuery = new BasicDBObject("_id", new ObjectId(userID));
+    	DBCursor userCursor = usersColl.find(userQuery);
+    	DBObject user = userCursor.one();
+        System.out.println(user);
+    	//We get the userAccessibleLists
+    	BasicDBList list = (BasicDBList) user.get("userAccessibleLists");
+    	//We remove the list from the userAccessibleLists
+    	list.remove(listObject.get("_id"));
+    	//We update the user object
+        user.put("userAccessibleLists", list);
+        DBObject userOrig = userCursor.one();
+        //We update the database user
+        usersColl.update(userOrig,user);
+    }
+  
+    //Temp debug due to remove list glitch leaving in case we need function
+    /**
+     * Public check to see if a list exists
+     * @param id ID of the list
+     * @return
+     */
+
+    @RequestMapping(value = "/cs480/manualRemoveList/{listID}", method = RequestMethod.POST)
+    public void manualRemoveList(
+    		@PathVariable("listID") String id,
+            @RequestParam("userID") String userID){
+	   	//List that we want to find
+    	BasicDBObject userQuery= new BasicDBObject("_id",new ObjectId(userID));
+    	//BasicDBObject listQuery = new BasicDBObject("_id",new ObjectId(id));
+    	DBCursor userCursor = usersColl.find(userQuery);
+    	DBObject user = userCursor.one();
+        //We get the userAccessibleLists
+    	BasicDBList list = (BasicDBList) user.get("userAccessibleLists");
+        System.out.println(list);
+    	//We remove the list from the userAccessibleLists
+    	list.remove(id);
+        System.out.println(list);
+    	//We update the user object
+        user.put("userAccessibleLists", list);
+        DBObject userOrig = userCursor.one();
+        //We update the database user
+        usersColl.update(userOrig,user);
+    	userCursor.close();
+    }  
     
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
