@@ -71,14 +71,14 @@
                         <button ng-click = "edit = ! edit">Edit Item</button>
                         <button ng-click="removeItem(listID, item.name)">Remove Item</button>
                         <br>
-                        <list ng-show = "edit">
+                        <div ng-show = "edit">
                     	    <tr>
 	                        	<td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}"></td>
 	                        	<td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}"></td>
 	                            <!--<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>-->
-	                        	<td><button ng-click = "editItem(listID, item.name, itemList.userAccess[0], item.isChecked, item.price)">Edit Item</button></td
+	                        	<td><button ng-click = "editItem(listID, item.name, UserOID, item.isChecked, item.price)">Edit Item</button></td
                         	</tr>
-                        </list>
+                        </div>
                     <!--</a>-->
 
                 </div>
@@ -91,7 +91,7 @@
                 	<td><a>Item Quantity</a></td>
                 	<td><input type = "text" id = "itemQuantity"></td>
                 	<!-- add in ng-keyup="event=$event" with keycode = 13 for enter key -->
-                	<td><button ng-click="addItemToList(listID,itemList.userAccess[0])">Add item</button>
+                	<td><button ng-click="addItemToList(listID,UserOID)">Add item</button>
                 </tr>
             </list>
         </div>

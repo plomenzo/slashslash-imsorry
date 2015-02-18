@@ -177,7 +177,8 @@ function itemsController($scope) {
             //TODO: call getUserLists(_account.UserOID), then populate angular $scope.lists with it
             console.log("hello workd from loadUserData")
             getUserLists(_account.UserOID)
-
+            //Makes the User OID available to access by other funcitons
+            $scope.UserOID = _account.UserOID;
             //(_account.User, _account.Pass);
             //If you want to delete the object
             //localStorage.removeItem('_Account');
