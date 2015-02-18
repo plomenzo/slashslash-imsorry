@@ -54,7 +54,17 @@
             <br>
             Last modified: {{itemList.lastModified}}
             <br><br>
-
+            <list>
+                <tr>
+                	<td><a>Item Name</a></td>
+                	<td><input type = "text" id = "itemName"></td>
+                	<td><a>Item Quantity</a></td>
+                	<td><input type = "text" id = "itemQuantity"></td>
+                	<!-- add in ng-keyup="event=$event" with keycode = 13 for enter key -->
+                	<td><button ng-click="addItemToList(listID,UserOID)">Add item</button>
+                </tr>
+            </list>
+            <br><br>
             <!--Items in List-->
             <div ng-repeat="item in itemList.items">
 
@@ -86,16 +96,6 @@
                 </div>
 
             </div>
-            <list>
-                <tr>
-                	<td><a>Item Name</a></td>
-                	<td><input type = "text" id = "itemName"></td>
-                	<td><a>Item Quantity</a></td>
-                	<td><input type = "text" id = "itemQuantity"></td>
-                	<!-- add in ng-keyup="event=$event" with keycode = 13 for enter key -->
-                	<td><button ng-click="addItemToList(listID,UserOID)">Add item</button>
-                </tr>
-            </list>
             <br>
             <button ng-click = "removeListAndUpdate(listID,UserOID)">Delete List</button>
         </div>
