@@ -169,15 +169,32 @@ public class WebController {
     public Boolean createUser(
     		@PathVariable("userName") String userName ,
     		@RequestParam("password") String pw){
+
     	DBObject user = new BasicDBObject("userName", userName)
     	                    .append("password", pw)
     						.append("userAccessibleLists", new BasicDBList());
     	
-    	usersColl.insert(user);
-   
-    	System.out.println("Call to createUser() :" + user.toString());
-    	
-    	return true;
+    	//Check to see if username is being used
+    	DBObject query = new BasicDBObject("userName", userName); 
+    	DBCursor cursor = usersColl.find(query);
+    	DBObject result = cursor.one();
+        //If username exists
+    	if(result != null)
+        {
+        	System.out.println("User Name Already Exists :" + user.toString());
+        	return false;
+        }
+        else
+        {   //Username does not exist
+            usersColl.insert(user);
+        	
+        	//Creates a default list for user
+        	createList(	"Default List" , user.get("_id").toString());
+        	
+        	System.out.println("Call to createUser() :" + user.toString());
+        	
+        	return true;	
+        }
     }
     
     /**
