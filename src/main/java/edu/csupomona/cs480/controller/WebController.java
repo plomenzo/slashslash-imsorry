@@ -7,6 +7,7 @@ import edu.csupomona.cs480.data.provider.UserManager;
 
 
 
+
 //Java imports
 import java.util.Arrays;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
+
 
 
 
@@ -42,11 +44,13 @@ import org.bson.types.ObjectId;
 
 
 
+
 //Google? import
 import static com.google.common.base.Preconditions.*;
 
 //Object Mapper? 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 
 
@@ -58,6 +62,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
 
 
 
@@ -352,6 +357,16 @@ public class WebController {
 								.append("quantity", quantity)
 								.append("price", price)
 								.append("isChecked", isChecked);
+		//Checks to see if itemName is already present in list
+		BasicDBObject[] itemList = items.toArray(new BasicDBObject[0]);
+		for(BasicDBObject i : itemList)
+		{
+			if(i.get("name").equals(( name)))
+			{
+				return false;
+			}
+		}
+
 		//add item to list
 		items.add(item);
 		//Removes item in new list
@@ -368,7 +383,7 @@ public class WebController {
         //print to console
     	System.out.println("Call to addItem() : "  +  listObject.toString());
         
-        return true;
+        return true;	
     }
     
     /**
