@@ -59,79 +59,49 @@ function itemsController($scope) {
 //    };
 
     //Added remove item due to nodejs scope issues
-    //May want to change to be a callback
-	function removeItem(listID, item) {
-	    $.ajax(
-	            {
-	                type : "POST",
-	                url  : "/cs480/removeItem/" + listID +"/" + item,
-	                data : {
-	                },
-	                success : function(result) {
-	                	pullListAndUpdate(listID);
-	                },
-	                error: function (jqXHR, exception) {
-	                    alert("Failed to remove item. Please check inputs.");
-	                }
-	            });
+	function removeItemAndUpdate(listID, item) {
+	    removeItem(listID, item, function(result) {
+	    
+	    	$scope.$apply(function(result){
+
+		        pullListAndUpdate(result.listID);
+		        
+		    })
+		    
+	    });
+
 	}
-    $scope.removeItem = removeItem;
+    $scope.removeItemAndUpdate = removeItemAndUpdate;
     
     
     //add item to list
     //Modified to streamline adding from page
     //May want to change to be a callback
     function addItemToList(listID, userName) {
-        var itemName = $('#itemName').val();
-        var itemQuantity = $('#itemQuantity').val();
+	   //Calls addItem in custom.js
+    	addItem(listID,userName, function(result) {
 
-        $.ajax(
-            {
-                type: "POST",
-                url: "/cs480/addItem/" + listID + "/" + userName,
-                data: {
-                    "itemName": itemName,
-                    "price": -1,
-                    "quantity": itemQuantity,
-                    "isChecked": false
-                },
-                success: function (result) {
-                    pullListAndUpdate(listID);
-                },
-                error: function (jqXHR, exception) {
-                    alert("Failed to add item");
-                }
-            });
+    		$scope.$apply(function(result) {
+                
+    			pullListAndUpdate(result.listID);
+    			
+    		})
+    	});
     }
 	$scope.addItemToList = addItemToList;
 
 	//Edit item
-	//May want to add to custom.js and callback later
-	function editItem(listID, itemName, userName, checked, price)
-	{
-	        var newItemName = $('#' + itemName + 'newItemName').val();
-	        var itemQuantity = $('#' + itemName + 'quantity').val();
-	        //var price = $('#' + itemName + 'itemPrice').val();
-			$.ajax(
-	        {
-	            type : "POST",
-	            url  : "/cs480/editItem/" + listID + "/" + itemName,
-	            data : {
-	                "name" : newItemName,
-	                "user" : userName,
-	                "quantity": itemQuantity,
-	                "price" : price,
-	                "isChecked": false
-	            },
-	            success : function(result) {
-	                	pullListAndUpdate(listID);
-	            },
-	            error: function (jqXHR, exception) {
-	                alert("Failed to add item");
-	            }
-	        });
+	function editItemAndUpdate(listID, itemName, userName, checked, price){
+	   //Calls editItem in custom.js
+		editItem(listID, itemName, userName, checked, price, function(result) {
+			$scope.$apply(function(result) {
+			
+				pullListAndUpdate(result.listID);
+			})
+			
+		});
 	}
-    $scope.editItem = editItem;
+    $scope.editItemAndUpdate = editItemAndUpdate;
 
     //Invite user
     function inviteUser(listID, userID) {
@@ -156,6 +126,10 @@ function itemsController($scope) {
 
                     $scope.$apply(function() {
                         $scope.lists = result;
+                        //Sets the first loaded page to the first user
+                        //accessible list
+                        pullListAndUpdate(result[0].oid);
+                     
                     })
 
 
@@ -182,6 +156,7 @@ function itemsController($scope) {
             //(_account.User, _account.Pass);
             //If you want to delete the object
             //localStorage.removeItem('_Account');
+           
         }
         else{
             alert("You have not logged in.")

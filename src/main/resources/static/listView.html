@@ -69,14 +69,14 @@
                             <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
                         </span>
                         <button ng-click = "edit = ! edit">Edit Item</button>
-                        <button ng-click="removeItem(listID, item.name)">Remove Item</button>
+                        <button ng-click="removeItemAndUpdate(listID, item.name)">Remove Item</button>
                         <br>
                         <div ng-show = "edit">
                     	    <tr>
 	                        	<td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}"></td>
 	                        	<td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}"></td>
 	                            <!--<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>-->
-	                        	<td><button ng-click = "editItem(listID, item.name, UserOID, item.isChecked, item.price)">Edit Item</button></td
+	                        	<td><button ng-click = "editItemAndUpdate(listID, item.name, UserOID, item.isChecked, item.price)">Confirm</button></td
                         	</tr>
                         </div>
                     <!--</a>-->

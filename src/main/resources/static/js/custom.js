@@ -23,26 +23,7 @@ function getListTest() {
 			});
 }
 
-function removeItem() {
-	var listID = $('#listIDRemove').val();
-	var item = $('#itemRemove').val();
-	
-  	$.ajax(
-			{
-				type : "POST",
-				url  : "/cs480/list/" + listID +"/" + item,
-				data : {
-				},
-				success : function(result) {
-				//need to find a way to refresh list
-				},
-				error: function (jqXHR, exception) {
-					alert("Failed to remove item. Please check inputs.");
-				}
-			});
-}
-//Duplicate as do not know if will need old remove item
-function removeItem(listID, item) {
+function removeItem(listID, item, callback) {
     $.ajax(
             {
                 type : "POST",
@@ -50,7 +31,8 @@ function removeItem(listID, item) {
                 data : {
                 },
                 success : function(result) {
-                //need to find a way to refresh list
+                	callback(listID);
+                	return listID;
                 },
                 error: function (jqXHR, exception) {
                     alert("Failed to remove item. Please check inputs.");
@@ -124,12 +106,78 @@ function addItemToListAJAX(listID, userName, itemName, price, quantity, isChecke
         });
 }
 
+//Modified Add item with callback
+function addItem(listID, userName, callback) {
+    var itemName = $('#itemName').val();
+    var quantity = $('#itemQuantity').val();
+    $.ajax(
+        {
+            type : "POST",
+            url  : "/cs480/addItem/" + listID + "/" + userName,
+            data : {
+                "itemName" : itemName,
+                "price" : -1,
+                "quantity": quantity,
+                "isChecked": false
+            },
+            success : function(result) {
+                callback(result);
+                return result;
+            },
+            error: function (jqXHR, exception) {
+                alert("Failed to add item");
+            }
+        });
+}
+
 function testAdd(){
     addItemToListAJAX("54cebe0d17ef75cddfb06a35","isaac","ISAAC APPLES",45,2,false, function(){
         console.log("inside testAdd() callback");
     })
 }
 
+function removeItem(listID, item, callback) {
+    $.ajax(
+            {
+                type : "POST",
+                url  : "/cs480/removeItem/" + listID +"/" + item,
+                data : {
+                },
+                success : 	function(listID) {
+                	callback(listID);
+                	return listID;
+                },
+                error: function (jqXHR, exception) {
+                    alert("Failed to remove item. Please check inputs.");
+                }
+            });
+}
+
+	function editItem(listID, itemName, userName, checked, price, callback)
+	{
+	        var newItemName = $('#' + itemName + 'newItemName').val();
+	        var itemQuantity = $('#' + itemName + 'quantity').val();
+	        //var price = $('#' + itemName + 'itemPrice').val();
+			$.ajax(
+	        {
+	            type : "POST",
+	            url  : "/cs480/editItem/" + listID + "/" + itemName,
+	            data : {
+	                "name" : newItemName,
+	                "user" : userName,
+	                "quantity": itemQuantity,
+	                "price" : price,
+	                "isChecked": false
+	            },
+	            success : function(result) {
+	                	callback(result);
+	                	return result;
+	            },
+	            error: function (jqXHR, exception) {
+	                alert("Failed to add item");
+	            }
+	        });
+	}
 
 
 
