@@ -189,6 +189,19 @@ function itemsController($scope) {
 
     }
     $scope.updateCheckedState = updateCheckedState;
+    
+    //Clears the inputs for the username
+    function resetUserName() {
+    	$scope.userIDField = "";
+    }
+    $scope.resetUserName = resetUserName;
+    
+    //Clears the inputs for add item
+    function resetItemAdd() {
+    	$scope.itemNameInput = "";
+    	$scope.itemQuantityInput = "";
+    }
+    $scope.resetItemAdd = resetItemAdd;
 }
 
 

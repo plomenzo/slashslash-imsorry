@@ -57,18 +57,18 @@
             <list>
             	<tr>
             		<td><a>User Name</a></td>
-            		<td><input type = "text" id = "InviteUser"></td>
-            		<td><button ng-click = "inviteUserToList(listID)">Invite User</button></td>
+            		<td><input type = "text" id = "InviteUser" ng-model = "userIDField"></td>
+            		<td><button ng-click = "inviteUserToList(listID); resetUserName()">Invite User</button></td>
             	</tr>
             <br><br>
             <list>
                 <tr>
                 	<td><a>Item Name</a></td>
-                	<td><input type = "text" id = "itemName"></td>
+                	<td><input type = "text" id = "itemName"  ng-model = "itemNameInput"></td>
                 	<td><a>Item Quantity</a></td>
-                	<td><input type = "text" id = "itemQuantity"></td>
+                	<td><input type = "text" id = "itemQuantity"  ng-model = "itemQuantityInput"></td>
                 	<!-- add in ng-keyup="event=$event" with keycode = 13 for enter key -->
-                	<td><button ng-click="addItemToList(listID,UserOID)">Add item</button>
+                	<td><button ng-click="addItemToList(listID,UserOID);resetItemAdd()">Add item</button>
                 </tr>
             </list>
             <br><br>
@@ -90,8 +90,8 @@
                             </div>
                             <div class="modal-body">
                                 <tr>
-                                    <td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}"></td>
-                                    <td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}"></td>
+                                    <td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}" ng-model = "itemNameInput"></td>
+                                    <td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}" ng-model = "itemQuantityInput"></td>
                                     <!--<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>-->
                                 </tr>
                             </div>
