@@ -197,5 +197,24 @@ function removeItem(listID, item, callback) {
 	        });
 	}
 
-
+function inviteUser(listID, callback)
+{
+    var userName = $('#InviteUser').val();
+    
+    $.ajax(
+    {
+        type : "POST",
+        url : "/cs480/inviteUser/" + listID,
+        data : {
+        	"userName" : userName
+        },
+        success : function(result) {
+            callback(result);
+            return result;
+        },
+        error: function (jqXHR, exception) {
+        	alert("Failed to invite user");
+        }
+    });
+}
 

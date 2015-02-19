@@ -104,10 +104,17 @@ function itemsController($scope) {
     $scope.editItemAndUpdate = editItemAndUpdate;
 
     //Invite user
-    function inviteUser(listID, userID) {
-
+    function inviteUserToList(listID) {
+		//Calls in
+		inviteUser(listID, function(result){
+		    $scope.$apply(function(result) {
+		    
+		        //?
+		    })
+		    
+		});
     }
-    $scope.inviteUser = inviteUser;
+    $scope.inviteUserToList = inviteUserToList;
 
     function getUserLists(userID) {
         $.ajax(
@@ -162,7 +169,7 @@ function itemsController($scope) {
     }
 
 	//Removes the list
-	function removeListAndUpdate(listID,UserOID){
+	function removeListAndUpdate(listID){
 		removeList(listID, function(result){
 		    
 		    $scope.$apply(function(result){
