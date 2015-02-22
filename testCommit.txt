@@ -5,3 +5,5 @@ Testing a commit from Vincent
 Testing Jenkins webhook
 
 Testing Jenkins webhook 2
+
+Testing AWS Jenkins connection
