@@ -61,7 +61,6 @@
             		<td><button ng-click = "inviteUserToList(listID); resetUserName()">Invite User</button></td>
             	</tr>
             <br><br>
-            <list>
                 <tr>
                 	<td><a>Item Name</a></td>
                 	<td><input type = "text" id = "itemName"  ng-model = "itemNameInput"></td>
@@ -72,7 +71,38 @@
                 </tr>
             </list>
             <br><br>
-            <!--Items in List-->
+
+        <!-- Modal -->
+        <div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Edit Item</h4>
+                    </div>
+                    <div class="modal-body"  >
+                        <tr>
+                            <td><input type = "text"  ng-model = "editField_itemName"></td>
+                            <td><input type = "text"  ng-model = "editField_quantity"></td>
+                            <td><input type = "text"  ng-model = "editField_price"></td>
+
+                            <!--<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>-->
+                        </tr>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary"
+                                ng-click = "editItemAndUpdate(listID, editField_itemName, editField_oldItemName, UserOID, editField_isChecked, editField_price, editField_quantity )">
+                            Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--    //editItem(listID, itemName, userName, checked, price, itemQuantity, callback)-->
+
+
+        <!--Items in List-->
             <div ng-repeat="item in itemList.items">
 
                 <!--&lt;!&ndash; Button trigger modal &ndash;&gt;-->
@@ -80,31 +110,31 @@
                     <!--Launch demo modal-->
                 <!--</button>-->
 
-                <!-- Modal -->
-                <div class="modal fade" id="myModal{{item.name}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Edit Item</h4>
-                            </div>
-                            <div class="modal-body">
-                                <tr>
-                                    <td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}" ng-model = "itemNameInput"></td>
-                                    <td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}" ng-model = "itemQuantityInput"></td>
-                                    <!--<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>-->
-                                </tr>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary"
-                                        ng-click = "editItemAndUpdate(listID, item.name, UserOID, item.isChecked, item.price)">
-                                    Save changes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!--&lt;!&ndash; Modal &ndash;&gt;-->
+                <!--<div class="modal fade" id="myModal{{item.name}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+                    <!--<div class="modal-dialog">-->
+                        <!--<div class="modal-content">-->
+                            <!--<div class="modal-header">-->
+                                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                                <!--<h4 class="modal-title" id="myModalLabel">Edit Item</h4>-->
+                            <!--</div>-->
+                            <!--<div class="modal-body">-->
+                                <!--<tr>-->
+                                    <!--<td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}" ng-model = "itemNameInput"></td>-->
+                                    <!--<td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}" ng-model = "itemQuantityInput"></td>-->
+                                    <!--&lt;!&ndash;<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>&ndash;&gt;-->
+                                <!--</tr>-->
+                            <!--</div>-->
+                            <!--<div class="modal-footer">-->
+                                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                                <!--<button type="button" class="btn btn-primary"-->
+                                        <!--ng-click = "editItemAndUpdate(listID, item.name, UserOID, item.isChecked, item.price)">-->
+                                    <!--Save changes-->
+                                <!--</button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
 
 
 
@@ -113,8 +143,10 @@
 
                     <!--<a class="list-group-item" >-->
                         <input type="checkbox" ng-checked="item.isChecked" id="{{$index}}" ng-model="checkedState" ng-change="updateCheckedState( item.name,checkedState )" >
-                        
-                        <span  data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}
+
+                        <!--<span  ng-click="showEditModal(5,5,5,5)" data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}-->
+
+                        <span  ng-click="showEditModal(listID, item.name, UserOID, item.isChecked, item.price, item.quantity )" data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}
                             <!--Control if quantity should show. Do not display if quantity is <= 1 -->
                             <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
                         </span>
@@ -143,6 +175,7 @@
 </body>
 
 <script type="text/javascript">
+    $('#editItemModal').modal({ show: false})
 
     $(document).ready(function() {
         $("#my-menu").mmenu();

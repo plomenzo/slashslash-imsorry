@@ -19,7 +19,7 @@ function itemsController($scope) {
 
     //TODO pull list of lists, possibly oids, listNames, need to write AJAX call/api method
     $scope.lists = ['54d6631c0fdcf8e36aa174d8','54d6625a0fdcf0e2679092ad', '54cebe0d17ef75cddfb06a35']
-    
+    $scope.editingItem = "";
     
     pullListAndUpdate(REPLACE_WITH_SESSION_SAVED_OID);
 
@@ -90,17 +90,24 @@ function itemsController($scope) {
     }
 	$scope.addItemToList = addItemToList;
 
-	//Edit item
-	function editItemAndUpdate(listID, itemName, userName, checked, price){
+
+
+
+    //Edit item
+	function editItemAndUpdate(listID, itemName, oldItemName, userName, checked, price, quantity){
 	   //Calls editItem in custom.js
-		editItem(listID, itemName, userName, checked, price, function(result) {
+		editItem(listID, itemName, oldItemName, userName, checked, price, quantity, function(result) {
 			$scope.$apply(function(result) {
 			
 				pullListAndUpdate(result.listID);
-			})
+
+            })
+
 			
 		});
-	}
+        $('#editItemModal').modal('hide')
+
+    }
     $scope.editItemAndUpdate = editItemAndUpdate;
 
     //Invite user
@@ -202,6 +209,38 @@ function itemsController($scope) {
     	$scope.itemQuantityInput = "";
     }
     $scope.resetItemAdd = resetItemAdd;
+
+
+
+    function showEditModal(listID, itemName, userName, checked, price, quantity){
+        console.log(listID)
+        console.log(itemName)
+        console.log(userName)
+        console.log(checked)
+        console.log(price)
+
+
+
+        //Prepare Modal Fields
+
+        //$scope.$apply(function() {
+            $scope.editField_oldItemName  = itemName;
+
+            $scope.editField_itemName = itemName;
+            $scope.editField_price = price;
+            $scope.editField_quantity  = quantity;
+            $scope.editField_isChecked = checked;
+
+            //$scope.editingItem.quantity = 4;
+
+        //})
+
+        //Show Modal
+        $('#editItemModal').modal('show');
+
+    }
+    $scope.showEditModal = showEditModal;
+
 }
 
 

@@ -171,21 +171,30 @@ function removeItem(listID, item, callback) {
             });
 }
 
-	function editItem(listID, itemName, userName, checked, price, callback)
+	function editItem(listID, newItemName, oldItemName, userName, checked, price, itemQuantity, callback)
 	{
-	        var newItemName = $('#' + itemName + 'newItemName').val();
-	        var itemQuantity = $('#' + itemName + 'quantity').val();
+
+        //console.log(listID)
+        //console.log(newItemName)
+        //console.log(oldItemName)
+        //console.log(userName)
+        //console.log(checked)
+        //console.log(price)
+        //console.log(itemQuantity)
+
+            //var newItemName = $('#' + itemName + 'newItemName').val();
+	        //var itemQuantity = $('#' + itemName + 'quantity').val();
 	        //var price = $('#' + itemName + 'itemPrice').val();
 			$.ajax(
 	        {
 	            type : "POST",
-	            url  : "/cs480/editItem/" + listID + "/" + itemName,
+	            url  : "/cs480/editItem/" + listID + "/" + oldItemName,
 	            data : {
 	                "name" : newItemName,
 	                "user" : userName,
 	                "quantity": itemQuantity,
 	                "price" : price,
-	                "isChecked": false
+	                "isChecked": checked
 	            },
 	            success : function(result) {
 	                	callback(result);
