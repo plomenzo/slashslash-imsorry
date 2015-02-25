@@ -1,6 +1,6 @@
-body {
-    margin: 20px;
-}
+/*body {*/
+    /*margin: 20px;*/
+/*}*/
 
 #jumboTop {
     padding: 20px;
@@ -9,3 +9,7 @@ body {
     margin-right: auto;
 
 }
+/*.no_padding {*/
+    /*padding: 0 !important;*/
+    /*margin: 0 !important;*/
+/*}*/

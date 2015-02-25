@@ -9,7 +9,7 @@
 
     <!--Bootstrap-->
      <!--Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <!--<link rel="stylesheet" href="css/bootstrap.css">-->
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
@@ -20,10 +20,21 @@
     <link rel="stylesheet" href="css/jquery.mmenu.all.css">
 
 
+
+
+
+    <!-- Twitter Bootstrap -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Material Design for Bootstrap -->
+    <link href="dist/css/material-wfont.min.css" rel="stylesheet">
+    <link href="dist/css/ripples.min.css" rel="stylesheet">
+
     <!--Custom Assets-->
     <!--<link rel="stylesheet" href="css/custom.css">-->
     <script src="js/custom.js"></script>
     <script src="js/controllers.js"></script>
+
 </head>
 <body ng-app="listView" ng-controller="itemsController">
 <div id="menu">
@@ -48,6 +59,8 @@
     <div>
 
              <br>           <br>
+
+
 
             <!--List Info-->
             Name of list: {{itemList.listName}}
@@ -101,75 +114,51 @@
         </div>
         <!--    //editItem(listID, itemName, userName, checked, price, itemQuantity, callback)-->
 
+        <div class="row">
+            <div class="col-md-3 col-sm-4 col-xs-1 col-lg-4"></div>
+            <div class="col-md-6 col-sm-4 col-xs-10 col-lg-4">
+                <div class="well">
 
-        <!--Items in List-->
-            <div ng-repeat="item in itemList.items">
+                    <!--Items in List-->
+                        <div ng-repeat="item in itemList.items">
+                            <div class="row">
+                                <div class="col-md-12 no_padding" >
 
-                <!--&lt;!&ndash; Button trigger modal &ndash;&gt;-->
-                <!--<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">-->
-                    <!--Launch demo modal-->
-                <!--</button>-->
+                                    <div class="list-group" >
 
-                <!--&lt;!&ndash; Modal &ndash;&gt;-->
-                <!--<div class="modal fade" id="myModal{{item.name}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
-                    <!--<div class="modal-dialog">-->
-                        <!--<div class="modal-content">-->
-                            <!--<div class="modal-header">-->
-                                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-                                <!--<h4 class="modal-title" id="myModalLabel">Edit Item</h4>-->
-                            <!--</div>-->
-                            <!--<div class="modal-body">-->
-                                <!--<tr>-->
-                                    <!--<td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}" ng-model = "itemNameInput"></td>-->
-                                    <!--<td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}" ng-model = "itemQuantityInput"></td>-->
-                                    <!--&lt;!&ndash;<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>&ndash;&gt;-->
-                                <!--</tr>-->
-                            <!--</div>-->
-                            <!--<div class="modal-footer">-->
-                                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                                <!--<button type="button" class="btn btn-primary"-->
-                                        <!--ng-click = "editItemAndUpdate(listID, item.name, UserOID, item.isChecked, item.price)">-->
-                                    <!--Save changes-->
-                                <!--</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
+                                        <!--<a class="list-group-item" >-->
+                                        <input type="checkbox" ng-checked="item.isChecked" id="{{$index}}"
+                                               ng-model="checkedState"
+                                               ng-change="updateCheckedState( item.name,checkedState )" >
 
+                                        <!--<span  ng-click="showEditModal(5,5,5,5)" data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}-->
 
+                                        <span  ng-click="showEditModal(listID, item.name, UserOID, item.isChecked, item.price, item.quantity )"
+                                               data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}
+                                            <!--Control if quantity should show. Do not display if quantity is <= 1 -->
+                                            <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
 
+                                        </span>
+                                        <i style="float:right" class="mdi-action-delete"
+                                           ng-click="removeItemAndUpdate(listID, item.name)"></i>
 
-                <div class="list-group" style="width:25%">
+                                        <br>
 
-                    <!--<a class="list-group-item" >-->
-                        <input type="checkbox" ng-checked="item.isChecked" id="{{$index}}" ng-model="checkedState" ng-change="updateCheckedState( item.name,checkedState )" >
+                                    </div>
+                                </div>
 
-                        <!--<span  ng-click="showEditModal(5,5,5,5)" data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}-->
+                            </div>     <!--row-->
 
-                        <span  ng-click="showEditModal(listID, item.name, UserOID, item.isChecked, item.price, item.quantity )" data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}
-                            <!--Control if quantity should show. Do not display if quantity is <= 1 -->
-                            <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
-                        </span>
-                        <!--<button ng-click = "edit = ! edit">Edit Item</button>-->
-                        <button ng-click="removeItemAndUpdate(listID, item.name)">Remove Item</button>
-                        <br>
-                        <!--<div ng-show = "edit">-->
-                        	<!--<table border = "1">-->
-	                    	    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-		                        	<!--&lt;!&ndash;<td><input type = "text" id = "{{item.name}}newItemName" value = "{{item.name}}"></td>&ndash;&gt;-->
-		                        	<!--&lt;!&ndash;<td><input type = "text" id = "{{item.name}}quantity" value = "{{item.quantity}}"></td>&ndash;&gt;-->
-		                            <!--&lt;!&ndash;&lt;!&ndash;<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>&ndash;&gt;&ndash;&gt;-->
-		                        	<!--&lt;!&ndash;<td><button ng-click = "editItemAndUpdate(listID, item.name, UserOID, item.isChecked, item.price)">Confirm</button></td>&ndash;&gt;-->
-	                        	<!--&lt;!&ndash;</tr>&ndash;&gt;-->
-                        	<!--</table>-->
-                        <!--</div>-->
-                    <!--</a>-->
+                        </div>    <!--Ng-repeat-->
+                    <br>
 
                 </div>
 
             </div>
-            <br>
-            <button ng-click = "removeListAndUpdate(listID,UserOID)">Delete List</button>
+            <div class="col-md-3 col-sm-4 col-xs-1 col-lg-4"></div>
+        </div>
+
+        <button ng-click = "removeListAndUpdate(listID,UserOID)">Delete List</button>
         </div>
     </div>
 </body>
