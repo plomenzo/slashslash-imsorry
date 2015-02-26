@@ -31,8 +31,9 @@
     <link href="dist/css/ripples.min.css" rel="stylesheet">
 
     <!--Custom Assets-->
-    <!--<link rel="stylesheet" href="css/custom.css">-->
+    <link rel="stylesheet" href="css/custom.css">
     <script src="js/custom.js"></script>
+
     <script src="js/controllers.js"></script>
 
 </head>
@@ -63,7 +64,7 @@
 
 
             <!--List Info-->
-            Name of list: {{itemList.listName}}
+        <h1  id="list_name"> {{itemList.listName}} </h1>
             <br>
             Last modified: {{itemList.lastModified}}
             <br><br>
@@ -75,12 +76,12 @@
             	</tr>
             <br><br>
                 <tr>
-                	<td><a>Item Name</a></td>
-                	<td><input type = "text" id = "itemName"  ng-model = "itemNameInput"></td>
-                	<td><a>Item Quantity</a></td>
-                	<td><input type = "text" id = "itemQuantity"  ng-model = "itemQuantityInput"></td>
-                	<!-- add in ng-keyup="event=$event" with keycode = 13 for enter key -->
-                	<td><button ng-click="addItemToList(listID,UserOID);resetItemAdd()">Add item</button>
+                	<!--<td><a>Item Name</a></td>-->
+                	<!--<td><input type = "text" id = "itemName"  ng-model = "itemNameInput"></td>-->
+                	<!--<td><a>Item Quantity</a></td>-->
+                	<!--<td><input type = "text" id = "itemQuantity"  ng-model = "itemQuantityInput"></td>-->
+                	<!--&lt;!&ndash; add in ng-keyup="event=$event" with keycode = 13 for enter key &ndash;&gt;-->
+                	<!--<td><button ng-click="addItemToList(listID,UserOID);resetItemAdd()">Add item</button>-->
                 </tr>
             </list>
             <br><br>
@@ -115,9 +116,12 @@
         <!--    //editItem(listID, itemName, userName, checked, price, itemQuantity, callback)-->
 
         <div class="row">
-            <div class="col-md-3 col-sm-4 col-xs-1 col-lg-4"></div>
+            <div class="col-md-3 col-sm-4 col-xs-1  col-lg-4"></div>
             <div class="col-md-6 col-sm-4 col-xs-10 col-lg-4">
                 <div class="well">
+                    <input type = "text" id = "itemName"  ng-model = "itemNameInput">
+                    <!-- add in ng-keyup="event=$event" with keycode = 13 for enter key -->
+                    <button ng-click="addItemToList(listID,UserOID);resetItemAdd()">Add item</button>
 
                     <!--Items in List-->
                         <div ng-repeat="item in itemList.items">
@@ -139,7 +143,7 @@
                                             <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
 
                                         </span>
-                                        <i style="float:right" class="mdi-action-delete"
+                                        <i class="mdi-action-delete delete_button"
                                            ng-click="removeItemAndUpdate(listID, item.name)"></i>
 
                                         <br>

@@ -127,15 +127,15 @@ function addItemToListAJAX(listID, userName, itemName, price, quantity, isChecke
 //Modified Add item with callback
 function addItem(listID, userName, callback) {
     var itemName = $('#itemName').val();
-    var quantity = $('#itemQuantity').val();
+    //var quantity = $('#itemQuantity').val();
     $.ajax(
         {
             type : "POST",
             url  : "/cs480/addItem/" + listID + "/" + userName,
             data : {
                 "itemName" : itemName,
-                "price" : -1,
-                "quantity": quantity,
+                "price" : 0,
+                "quantity": 1,
                 "isChecked": false
             },
             success : function(result) {

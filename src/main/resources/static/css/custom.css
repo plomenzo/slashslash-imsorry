@@ -9,7 +9,12 @@
     margin-right: auto;
 
 }
-/*.no_padding {*/
-    /*padding: 0 !important;*/
-    /*margin: 0 !important;*/
-/*}*/
+
+.delete_button {
+    float:right;
+}
+
+
+#list_name {
+    text-align: center;
+}
