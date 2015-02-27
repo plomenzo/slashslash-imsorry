@@ -128,24 +128,34 @@ function addItemToListAJAX(listID, userName, itemName, price, quantity, isChecke
 function addItem(listID, userName, callback) {
     var itemName = $('#itemName').val();
     //var quantity = $('#itemQuantity').val();
-    $.ajax(
-        {
-            type : "POST",
-            url  : "/cs480/addItem/" + listID + "/" + userName,
-            data : {
-                "itemName" : itemName,
-                "price" : 0,
-                "quantity": 1,
-                "isChecked": false
-            },
-            success : function(result) {
-                callback(result);
-                return result;
-            },
-            error: function (jqXHR, exception) {
-                alert("Failed to add item");
-            }
-        });
+   
+    if(itemName.trim() || !itemName.length === 0)
+    {
+        itemName = itemName.trim();
+	    $.ajax(
+	        {
+	            type : "POST",
+	            url  : "/cs480/addItem/" + listID + "/" + userName,
+	            data : {
+	                "itemName" : itemName,
+	                "price" : 0,
+	                "quantity": 1,
+	                "isChecked": false
+	            },
+	            success : function(result) {
+	                callback(result);
+	                return result;
+	            },
+	            error: function (jqXHR, exception) {
+	                alert("Failed to add item");
+	            }
+	        });   
+    }
+    else
+    {
+        alert("Please enter an item name");
+    }
+
 }
 
 function testAdd(){
@@ -224,5 +234,34 @@ function inviteUser(listID, callback)
         	alert("Failed to invite user");
         }
     });
+}
+
+function getHistory(listID, callback)
+{
+    console.log("Get list history")
+   $.ajax(
+        {
+            type : "GET",
+            url  : "/cs480/listHistory/" + listID,
+            data : {
+
+            },
+            success : function(result) {
+                //callback(result);
+                console.log("Results of getUserHistory()")
+                console.log(result)
+
+                $scope.$apply(function(result) {
+                    callback(result);
+                    return result;         
+                })
+
+
+                return result;
+            },
+            error: function (jqXHR, exception) {
+                alert("Failed to getHistory");
+            }
+        });
 }
 
