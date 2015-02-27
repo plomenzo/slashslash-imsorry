@@ -412,13 +412,26 @@ public class WebController {
     		@RequestParam("price") int price,
     		@RequestParam("isChecked") boolean isChecked) {
     	
-    	// remove the old item from the list
-    	removeItem(listId,oldName);
-    	
-    	// add the new item to the list
-    	addItemToList(listId,userName,name,price,quantity,isChecked);
+    	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listId));
+    	DBCursor cursor = listsColl.find(query);
+    	DBObject listObject = cursor.one();
 
-    	return true;	
+		//Get the items part of the list DBObject and cast as a list
+		BasicDBList items = (BasicDBList) listObject.get("items");
+		BasicDBList temp = new BasicDBList();
+		BasicDBObject[] itemList = items.toArray(new BasicDBObject[0]);
+		for(BasicDBObject i : itemList)
+		{
+			if(i.get("name").equals((oldName)))
+			{
+				i.append("name",name).append("quantity", quantity).append("price",price).append("isChecked", isChecked);
+			}
+			temp.add(i);
+		}
+		items = temp;
+		listObject.put("items", items);
+		listsColl.update(cursor.one(),listObject);
+    	return true;
     }	
     
     /**
@@ -673,6 +686,34 @@ public class WebController {
     	userCursor.close();
     }  
     
+    @RequestMapping(value = "/cs480/changeCheckState/{listOID}", method = RequestMethod.POST)
+    boolean changeCheckedState(
+        	@PathVariable("listOID") String listOID,
+    		@RequestParam("itemName") String itemName,
+    		@RequestParam("isChecked") boolean isChecked){
+    	
+    	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listOID));
+    	DBCursor cursor = listsColl.find(query);
+    	DBObject listObject = cursor.one();
+
+		//Get the items part of the list DBObject and cast as a list
+		BasicDBList items = (BasicDBList) listObject.get("items");
+		BasicDBList temp = new BasicDBList();
+		BasicDBObject[] itemList = items.toArray(new BasicDBObject[0]);
+		for(BasicDBObject i : itemList)
+		{
+			if(i.get("name").equals((itemName)))
+			{
+				i.append("isChecked", isChecked);
+			}
+			temp.add(i);
+		}
+		items = temp;
+		listObject.put("items", items);
+		listsColl.update(cursor.one(),listObject);
+    	return true;
+    }
+
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
