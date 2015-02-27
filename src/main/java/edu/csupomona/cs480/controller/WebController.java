@@ -608,8 +608,8 @@ public class WebController {
      * @param listOID
      * @return
      */
-    @RequestMapping(value = "/cs480/listHistory/{listOID}", method = RequestMethod.GET)
-    public DBObject listHistory(
+    @RequestMapping(value = "/cs480/getHistory/{listOID}", method = RequestMethod.GET)
+    public DBObject getHistory(
     		@PathVariable("listOID") String listOID)
     		{
     			BasicDBObject query = new BasicDBObject("_id", new ObjectId(listOID));
