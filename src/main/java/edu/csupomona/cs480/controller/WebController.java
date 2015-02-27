@@ -241,7 +241,7 @@ public class WebController {
     	DBObject list = new BasicDBObject("listName", listName)
     					.append("items", new BasicDBList())
     					.append("userAccess", userAccess)
-    					.append("itemHistory", new BasicDBObject())
+    					.append("itemHistory", new BasicDBList())
     					.append("createdBy", creatorUserID)
     					.append("lastModified", System.currentTimeMillis());
     	
@@ -318,11 +318,15 @@ public class WebController {
     	//List that we want to find
     	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));
     	//Item that we want to remove
-    	DBObject item = new BasicDBObject("items", new BasicDBObject("name", itemName));
-        //Remove item from list
-        listsColl.update(listObject,new BasicDBObject("$pull", item), false, false);
-        // Updates lastUpdated to current time
-        DBObject lastUpdated = new BasicDBObject("lastModified", System.currentTimeMillis());
+    	DBObject item =  new BasicDBObject("name", itemName);
+    	DBObject itemRemove = new BasicDBObject("items",item);
+    	//Removes item from item list
+    	listsColl.update(listObject,new BasicDBObject("$pull", itemRemove), false, false);
+    	//Item we want to add to history
+    	DBObject itemHistory = new BasicDBObject("itemHistory", item);
+    	//Adds item to history
+    	listsColl.update(listObject, new BasicDBObject("$push", itemHistory));
+    	DBObject lastUpdated = new BasicDBObject("lastModified", System.currentTimeMillis());
         listsColl.update(listObject, new BasicDBObject("$set", lastUpdated), false, false);
         System.out.println("Call to removeItem: " + itemName);
         return true;
@@ -598,6 +602,23 @@ public class WebController {
     	
     	return lists;
     }
+  
+    /**
+     * Returns the history object from given list
+     * @param listOID
+     * @return
+     */
+    @RequestMapping(value = "/cs480/listHistory/{listOID}", method = RequestMethod.GET)
+    public DBObject listHistory(
+    		@PathVariable("listOID") String listOID)
+    		{
+    			BasicDBObject query = new BasicDBObject("_id", new ObjectId(listOID));
+    	    	//We find the list in the db
+    	    	DBCursor listCursor = listsColl.find(query);
+    			DBObject listObj = listCursor.one();
+    			BasicDBList history = (BasicDBList)listObj.get("itemHistory");
+    			return history;
+    		}
     
     /**
      * Removes a list from a user
@@ -628,7 +649,6 @@ public class WebController {
      * @param id ID of the list
      * @return
      */
-
     @RequestMapping(value = "/cs480/manualRemoveList/{listID}", method = RequestMethod.POST)
     public void manualRemoveList(
     		@PathVariable("listID") String id,

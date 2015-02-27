@@ -210,8 +210,6 @@ function itemsController($scope) {
     }
     $scope.resetItemAdd = resetItemAdd;
 
-
-
     function showEditModal(listID, itemName, userName, checked, price, quantity){
         console.log(listID)
         console.log(itemName)
@@ -240,7 +238,6 @@ function itemsController($scope) {
 
     }
     $scope.showEditModal = showEditModal;
-
 }
 
 
