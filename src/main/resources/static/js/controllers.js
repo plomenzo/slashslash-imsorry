@@ -238,6 +238,21 @@ function itemsController($scope) {
 
     }
     $scope.showEditModal = showEditModal;
+
+	function getHistoryAndUpdate(listID)
+	{
+	   
+		getHistory(listID, function(result){
+		    //If we want to redraw the result
+		    $scope.$apply(function(result){
+		        $itemHistory = result.itemHistory;
+		        pullListAndUpdate(result.listID);
+
+	    	})
+    	 });
+	}
+	$scope.getHistoryAndUpdate = getHistoryAndUpdate;
+
 }
 
 

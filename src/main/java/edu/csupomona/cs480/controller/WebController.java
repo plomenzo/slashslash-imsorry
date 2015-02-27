@@ -617,6 +617,7 @@ public class WebController {
     	    	DBCursor listCursor = listsColl.find(query);
     			DBObject listObj = listCursor.one();
     			BasicDBList history = (BasicDBList)listObj.get("itemHistory");
+    			System.out.println("Call to get history() : " + listOID);
     			return history;
     		}
     
