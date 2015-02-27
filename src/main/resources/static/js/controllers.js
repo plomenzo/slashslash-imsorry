@@ -188,10 +188,11 @@ function itemsController($scope) {
     	 });
      }
      $scope.removeListAndUpdate = removeListAndUpdate;
-
-    function updateCheckedState(itemName, newState){
-        console.log("Updating Checked State of: "+itemName +" -> "+newState)
-
+    
+    //Changes checked value of given item from checkbox input
+    function updateCheckedState(item, newState){
+        console.log("Updating Checked State of: "+item.name +" -> "+newState)
+        item.isChecked = newState;
 
 
     }
@@ -253,6 +254,16 @@ function itemsController($scope) {
 	}
 	$scope.getHistoryAndUpdate = getHistoryAndUpdate;
 
+	function removeAllCheckedItemsAndUpdate(listID, itemList)
+	{
+	    removeAllCheckedItems(listID, itemList, function(result){
+	        //We want to redraw the list with updated items
+	        $scope.$apply(function(result){
+	            pullListAndUpdate(listID);
+	         })
+	    });
+	}
+	$scope.removeAllCheckedItemsAndUpdate = removeAllCheckedItemsAndUpdate;
 }
 
 

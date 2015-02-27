@@ -238,7 +238,7 @@ function inviteUser(listID, callback)
 
 function getHistory(listID, callback)
 {
-    console.log("Get list history")
+    //console.log("Get list history")
    $.ajax(
         {
             type : "GET",
@@ -265,3 +265,41 @@ function getHistory(listID, callback)
         });
 }
 
+
+function removeAllCheckedItems(listID, itemList, callback)
+{
+   console.log("removing checked items")
+   var index;
+   var error = false
+   //console.log(itemList)
+   //console.log(itemList.items.length)
+   //console.log(itemList.items[0] + " " + itemList.items[0].isChecked )
+   for(index = 0; index < itemList.items.length; ++index)
+   {   //If we have an item that is checked
+       //console.log("checking :" + itemList.items[index] + " " + index);
+       //console.log(Boolean(itemList.items[index].isChecked))
+       if(Boolean(itemList.items[index].isChecked))
+       { //We call the ajax to remove the item
+            //We do not care about successes here, only if we
+            //have completed the loop do we care
+            $.ajax(
+            {
+                type : "POST",
+                url  : "/cs480/removeItem/" + listID +"/" + itemList.items[index].name,
+                data : {
+                },
+                success : function(result) {
+                callback(result);
+                //console.log("Results of getUserHistory()")
+                //console.log(result)
+                return result;
+                },
+                error: function (jqXHR, exception) {
+                    error = true
+                    alert("Failed to remove item. Please check inputs.");
+                }
+            });
+       }
+   }
+   
+}
