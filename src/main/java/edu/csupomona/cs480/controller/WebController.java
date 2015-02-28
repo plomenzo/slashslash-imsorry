@@ -416,7 +416,7 @@ public class WebController {
     		@RequestParam("name") String name,
     		@RequestParam("userId") String userId,
     		@RequestParam("quantity") int quantity,
-    		@RequestParam("price") int price,
+    		@RequestParam("price") double price,
     		@RequestParam("isChecked") boolean isChecked) {
     	
     	// verify is the user is allowed to edit list
