@@ -203,7 +203,7 @@ function removeItem(listID, item, callback) {
 	            url  : "/cs480/editItem/" + listID + "/" + oldItemName,
 	            data : {
 	                "name" : newItemName,
-	                "user" : userName,
+	                "userId" : userName,
 	                "quantity": itemQuantity,
 	                "price" : price,
 	                "isChecked": checked
