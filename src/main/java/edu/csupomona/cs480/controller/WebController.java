@@ -559,7 +559,15 @@ public class WebController {
     public boolean verifyListAccess(String listId, String userId)
     {
     	BasicDBList userList = getUserLists(userId);
-    	return userList.contains(userId);
+		BasicDBObject[] userArray = userList.toArray(new BasicDBObject[0]);
+		for(BasicDBObject i : userArray)
+		{
+			if(i.get("oid").equals((listId)))
+			{
+				return true;
+			}
+		}
+    	return false;
     }
     /**
      * Authenticates a user/password
