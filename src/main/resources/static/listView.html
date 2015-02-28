@@ -23,8 +23,6 @@
 
 
 
-
-
     <!-- Twitter Bootstrap -->
     <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 
@@ -33,15 +31,22 @@
     <link href="dist/css/ripples.min.css" rel="stylesheet">
 
     <!--Custom Assets-->
-    <link rel="stylesheet" href="css/custom.css">
-    <script src="js/custom.js"></script>
 
-    <script src="js/controllers.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <link rel="stylesheet" type="text/css" href="css/svgCheckboxImported.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/custom.css">
+
+
+
 
 </head>
 <body ng-app="listView" ng-controller="itemsController">
+
 <div id="menu">
-        <a href="#my-menu">Open the menu</a>
+    <a id="menuButton" href="#my-menu"><i class="fa fa-list list-5x"></i>  </a>
+
+
 
 
     <nav id="my-menu">
@@ -67,15 +72,15 @@
 
             <!--List Info-->
         <h1  id="list_name"> {{itemList.listName}} </h1>
-            <br>
-            Last modified: {{itemList.lastModified}}
-            <br><br>
+            <!--<br>-->
+            <!--Last modified: {{itemList.lastModified}}-->
+            <!--<br><br>-->
             <list>
-            	<tr>
-            		<td><a>User Name</a></td>
-            		<td><input type = "text" id = "InviteUser" ng-model = "userIDField"></td>
-            		<td><button ng-click = "inviteUserToList(listID); resetUserName()">Invite User</button></td>
-            	</tr>
+            	<!--<tr>-->
+            		<!--<td><a>User Name</a></td>-->
+            		<!--<td><input type = "text" id = "InviteUser" ng-model = "userIDField"></td>-->
+            		<!--<td><button ng-click = "inviteUserToList(listID); resetUserName()">Invite User</button></td>-->
+            	<!--</tr>-->
             <br><br>
                 <tr>
                 	<!--<td><a>Item Name</a></td>-->
@@ -119,46 +124,74 @@
 
         <div class="row">
             <div class="col-md-3 col-sm-4 col-xs-1  col-lg-4"></div>
-            <div class="col-md-6 col-sm-4 col-xs-10 col-lg-4">
-                <div class="well">
-                    <input type = "text" id = "itemName"  ng-model = "itemNameInput">
+            <div class="col-md-6 col-sm-6 col-xs-10 col-lg-4">
+                <!--<div class="well">-->
+                    <input type = "text" id = "itemName"  ng-model = "itemNameInput" >
                     <!-- add in ng-keyup="event=$event" with keycode = 13 for enter key -->
                     <button ng-click="addItemToList(listID,UserOID);resetItemAdd()">Add item</button>
 
+
+
+                <br>
+
                     <!--Items in List-->
-                        <div ng-repeat="item in itemList.items">
+                    <form class="ac-custom ac-checkbox ac-checkmark" autocomplete="off">
+                        <ul>
+
+
+                    <div ng-repeat="item in itemList.items">
                             <div class="row">
                                 <div class="col-md-12 no_padding" >
 
-                                    <div class="list-group" >
+                                    <!--<div class="list-group" >-->
+
+                                            <li><input id="c2" name="cb2" type="checkbox" ng-checked="item.isChecked" id="{{$index}}"
+                                                       ng-model="checkedState"
+                                                       ng-change="updateCheckedState( item,checkedState )" >
+                                                    <label ng-click="showEditModal(listID, item.name, UserOID, item.isChecked, item.price, item.quantity )"
+                                                        data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}
+
+                                                        <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
+                                                    </label>
+
+                                                <i class="fa fa-trash-o fa-3x delete_button"
+
+                                                   ng-click="removeItemAndUpdate(listID, item.name)">
+                                                </i>
+
+
+
+                                            </li>
+
 
                                         <!--<a class="list-group-item" >-->
-                                        <input type="checkbox" ng-checked="item.isChecked" id="{{$index}}"
-                                               ng-model="checkedState"
-                                               ng-change="updateCheckedState( item,checkedState )" >
+                                        <!--<input type="checkbox" ng-checked="item.isChecked" id="{{$index}}"-->
+                                               <!--ng-model="checkedState"-->
+                                               <!--ng-change="updateCheckedState( item,checkedState )" >-->
 
                                         <!--<span  ng-click="showEditModal(5,5,5,5)" data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}-->
 
-                                        <span  ng-click="showEditModal(listID, item.name, UserOID, item.isChecked, item.price, item.quantity )"
-                                               data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}
+                                        <!--<span  ng-click="showEditModal(listID, item.name, UserOID, item.isChecked, item.price, item.quantity )"-->
+                                               <!--data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}-->
                                             <!--Control if quantity should show. Do not display if quantity is <= 1 -->
-                                            <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
 
                                         </span>
-                                        <i class="mdi-action-delete delete_button"
-                                           ng-click="removeItemAndUpdate(listID, item.name)"></i>
+
 
                                         <br>
 
-                                    </div>
+                                    <!--</div>-->
                                 </div>
 
                             </div>     <!--row-->
 
                         </div>    <!--Ng-repeat-->
+                        </ul>
+                    </form>
+
                     <br>
 
-                </div>
+                <!--</div>-->
 
             </div>
             <div class="col-md-3 col-sm-4 col-xs-1 col-lg-4"></div>
@@ -169,12 +202,58 @@
         </div>
     </div>
 </body>
+<script src="js/svgcheckbx.js"></script>
+
+<script src="js/custom.js"></script>
+
+<script src="js/controllers.js"></script>
+
 
 <script type="text/javascript">
+
+
     $('#editItemModal').modal({ show: false})
 
     $(document).ready(function() {
         $("#my-menu").mmenu();
     });
+</script>
+
+
+<script src="js/classie.js"></script>
+<script>
+    (function() {
+        // trim polyfill : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
+        if (!String.prototype.trim) {
+            (function() {
+                // Make sure we trim BOM and NBSP
+                var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+                String.prototype.trim = function() {
+                    return this.replace(rtrim, '');
+                };
+            })();
+        }
+
+        [].slice.call( document.querySelectorAll( 'input.input__field' ) ).forEach( function( inputEl ) {
+            // in case the input is already filled..
+            if( inputEl.value.trim() !== '' ) {
+                classie.add( inputEl.parentNode, 'input--filled' );
+            }
+
+            // events:
+            inputEl.addEventListener( 'focus', onInputFocus );
+            inputEl.addEventListener( 'blur', onInputBlur );
+        } );
+
+        function onInputFocus( ev ) {
+            classie.add( ev.target.parentNode, 'input--filled' );
+        }
+
+        function onInputBlur( ev ) {
+            if( ev.target.value.trim() === '' ) {
+                classie.remove( ev.target.parentNode, 'input--filled' );
+            }
+        }
+    })();
 </script>
 </html>

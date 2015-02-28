@@ -3,6 +3,8 @@ var dummyItem;
 var dummyList;
 
 
+
+
 function getListTest() {
 	var listID = $('#listIDGet').val();
     console.log(listID)

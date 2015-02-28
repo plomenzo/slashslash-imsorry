@@ -17,4 +17,26 @@
 
 #list_name {
     text-align: center;
+    color: #df6589;
+    color: #2fa8ec;
+    font-family: 'Raleway', Arial, sans-serif;
+
+
+}
+
+#itemName {
+    color:black;
+}
+
+body {
+    background-color: #333 ;
+
+}
+
+#menuButton{
+    color: white;
+    font-size: 40px;
+    padding-left: 10%;
+    padding-top: 50px;
+    position: absolute;
 }

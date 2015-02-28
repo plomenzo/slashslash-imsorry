@@ -12,7 +12,7 @@ var REFRESH_INTERVAL = 5000;
 // which will use lots of GET AJAX calls
 var AUTOUPDATE = false;
 
-angular.module('listView', [])
+var app = angular.module('listView', [])
 
 .controller('itemsController', ['$scope',function($scope) {
 //function itemsController($scope) {
@@ -40,7 +40,9 @@ angular.module('listView', [])
                 $scope.itemList = result;
                 $scope.listID = listOID;
 
+
             })
+            setupCheckboxes();
 
         });
 
@@ -266,7 +268,10 @@ angular.module('listView', [])
 	}
 	$scope.removeAllCheckedItemsAndUpdate = removeAllCheckedItemsAndUpdate;
 
+
+
     }]);
+
 
 
 
