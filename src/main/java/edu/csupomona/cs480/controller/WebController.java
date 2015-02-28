@@ -341,18 +341,26 @@ public class WebController {
      * @param isChecked is item "checked"
      * @return 
      */
-    @RequestMapping(value = "/cs480/addItem/{listName}/{userName}", method = RequestMethod.POST)
+    @RequestMapping(value = "/cs480/addItem/{listName}/{userId}", method = RequestMethod.POST)
     Boolean addItemToList(
     		@PathVariable("listName") String id,
-    		@PathVariable("userName") String userName,
+    		@PathVariable("userId") String userId,
     		@RequestParam("itemName") String name,
     		@RequestParam("price") double price,
     		@RequestParam("quantity") int quantity,
     		@RequestParam("isChecked") boolean isChecked){
+    	
+    	// verify is the user is allowed to add to the list
+    	if(!verifyListAccess(id,userId))
+    	{
+    		System.out.println("user doesnt have access");
+    		return false;
+    	}
+    	
     	BasicDBObject query = new BasicDBObject("_id",new ObjectId(id));
     	DBCursor cursor = listsColl.find(query);
     	DBObject listObject = cursor.one();
-
+    	
 		//Get the items part of the list DBObject and cast as a list
 		BasicDBList items = (BasicDBList) listObject.get("items");
 
@@ -401,16 +409,22 @@ public class WebController {
      * @param isChecked is item "checked"
      * @return 
      */
-    //TODO use $set instead of other functions
     @RequestMapping(value = "/cs480/editItem/{id}/{oldName}", method = RequestMethod.POST)
     Boolean editItem(
     		@PathVariable("id") String listId,
     		@PathVariable("oldName") String oldName,
     		@RequestParam("name") String name,
-    		@RequestParam("user") String userName,
+    		@RequestParam("userId") String userId,
     		@RequestParam("quantity") int quantity,
     		@RequestParam("price") int price,
     		@RequestParam("isChecked") boolean isChecked) {
+    	
+    	// verify is the user is allowed to edit list
+    	if(!verifyListAccess(listId,userId))
+    	{
+    		System.out.println("user doesnt have access");
+    		return false;
+    	}
     	
     	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listId));
     	DBCursor cursor = listsColl.find(query);
@@ -536,6 +550,17 @@ public class WebController {
 	    return true;
     }
     
+    /**
+     * 
+     * @param listId
+     * @param userId
+     * @return
+     */
+    public boolean verifyListAccess(String listId, String userId)
+    {
+    	BasicDBList userList = getUserLists(userId);
+    	return userList.contains(userId);
+    }
     /**
      * Authenticates a user/password
      * @param userName user name
