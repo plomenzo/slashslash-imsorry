@@ -746,6 +746,54 @@ public class WebController {
 		listsColl.update(cursor.one(),listObject);
     	return true;
     }
+    
+    /**
+     * Cost splits for a list
+     * @param id List ID
+     * @return 
+     */
+    @RequestMapping(value = "/cs480/splitCostOfList/{id}", method = RequestMethod.GET)
+    public double splitCostOfList(
+    		@PathVariable("id") String id){
+
+	   	// List that we want to find
+    	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));
+    	DBCursor listCursor = listsColl.find(listObject);
+		DBObject listObj = listCursor.one();
+		
+		// first sum up prices
+		double totalPrice = 0;
+		BasicDBList itemsList = (BasicDBList)(listObj.get("items"));
+		for(int i=0; i<itemsList.size(); i++)
+		{
+			BasicDBObject item  = (BasicDBObject)(itemsList.get(i));
+			double itemPrice = item.getDouble("price");
+			System.out.println("adding current itemPrice(" + itemPrice + ") to totalPrice" );
+			totalPrice += itemPrice;
+		}
+		System.out.println("totalPrice after adding is: " + totalPrice);
+		// short circuits if totalPrice is 0 then no need to calc numUsers
+		if(totalPrice == 0)
+		{
+			return 0.0;
+		}
+		
+		// second sum up number of users that use this list
+		BasicDBList userList =  (BasicDBList)(listObj.get("userAccess"));
+		int numUsers = userList.size();
+		// short circuits divide if numUsers is 0 or 1
+		System.out.println("Number of users in list is: " + numUsers);
+		if((numUsers == 0) || (numUsers == 1))
+		{
+			return totalPrice;
+		}
+		
+		// third divide the summed price by number of users
+		double result = totalPrice / numUsers;
+		
+		// return result
+		return result;
+    }
 
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
 //////////////////////////////////////////////////Assignment 5//////////////////////////////////
