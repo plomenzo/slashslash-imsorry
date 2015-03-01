@@ -63,8 +63,13 @@
                     ng-repeat="list in lists"
                     ng-click="setCurrentList(list.oid)">
                 <a >{{list.name}}</a>
+                <!-- -->
             </li>
-
+            <li>
+                        <input type = "text" id = "listName" ></input>
+                        <!-- replace with icon -->
+                        <button ng-click = "createNewListAndUpdate(UserOID);">Create List</button>
+            </li>
         </ul>
     </nav>
 </div><!--Overall Wrapper for menu-->

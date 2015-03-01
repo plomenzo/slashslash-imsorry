@@ -179,7 +179,7 @@ var app = angular.module('listView', [])
     }
 
 	//Removes the list
-	function removeListAndUpdate(listID){
+	function removeListAndUpdate(listID, UserOID){
 		removeList(listID, function(result){
 		    
 		    $scope.$apply(function(result){
@@ -256,7 +256,18 @@ var app = angular.module('listView', [])
     	 });
 	}
 	$scope.getHistoryAndUpdate = getHistoryAndUpdate;
-
+    
+    function createNewListAndUpdate(UserOID)
+    {   //Upon creation of new list we go to it
+    	createList(UserOID, function(result){
+    		$scope.$apply(function(result){
+                console.log(result);
+                setCurrentList(result.lists[result.lists.length -1].oid);
+    		   })
+    	});
+    }
+    $scope.createNewListAndUpdate = createNewListAndUpdate;
+    
 	function removeAllCheckedItemsAndUpdate(listID, itemList)
 	{
 	    removeAllCheckedItems(listID, itemList, function(result){

@@ -305,3 +305,25 @@ function removeAllCheckedItems(listID, itemList, callback)
    }
    
 }
+
+function createList(UserOID, callback)
+{
+	var listName = $('#listName').val()
+	$.ajax(
+	{
+            type : "POST",
+            url  : "/cs480/createList/" + listName,
+            data : {
+            	"creatorUserID" : UserOID
+            },
+            success : function(result) {
+            callback(result);
+
+            return result;
+            },
+            error: function (jqXHR, exception) {
+                alert("Unable to create list.");
+            }
+	
+	});
+}
