@@ -160,6 +160,41 @@ function addItem(listID, userName, callback) {
 
 }
 
+//Modified Add item with callback
+function addItemVC(listID, userName, itemName, callback) {
+
+    if(itemName.trim() || !itemName.length === 0)
+    {
+        itemName = itemName.trim();
+        $.ajax(
+            {
+                type : "POST",
+                url  : "/cs480/addItem/" + listID + "/" + userName,
+                data : {
+                    "itemName" : itemName,
+                    "price" : 0,
+                    "quantity": 1,
+                    "isChecked": false
+                },
+                success : function(result) {
+                    callback(result);
+                    return result;
+                },
+                error: function (jqXHR, exception) {
+                    alert("Failed to add item");
+                }
+            });
+    }
+    else
+    {
+        alert("Please enter an item name");
+    }
+
+}
+
+
+
+
 function testAdd(){
     addItemToListAJAX("54cebe0d17ef75cddfb06a35","isaac","ISAAC APPLES",45,2,false, function(){
         console.log("inside testAdd() callback");

@@ -24,6 +24,12 @@ var app = angular.module('listView', [])
     
     pullListAndUpdate(REPLACE_WITH_SESSION_SAVED_OID);
 
+    initializeVoiceCommand();
+
+
+
+
+
     if(AUTOUPDATE){
         setInterval(function(){
             pullListAndUpdate();
@@ -92,6 +98,23 @@ var app = angular.module('listView', [])
     	});
     }
 	$scope.addItemToList = addItemToList;
+
+    //add item to list
+    //Modified to streamline adding from page
+    //May want to change to be a callback
+    function addItemToListVC(listID, userName, itemName) {
+        //Calls addItem in custom.js
+        addItemVC(listID,userName, itemName, function(result) {
+
+            $scope.$apply(function(result) {
+
+                pullListAndUpdate(result.listID);
+
+            })
+        });
+    }
+    $scope.addItemToListVC = addItemToListVC;
+
 
 
 
@@ -280,6 +303,28 @@ var app = angular.module('listView', [])
 	}
 	$scope.removeAllCheckedItemsAndUpdate = removeAllCheckedItemsAndUpdate;
 
+
+
+
+
+
+    function initializeVoiceCommand(){
+        if (annyang) {
+            var commands = {
+                'add item *item': function(item) {
+                    console.log("Voice Command Detected:" + "Adding item: "+ item)
+                    addItemToListVC($scope.listID,$scope.UserOID, item);
+                    resetItemAdd();
+                }
+            };
+
+            // Add our commands to annyang
+            annyang.addCommands(commands);
+
+            // Start listening. You can call this here, or attach this call to an event, button, etc.
+            annyang.start();
+        }
+    }
 
 
     }]);
