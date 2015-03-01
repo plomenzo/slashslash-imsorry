@@ -229,9 +229,9 @@ function removeItem(listID, item, callback) {
         //console.log(checked)
         //console.log(price)
         //console.log(itemQuantity)
-            if(itemQuantity == 0)
+            if(itemQuantity <= 0)
             {
-                alert("Cannot have item with quantity of 0");
+                alert("Cannot have item with quantity less than 1");
             }
             //var newItemName = $('#' + itemName + 'newItemName').val();
 	        //var itemQuantity = $('#' + itemName + 'quantity').val();
