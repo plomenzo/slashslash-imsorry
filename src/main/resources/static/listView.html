@@ -9,7 +9,7 @@
 
     <!--Bootstrap-->
      <!--Latest compiled and minified CSS -->
-    <!--<link rel="stylesheet" href="css/bootstrap.css">-->
+    <link rel="stylesheet" href="css/bootstrap.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
@@ -24,11 +24,11 @@
 
 
     <!-- Twitter Bootstrap -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">-->
 
     <!-- Material Design for Bootstrap -->
-    <link href="dist/css/material-wfont.min.css" rel="stylesheet">
-    <link href="dist/css/ripples.min.css" rel="stylesheet">
+    <!--<link href="dist/css/material-wfont.min.css" rel="stylesheet">-->
+    <!--<link href="dist/css/ripples.min.css" rel="stylesheet">-->
 
     <!--Custom Assets-->
 
@@ -114,13 +114,33 @@
                         <h4 class="modal-title" id="myModalLabel">Edit Item</h4>
                     </div>
                     <div class="modal-body"  >
-                        <tr>
-                            <td><input type = "text"  ng-model = "editField_itemName"></td>
-                            <td><input type = "text"  ng-model = "editField_quantity"></td>
-                            <td><input type = "text"  ng-model = "editField_price"></td>
+                        <!--<tr>-->
+                            <!--<td><input type = "text"  ng-model = "editField_itemName"></td>-->
+                            <!--<td><input type = "text"  ng-model = "editField_quantity"></td>-->
+                            <!--<td><input type = "text"  ng-model = "editField_price"></td>-->
 
-                            <!--<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>-->
-                        </tr>
+                            <!--&lt;!&ndash;<td><input type = "text" id = "{{item.name}}itemPrice" value = "{{item.price}}"></td>&ndash;&gt;-->
+                        <!--</tr>-->
+
+
+                        <span class="input input--isao">
+					        <input class="input__field input__field--isao" type="text" id="input-1" ng-model = "editField_itemName"/>
+					        <label class="input__label input__label--isao" for="input-1" data-content="Item Name">
+                                <span class="input__label-content input__label-content--isao">Item Name</span>
+                            </label>
+				        </span>
+                         <span class="input input--isao">
+					        <input class="input__field input__field--isao" type="text" id="input-2" ng-model = "editField_quantity"/>
+					        <label class="input__label input__label--isao" for="input-2" data-content="Quantity">
+                                <span class="input__label-content input__label-content--isao">Quantity</span>
+                            </label>
+				        </span>
+                         <span class="input input--isao">
+					        <input class="input__field input__field--isao" type="text" id="input-3" ng-model = "editField_price"/>
+					        <label class="input__label input__label--isao" for="input-3" data-content="Price">
+                                <span class="input__label-content input__label-content--isao">Price</span>
+                            </label>
+				        </span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

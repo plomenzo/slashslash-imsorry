@@ -42,3 +42,13 @@ body {
     padding-top: 50px;
     position: absolute;
 }
+
+
+.input--isao {
+    font-size: 3.0vh;
+
+}
+
+.modal-content {
+    color: #afb3b8;
+}
