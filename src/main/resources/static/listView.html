@@ -4,6 +4,9 @@
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/custom.js"></script>
+    <script src="js/jquery.mmenu.min.all.js"></script>
+    <link rel="stylesheet" href="css/jquery.mmenu.all.css">
+
 
     <title>My Lists</title>
 
@@ -18,8 +21,6 @@
 
     <!--<script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>-->
 
-    <script src="js/jquery.mmenu.min.all.js"></script>
-    <link rel="stylesheet" href="css/jquery.mmenu.all.css">
 
 
 
@@ -59,6 +60,9 @@
     <nav id="my-menu">
         <!--List of List Names-->
         <ul>
+
+            <br>
+
             <li
                     ng-repeat="list in lists"
                     ng-click="setCurrentList(list.oid)">
@@ -66,11 +70,22 @@
                 <!-- -->
             </li>
             <li>
-                        <input type = "text" id = "listName" ng-keyup="$event.keyCode == 13 && createNewListAndUpdate()"></input>
-                        <!-- replace with icon -->
+                        <!--<input type = "text" id = "listName" ng-keyup="$event.keyCode == 13 && createNewListAndUpdate()"></input>-->
+			<span class="input input--kuro sidebar"  >
+					<input class="input__field input__field--kuro" id = "listName" ng-keyup="$event.keyCode == 13 && createNewListAndUpdate()"  />
+					<label class="input__label input__label--kuro" for="listName" >
+                        <span class="input__label-content input__label-content--kuro" >New List</span>
+                    </label>
+				</span>
+                <br>
+
+
+                <!-- replace with icon -->
                         <!--<button ng-click = "createNewListAndUpdate();">Create List</button>-->
             </li>
+
         </ul>
+
     </nav>
 </div><!--Overall Wrapper for menu-->
 

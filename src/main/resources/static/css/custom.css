@@ -63,3 +63,20 @@ body {
 .modal-content {
     color: #afb3b8;
 }
+
+.input--akira {
+    /*padding-top: 50px;*/
+    /*padding-bottom: 50px;*/
+                     text-align:center;
+    font-size: 20px;
+
+}
+
+.sidebar {
+    font-size: 12px;
+    left: 50px;
+}
+#newListContainer {
+
+}
+
