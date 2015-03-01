@@ -303,6 +303,7 @@ var app = angular.module('listView', [])
 	}
 	$scope.removeAllCheckedItemsAndUpdate = removeAllCheckedItemsAndUpdate;
 
+
     function initializeVoiceCommand(){
         if (annyang) {
             var commands = {
@@ -321,6 +322,7 @@ var app = angular.module('listView', [])
         }
     }
 
+    }]);
 
 
 
