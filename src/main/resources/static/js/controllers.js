@@ -202,14 +202,14 @@ var app = angular.module('listView', [])
     }
 
 	//Removes the list
-	function removeListAndUpdate(listID, UserOID){
-		removeList(listID, function(result){
+	function removeListAndUpdate(){
+		removeList($scope.listID, function(result){
 		    
 		    $scope.$apply(function(result){
 		    	//As we have deleted a list remotely, we have to
 		    	//Change the lists locally
 				//Reload lists from remote
-				getUserLists(UserOID);	
+				getUserLists($scope.UserOID);	
 	    	})
     	 });
      }
@@ -266,10 +266,10 @@ var app = angular.module('listView', [])
     }
     $scope.showEditModal = showEditModal;
 
-	function getHistoryAndUpdate(listID)
+	function getHistoryAndUpdate()
 	{
 	   
-		getHistory(listID, function(result){
+		getHistory($scope.listID, function(result){
 		    //If we want to redraw the result
 		    $scope.$apply(function(result){
 		        $itemHistory = result.itemHistory;
@@ -280,12 +280,12 @@ var app = angular.module('listView', [])
 	}
 	$scope.getHistoryAndUpdate = getHistoryAndUpdate;
     
-    function createNewListAndUpdate(UserOID)
+    function createNewListAndUpdate()
     {   //Upon creation of new list we go to it
-    	createList(UserOID, function(result){
+    	createList($scope.UserOID, function(result){
     		$scope.$apply(function(result){
                 console.log(result);
-                getUserLists(UserOID);
+                getUserLists($scope.UserOID);
                 //console.log("pulling list " + $scope.lists[$scope.lists.length -1].name);
                 //pullListAndUpdate($scope.lists[$scope.lists.length -1].oid);
     		   })
@@ -293,12 +293,12 @@ var app = angular.module('listView', [])
     }
     $scope.createNewListAndUpdate = createNewListAndUpdate;
     
-	function removeAllCheckedItemsAndUpdate(listID, itemList)
+	function removeAllCheckedItemsAndUpdate()
 	{
-	    removeAllCheckedItems(listID, itemList, function(result){
+	    removeAllCheckedItems($scope.listID, $scope.itemList, function(result){
 	        //We want to redraw the list with updated items
 	        $scope.$apply(function(result){
-	            pullListAndUpdate(listID);
+	            pullListAndUpdate($scope.listID);
 	         })
 	    });
 	}

@@ -68,14 +68,14 @@
             <li>
                         <input type = "text" id = "listName" ></input>
                         <!-- replace with icon -->
-                        <button ng-click = "createNewListAndUpdate(UserOID);">Create List</button>
+                        <button ng-click = "createNewListAndUpdate();">Create List</button>
             </li>
         </ul>
     </nav>
 </div><!--Overall Wrapper for menu-->
 
 <div id="page">
-                <i class = "fa fa-times icon_times icon_red icon_removeList fa-4x" ng-click = "removeListAndUpdate(listID,UserOID)"></i>
+                <i class = "fa fa-times icon_times icon_red icon_removeList fa-4x" ng-click = "removeListAndUpdate()"></i>
     <div>
 
 
@@ -242,7 +242,7 @@
             <div class="col-md-3 col-sm-4 col-xs-1 col-lg-4"></div>
         </div>
         
-        <button ng-click = "removeAllCheckedItemsAndUpdate(listID, itemList)">Remove Checked</button>
+        <button ng-click = "removeAllCheckedItemsAndUpdate()">Remove Checked</button>
         </div>
     </div>
 </body>
