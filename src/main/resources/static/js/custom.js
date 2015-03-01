@@ -229,7 +229,10 @@ function removeItem(listID, item, callback) {
         //console.log(checked)
         //console.log(price)
         //console.log(itemQuantity)
-
+            if(itemQuantity == 0)
+            {
+                alert("Cannot have item with quantity of 0");
+            }
             //var newItemName = $('#' + itemName + 'newItemName').val();
 	        //var itemQuantity = $('#' + itemName + 'quantity').val();
 	        //var price = $('#' + itemName + 'itemPrice').val();
@@ -249,7 +252,7 @@ function removeItem(listID, item, callback) {
 	                	return result;
 	            },
 	            error: function (jqXHR, exception) {
-	                alert("Failed to add item");
+	                alert("Failed to edit item");
 	            }
 	        });
 	}

@@ -286,7 +286,8 @@ var app = angular.module('listView', [])
     		$scope.$apply(function(result){
                 console.log(result);
                 getUserLists(UserOID);
-                //pullListAndUpdate(lists[lists.length -1].oid);
+                //console.log("pulling list " + $scope.lists[$scope.lists.length -1].name);
+                //pullListAndUpdate($scope.lists[$scope.lists.length -1].oid);
     		   })
     	});
     }
@@ -303,6 +304,32 @@ var app = angular.module('listView', [])
 	}
 	$scope.removeAllCheckedItemsAndUpdate = removeAllCheckedItemsAndUpdate;
 
+    function changeItemQuantityByOne(listID, UserOID, item, upOrdown)
+    {
+       if(upOrdown == 1)
+       {
+          editItem(listID, item.name, item.name, UserOID, item.isChecked, item.price, item.quantity + 1, function(result) {
+			$scope.$apply(function(result) {
+			
+				pullListAndUpdate(result.listID);
+
+            })
+          });		
+       }
+       else
+       {
+          editItem(listID, item.name, item.name, UserOID, item.isChecked, item.price, item.quantity - 1, function(result) {
+			$scope.$apply(function(result) {
+			
+				pullListAndUpdate(result.listID);
+
+            })	
+           });
+       }
+       
+    } 
+    
+    $scope.changeItemQuantityByOne = changeItemQuantityByOne; 
 
     function initializeVoiceCommand(){
         if (annyang) {
