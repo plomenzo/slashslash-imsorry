@@ -308,7 +308,8 @@ function removeAllCheckedItems(listID, itemList, callback)
 
 function createList(UserOID, callback)
 {
-	var listName = $('#listName').val()
+	var listName = $('#listName').val();
+	$('#listName').val('');
 	$.ajax(
 	{
             type : "POST",

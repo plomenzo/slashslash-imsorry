@@ -262,7 +262,8 @@ var app = angular.module('listView', [])
     	createList(UserOID, function(result){
     		$scope.$apply(function(result){
                 console.log(result);
-                setCurrentList(result.lists[result.lists.length -1].oid);
+                getUserLists(UserOID);
+                //pullListAndUpdate(lists[lists.length -1].oid);
     		   })
     	});
     }
