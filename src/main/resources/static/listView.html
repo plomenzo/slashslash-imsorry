@@ -35,6 +35,13 @@
     <link rel="stylesheet" type="text/css" href="css/page.css" />
     <link rel="stylesheet" type="text/css" href="css/svgCheckboxImported.css" />
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/inputboxDemoComponent.css" />
+
+    <link rel="stylesheet" type="text/css" href="css/inputboxComponent.css" />
+
+
+
+
     <link rel="stylesheet" href="css/custom.css">
 
 
@@ -126,10 +133,20 @@
             <div class="col-md-3 col-sm-4 col-xs-1  col-lg-4"></div>
             <div class="col-md-6 col-sm-6 col-xs-10 col-lg-4">
                 <!--<div class="well">-->
-                    <input type = "text" id = "itemName"  ng-model = "itemNameInput" >
+                    <!--<input type = "text" id = "itemName"  ng-model = "itemNameInput" >-->
                     <!-- add in ng-keyup="event=$event" with keycode = 13 for enter key -->
                     <button ng-click="addItemToList(listID,UserOID);resetItemAdd()">Add item</button>
 
+
+                <!--<section class="content bgcolor-4">-->
+				<span class="input input--kuro"  >
+					<input class="input__field input__field--kuro" type="text"   id = "itemName"  ng-model = "itemNameInput" />
+					<label class="input__label input__label--kuro" for="itemName" >
+                        <span class="input__label-content input__label-content--kuro" >Add Item</span>
+                    </label>
+				</span>
+
+                <!--</section>-->
 
 
                 <br>
