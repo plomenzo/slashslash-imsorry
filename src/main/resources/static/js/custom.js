@@ -129,6 +129,7 @@ function addItemToListAJAX(listID, userName, itemName, price, quantity, isChecke
 //Modified Add item with callback
 function addItem(listID, userName, callback) {
     var itemName = $('#itemName').val();
+    $('#itemName').val('');
     //var quantity = $('#itemQuantity').val();
    
     if(itemName.trim() || !itemName.length === 0)
@@ -363,3 +364,5 @@ function createList(UserOID, callback)
 	
 	});
 }
+
+

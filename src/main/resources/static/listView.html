@@ -140,12 +140,11 @@
                 <!--<div class="well">-->
                     <!--<input type = "text" id = "itemName"  ng-model = "itemNameInput" >-->
                     <!-- add in ng-keyup="event=$event" with keycode = 13 for enter key -->
-                    <button ng-click="addItemToList(listID,UserOID);resetItemAdd()">Add item</button>
-
+                    <!--<button ng-click="addItemToList(listID,UserOID);resetItemAdd()">Add item</button>-->
 
                 <!--<section class="content bgcolor-4">-->
 				<span class="input input--kuro"  >
-					<input class="input__field input__field--kuro" type="text"   id = "itemName"  ng-model = "itemNameInput" />
+					<input class="input__field input__field--kuro" type="text" ng-keyup="$event.keyCode == 13 && addItemToList(listID, UserOID)" id = "itemName"  ng-model = "itemNameInput" />
 					<label class="input__label input__label--kuro" for="itemName" >
                         <span class="input__label-content input__label-content--kuro" >Add Item</span>
                     </label>
