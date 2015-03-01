@@ -149,34 +149,18 @@ var app = angular.module('listView', [])
     }
     $scope.inviteUserToList = inviteUserToList;
 
-    function getUserLists(userID) {
-        $.ajax(
-            {
-                type : "GET",
-                url  : "/cs480/getUserLists/" + userID,
-                data : {
+    function getUserLists(userID, callback) {
+        //Calls get User list
+        getUserListsAJAX(userID, function(result){
+                var list = result;
+                console.log("new var from callback is")
+                console.log(list)
+              $scope.$apply(
+                $scope.lists = list
+              )
+                              callback(list);
 
-                },
-                success : function(result) {
-                    //callback(result);
-                    console.log("Results of getUserLists()")
-                    console.log(result)
-
-                    $scope.$apply(function() {
-                        $scope.lists = result;
-                        //Sets the first loaded page to the first user
-                        //accessible list
-                        pullListAndUpdate(result[0].oid);
-                     
-                    })
-
-
-                    return result;
-                },
-                error: function (jqXHR, exception) {
-                    alert("Failed to add item");
-                }
-            });
+        });       
     }
 
     function loadUserData(){
@@ -188,7 +172,10 @@ var app = angular.module('listView', [])
             console.log(_account)
             //TODO: call getUserLists(_account.UserOID), then populate angular $scope.lists with it
             console.log("hello workd from loadUserData")
-            getUserLists(_account.UserOID)
+            getUserLists(_account.UserOID, function(result){
+                console.log(result)
+                pullListAndUpdate(result[0].oid);
+            });
             //Makes the User OID available to access by other funcitons
             $scope.UserOID = _account.UserOID;
             //(_account.User, _account.Pass);
@@ -209,10 +196,12 @@ var app = angular.module('listView', [])
 		    	//As we have deleted a list remotely, we have to
 		    	//Change the lists locally
 				//Reload lists from remote
-				getUserLists($scope.UserOID);	
-	    	})
-    	 });
-     }
+				getUserLists($scope.UserOID, function(result){
+                    pullListAndUpdate(result[0].oid);
+	    	    })
+    	   });
+        });
+    }
      $scope.removeListAndUpdate = removeListAndUpdate;
     
     //Changes checked value of given item from checkbox input
@@ -283,12 +272,11 @@ var app = angular.module('listView', [])
     function createNewListAndUpdate()
     {   //Upon creation of new list we go to it
     	createList($scope.UserOID, function(result){
-    		$scope.$apply(function(result){
-                console.log(result);
-                getUserLists($scope.UserOID);
-                //console.log("pulling list " + $scope.lists[$scope.lists.length -1].name);
-                //pullListAndUpdate($scope.lists[$scope.lists.length -1].oid);
-    		   })
+            $scope.$apply(function(result){
+                getUserLists($scope.UserOID, function(result){
+                    pullListAndUpdate(result[result.length -1].oid);
+                });
+            });
     	});
     }
     $scope.createNewListAndUpdate = createNewListAndUpdate;

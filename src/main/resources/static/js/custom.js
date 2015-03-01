@@ -71,6 +71,28 @@ function getItemsFromList(listID, callback)
     });
 }
 
+function getUserListsAJAX(userID, callback)
+{
+           $.ajax(
+            {
+                type : "GET",
+                url  : "/cs480/getUserLists/" + userID,
+                data : {
+
+                },
+                success : function(result) {
+                    //callback(result);
+                    console.log("Results of getUserLists()")
+                    console.log(result)
+                    callback(result);
+                    //return result;
+                },
+                error: function (jqXHR, exception) {
+                    alert("Failed to add item");
+                }
+            });
+}
+
 function getEntireList(listID, callback)
 {
     getList(listID, function(result) {
