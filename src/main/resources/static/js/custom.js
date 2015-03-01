@@ -232,6 +232,7 @@ function removeItem(listID, item, callback) {
             if(itemQuantity <= 0)
             {
                 alert("Cannot have item with quantity less than 1");
+                return;
             }
             //var newItemName = $('#' + itemName + 'newItemName').val();
 	        //var itemQuantity = $('#' + itemName + 'quantity').val();

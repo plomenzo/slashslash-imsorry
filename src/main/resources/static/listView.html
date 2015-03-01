@@ -174,8 +174,8 @@
 
                                                         <span ng-if="item.quantity > 1">x {{item.quantity}}</span>
                                                     </label>
-                                                <button ng-click="changeItemQuantityByOne(listID, UserOID, item, 1)">Increment</button>
-                                                <button ng-click="changeItemQuantityByOne(listID, UserOID, item, -1)">Decrement</button>
+                                                <i class = "fa fa-plus fa-3x plus_button" ng-click="changeItemQuantityByOne(listID, UserOID, item, 1)"></i>
+                                                <i class = "fa fa-minus fa-3x minus_button" ng-click="changeItemQuantityByOne(listID, UserOID, item, -1)"></i>
 
                                                 <i class="fa fa-trash-o fa-3x delete_button"
 
