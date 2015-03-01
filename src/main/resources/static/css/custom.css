@@ -18,6 +18,17 @@
     margin-left: 30px;
 }
 
+.icon_times{
+    float:right;
+} 
+.icon_red {
+    color : red;
+}
+.icon_removeList{
+    position : absolute;
+    top: 50px;
+    right: 10%;
+}
 
 
 #list_name {

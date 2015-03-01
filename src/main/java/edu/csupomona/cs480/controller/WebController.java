@@ -744,6 +744,7 @@ public class WebController {
 		items = temp;
 		listObject.put("items", items);
 		listsColl.update(cursor.one(),listObject);
+		System.out.println("Call to changeChekedState() : list: " + listOID + " " + " item : " + itemName + " checked : " + isChecked);
     	return true;
     }
     

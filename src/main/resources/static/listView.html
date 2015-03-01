@@ -75,15 +75,15 @@
 </div><!--Overall Wrapper for menu-->
 
 <div id="page">
-
+                <i class = "fa fa-times icon_times icon_red icon_removeList fa-4x" ng-click = "removeListAndUpdate(listID,UserOID)"></i>
     <div>
+
 
              <br>           <br>
 
 
-
             <!--List Info-->
-        <h1  id="list_name"> {{itemList.listName}} </h1>
+        <h1  id="list_name"> {{itemList.listName}}</h1> 
             <!--<br>-->
             <!--Last modified: {{itemList.lastModified}}-->
             <!--<br><br>-->
@@ -241,8 +241,7 @@
             </div>
             <div class="col-md-3 col-sm-4 col-xs-1 col-lg-4"></div>
         </div>
-
-        <button ng-click = "removeListAndUpdate(listID,UserOID)">Delete List</button>
+        
         <button ng-click = "removeAllCheckedItemsAndUpdate(listID, itemList)">Remove Checked</button>
         </div>
     </div>

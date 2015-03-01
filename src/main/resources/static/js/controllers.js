@@ -219,7 +219,7 @@ var app = angular.module('listView', [])
     function updateCheckedState(item, newState){
         console.log("Updating Checked State of: "+item.name +" -> "+newState)
         item.isChecked = newState;
-
+        updateItemCheckedState($scope.listID, $scope.UserOID, item);
 
     }
     $scope.updateCheckedState = updateCheckedState;

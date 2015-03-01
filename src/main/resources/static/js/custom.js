@@ -258,6 +258,26 @@ function removeItem(listID, item, callback) {
 	        });
 	}
 
+    function updateItemCheckedState(listID, UserOID, item)
+    {
+        $.ajax(
+        {
+            type : "POST",
+            url  : "/cs480/changeCheckState/" + listID,
+            data : {
+                "itemName" : item.name ,
+                "isChecked" : item.isChecked
+            },
+            success : function(result) {
+                    console.log("Updated item checked state");
+            },
+            error: function (jqXHR, exception) {
+                alert("Failed to edit item checked state");
+            }
+        });
+    }
+
+
 function inviteUser(listID, callback)
 {
     var userName = $('#InviteUser').val();
