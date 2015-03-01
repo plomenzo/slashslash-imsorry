@@ -86,9 +86,9 @@ var app = angular.module('listView', [])
     //add item to list
     //Modified to streamline adding from page
     //May want to change to be a callback
-    function addItemToList(listID, userName) {
+    function addItemToList() {
 	   //Calls addItem in custom.js
-    	addItem(listID,userName, function(result) {
+    	addItem($scope.listID,$scope.UserOID, function(result) {
 
     		$scope.$apply(function(result) {
                 

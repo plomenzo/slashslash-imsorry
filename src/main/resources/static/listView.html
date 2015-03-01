@@ -66,9 +66,9 @@
                 <!-- -->
             </li>
             <li>
-                        <input type = "text" id = "listName" ></input>
+                        <input type = "text" id = "listName" ng-keyup="$event.keyCode == 13 && createNewListAndUpdate()"></input>
                         <!-- replace with icon -->
-                        <button ng-click = "createNewListAndUpdate();">Create List</button>
+                        <!--<button ng-click = "createNewListAndUpdate();">Create List</button>-->
             </li>
         </ul>
     </nav>
@@ -165,7 +165,7 @@
                 <!--<section class="content bgcolor-4">-->
                 <div class=" text-center">
 				<span class="input input--kuro"  >
-					<input class="input__field input__field--kuro" type="text" ng-keyup="$event.keyCode == 13 && addItemToList(listID, UserOID)" id = "itemName"  ng-model = "itemNameInput" />
+					<input class="input__field input__field--kuro" type="text" ng-keyup="$event.keyCode == 13 && addItemToList()" id = "itemName"  ng-model = "itemNameInput" />
 					<label class="input__label input__label--kuro" for="itemName" >
                         <span class="input__label-content input__label-content--kuro" >Add Item</span>
                     </label>
