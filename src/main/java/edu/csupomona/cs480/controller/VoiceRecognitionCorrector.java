@@ -13,7 +13,7 @@ public class VoiceRecognitionCorrector
 	private Hashtable<String, String> converter;
 	// Path to the text file containing the corrections
 	private static final String LOCAL_CORRECTIONS_FILE_PATH = "src/main/resources/static/documents/VoiceRecognitionCorrections.txt";
-	private static final String SERVER_CORRECTIONS_FILE_PATH = "documents/VoiceRecognitionCorrections.txt";
+	private static final String SERVER_CORRECTIONS_FILE_PATH = "/documents/VoiceRecognitionCorrections.txt";
 	
 	/**
      * Gets the instance of the VoiceRecognitionCorrector
