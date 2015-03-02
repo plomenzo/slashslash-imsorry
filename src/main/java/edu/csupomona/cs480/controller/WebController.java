@@ -143,6 +143,11 @@ public class WebController {
     	//Initialize references to collections
 		usersColl = db.getCollection("users");
 		listsColl = db.getCollection("lists");
+		
+		//Initialize VoiceRecognitionCorrector
+		// 		may take time depending on how large the corrections file is
+		// Uses singularity
+		VoiceRecognitionCorrector vrc = VoiceRecognitionCorrector.getVoiceRecognitionCorrector();
     }
     
     
@@ -363,6 +368,14 @@ public class WebController {
     	
 		//Get the items part of the list DBObject and cast as a list
 		BasicDBList items = (BasicDBList) listObject.get("items");
+		
+		//Voice Correct item name
+		String correction = VoiceRecognitionCorrector.getVoiceRecognitionCorrector().correct(name);
+		if(!name.equals(correction))
+		{
+			System.out.println("During addItem correction made to itemName: \"" + name + "\" corrected to \"" + correction + "\"");
+			name = correction;
+		}
 
 		//Create new item
 		BasicDBObject item = new BasicDBObject("name", name)

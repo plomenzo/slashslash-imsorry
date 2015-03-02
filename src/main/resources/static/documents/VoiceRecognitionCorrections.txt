@@ -1,0 +1,3 @@
+x => eggs
+flower => flour
+catch up => ketchup
