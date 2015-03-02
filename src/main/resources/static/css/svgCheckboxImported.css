@@ -87,7 +87,7 @@
 .ac-custom input[type="checkbox"]:checked + label,
 .ac-custom input[type="radio"]:checked + label {
 	/*Color After transition*/
-	color: rgba(0,0,0,0.2); 
+	color: rgba(149,147,147,0.6); 
 
 } 
 
