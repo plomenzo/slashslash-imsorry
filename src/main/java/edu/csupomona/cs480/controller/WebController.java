@@ -782,7 +782,6 @@ public class WebController {
 		{
 			BasicDBObject item  = (BasicDBObject)(itemsList.get(i));
 			double itemPrice = item.getDouble("price");
-			System.out.println("adding current itemPrice(" + itemPrice + ") to totalPrice" );
 			totalPrice += itemPrice;
 		}
 		System.out.println("totalPrice after adding is: " + totalPrice);
@@ -804,6 +803,7 @@ public class WebController {
 		
 		// third divide the summed price by number of users
 		double result = totalPrice / numUsers;
+		System.out.println("Result of cost splitting:" + result);
 		
 		// return result
 		return result;
