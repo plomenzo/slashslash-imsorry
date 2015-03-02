@@ -26,6 +26,7 @@ public class VoiceRecognitionCorrector
 		return instance;
 	}
 	
+	
 	/**
      * Constructor for the instance of the VoiceRecognitionCorrector. 
      * Uses a default path to the file of corrections
@@ -34,34 +35,51 @@ public class VoiceRecognitionCorrector
 	private VoiceRecognitionCorrector()
 	{
 		converter = new Hashtable<String, String>();
-		try
+		
+		// Starting here and going till the commented-out code is the hardcoded version
+		// When reverting delete or comment out this code and uncomment the previously commented code below
+		String[] possibleInputs =   {"x",    "flower", "catch up"};
+		String[] correctedOutputs = {"eggs", "flour",  "ketchup"};
+		if(possibleInputs.length != correctedOutputs.length)
 		{
-			File correctionsFile = chooseExistingFile(LOCAL_CORRECTIONS_FILE_PATH, SERVER_CORRECTIONS_FILE_PATH);
-			if(correctionsFile.exists())
-			{
-				System.out.println("FILE FOUND FOR VRC");
-				Scanner correctionsScanner = new Scanner(correctionsFile);
-				while(correctionsScanner.hasNextLine())
-				{
-					String line = correctionsScanner.nextLine();
-					if((line.length() == 0) || (!(line.contains("=>"))))
-					{
-						// deals with blank lines and incorrect lines
-						continue;
-					}
-					int splitNdx = line.indexOf("=>");
-					String key = line.substring(0, splitNdx).trim();
-					String value = line.substring(splitNdx+2).trim();
-					
-					converter.put(key, value);
-				}
-				correctionsScanner.close();
-			}
+			System.out.println("HARD CODED VALUES IN VOICE RECOGNITION CORRECTOR DO NOT ALL HAVE MATCHES");
+			return;
 		}
-		catch(Exception ex)
+		for(int i=0; i<possibleInputs.length; i++)
 		{
-			System.out.println("Exception thrown in VoiceRecognitionCorrector: " + ex);
+			converter.put(possibleInputs[i], correctedOutputs[i]);
 		}
+		// This code is commented out because it does not work on the server at the moment....
+		// the file path is not correct and I (Vincent) do not want to spend a lot of time figure it out
+		// I am going to hard code the values in for now and if we need to add to the corrections then we can do so here for now.
+//		try
+//		{
+//			File correctionsFile = chooseExistingFile(LOCAL_CORRECTIONS_FILE_PATH, SERVER_CORRECTIONS_FILE_PATH);
+//			if(correctionsFile.exists())
+//			{
+//				System.out.println("FILE FOUND FOR VRC");
+//				Scanner correctionsScanner = new Scanner(correctionsFile);
+//				while(correctionsScanner.hasNextLine())
+//				{
+//					String line = correctionsScanner.nextLine();
+//					if((line.length() == 0) || (!(line.contains("=>"))))
+//					{
+//						// deals with blank lines and incorrect lines
+//						continue;
+//					}
+//					int splitNdx = line.indexOf("=>");
+//					String key = line.substring(0, splitNdx).trim();
+//					String value = line.substring(splitNdx+2).trim();
+//					
+//					converter.put(key, value);
+//				}
+//				correctionsScanner.close();
+//			}
+//		}
+//		catch(Exception ex)
+//		{
+//			System.out.println("Exception thrown in VoiceRecognitionCorrector: " + ex);
+//		}
 	}
 	
 	/**
