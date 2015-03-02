@@ -336,7 +336,30 @@ var app = angular.module('listView', [])
             annyang.start();
         }
     }
+    
+    function costSplit()
+    {
+           $.ajax(
+            {
+                type : "GET",
+                url  : "/cs480/splitCostOfList/" + $scope.listID,
+                data : {
 
+                },
+                success : function(result) {
+                    //callback(result);
+                    console.log("Results of Cost Split")
+                    console.log(result)
+                    angular.element('#costSplit').text("Your part is $" +Number(result).toFixed(2));
+                    return result;
+                },
+                error: function (jqXHR, exception) {
+                    alert("Failed to cost split");
+                }
+            });
+    }
+    $scope.costSplit = costSplit;
+    
     }]);
 
 

@@ -30,7 +30,12 @@
     right: 10%;
 }
 
-
+.splitCostButton {
+    position : absolute;
+}
+#splitCost{
+    font-size : 2em;
+}
 #list_name {
     text-align: center;
     color: #df6589;

@@ -98,7 +98,7 @@
 
 
             <!--List Info-->
-        <h1  id="list_name"> {{itemList.listName}}</h1> 
+        <h1  id="list_name"> {{itemList.listName}}<i class="fa fa-shopping-cart splitCostButton" ng-click ="costSplit()" data-toggle = "modal" data-target = "#splitCost" class = "ng-binding"></i></h1>
             <!--<br>-->
             <!--Last modified: {{itemList.lastModified}}-->
             <!--<br><br>-->
@@ -167,8 +167,26 @@
                 </div>
             </div>
         </div>
-        <!--    //editItem(listID, itemName, userName, checked, price, itemQuantity, callback)-->
 
+        <!-- Modal -->
+        <div class="modal fade" id="splitCost" tabindex="-1" role="dialog" aria-labelledby="splitCost" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="splitCost">Cost Split</h4>
+                    </div>
+                    <div class="modal-body"  >
+                        <p id = "costSplit"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--    //editItem(listID, itemName, userName, checked, price, itemQuantity, callback)-->
+        
         <div class="row">
             <div class="col-md-3 col-sm-4 col-xs-1  col-lg-4"></div>
             <div class="col-md-6 col-sm-6 col-xs-10 col-lg-4">
@@ -274,7 +292,7 @@
 
 
     $('#editItemModal').modal({ show: false})
-
+    $('#splitCostModal').modal({show : false})
     $(document).ready(function() {
         $("#my-menu").mmenu();
     });
