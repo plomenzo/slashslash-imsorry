@@ -753,10 +753,10 @@ public class WebController {
 		BasicDBObject[] itemList = items.toArray(new BasicDBObject[0]);
 		for(BasicDBObject i : itemList)
 		{
-			//if(i.get("name").equals((itemName)))
-			//{
+			if(i.get("name").equals((itemName)))
+			{
 				i.append("isChecked", isChecked);
-			//}
+			}
 			temp.add(i);
 		}
 		items = temp;
