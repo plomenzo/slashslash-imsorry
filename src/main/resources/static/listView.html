@@ -99,25 +99,8 @@
 
             <!--List Info-->
         <h1  id="list_name"> {{itemList.listName}}<i class="fa fa-shopping-cart splitCostButton" ng-click ="costSplit()" data-toggle = "modal" data-target = "#splitCost" class = "ng-binding"></i></h1>
-            <!--<br>-->
-            <!--Last modified: {{itemList.lastModified}}-->
-            <!--<br><br>-->
-            <list>
-            	<!--<tr>-->
-            		<!--<td><a>User Name</a></td>-->
-            		<!--<td><input type = "text" id = "InviteUser" ng-model = "userIDField"></td>-->
-            		<!--<td><button ng-click = "inviteUserToList(listID); resetUserName()">Invite User</button></td>-->
-            	<!--</tr>-->
-            <br><br>
-                <tr>
-                	<!--<td><a>Item Name</a></td>-->
-                	<!--<td><input type = "text" id = "itemName"  ng-model = "itemNameInput"></td>-->
-                	<!--<td><a>Item Quantity</a></td>-->
-                	<!--<td><input type = "text" id = "itemQuantity"  ng-model = "itemQuantityInput"></td>-->
-                	<!--&lt;!&ndash; add in ng-keyup="event=$event" with keycode = 13 for enter key &ndash;&gt;-->
-                	<!--<td><button ng-click="addItemToList(listID,UserOID);resetItemAdd()">Add item</button>-->
-                </tr>
-            </list>
+        <h1>
+        <i class="fa fa-user-plus inviteUserButton" data-toggle = "modal" data-target = "#inviteUser" class = "ng-binding"></i></h1>
             <br><br>
 
         <!-- Modal -->
@@ -168,7 +151,7 @@
             </div>
         </div>
 
-        <!-- Modal -->
+        <!-- Modal Cost Split -->
         <div class="modal fade" id="splitCost" tabindex="-1" role="dialog" aria-labelledby="splitCost" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -185,7 +168,33 @@
                 </div>
             </div>
         </div>
-        <!--    //editItem(listID, itemName, userName, checked, price, itemQuantity, callback)-->
+
+        <!--Modal Invite User -->
+        <div class="modal fade" id="inviteUser" tabindex="-1" role="dialog" aria-labelledby="inviteUser" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="inviteUser">Invite User</h4>
+                    </div>
+                    <div class="modal-body"  >
+                        <span class="input input--isao">
+                            <input class="input__field input__field--isao" type="text" id="InviteUser"/>
+                            <label class="input__label input__label--isao" for="InviteUser" data-content="User Name">
+                                <span class="input__label-content input__label-content--isao">User Name</span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                ng-click = "inviteUserToList()">
+                            Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div class="row">
             <div class="col-md-3 col-sm-4 col-xs-1  col-lg-4"></div>

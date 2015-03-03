@@ -137,9 +137,9 @@ var app = angular.module('listView', [])
     $scope.editItemAndUpdate = editItemAndUpdate;
 
     //Invite user
-    function inviteUserToList(listID) {
+    function inviteUserToList() {
 		//Calls in
-		inviteUser(listID, function(result){
+		inviteUser($scope.listID, function(result){
 		    $scope.$apply(function(result) {
 		    
 		        //?
@@ -344,7 +344,7 @@ var app = angular.module('listView', [])
                 type : "GET",
                 url  : "/cs480/splitCostOfList/" + $scope.listID,
                 data : {
-
+                    "userId" : $scope.UserOID
                 },
                 success : function(result) {
                     //callback(result);

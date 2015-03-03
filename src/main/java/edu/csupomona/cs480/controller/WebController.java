@@ -382,6 +382,7 @@ public class WebController {
 								.append("quantity", quantity)
 								.append("price", price)
 								.append("isChecked", isChecked);
+								//.append("wantedBy", new BasicDBObject("userId", userId));
 		//Checks to see if itemName is already present in list
 		BasicDBObject[] itemList = items.toArray(new BasicDBObject[0]);
 		for(BasicDBObject i : itemList)
@@ -495,13 +496,17 @@ public class WebController {
     	// check to see if they are already added to the list *not implemented yet
     	
 		//Get the UserAccess list
-    	BasicDBList users = (BasicDBList) listObject.get("userAccess");
-    	
-		//add user to userId
-		users.add(userId);
+    	BasicDBList userList = (BasicDBList) listObject.get("userAccess");
+   
+    	if(userList.contains(userId))
+    	{
+    		return true;
+    	}
+    	//add user to userId
+		userList.add(userId);
 		
 		// Add the user to userAccess
-        listObject.put("userAccess", users);
+        listObject.put("userAccess", userList);
         
         //orig = listObject will give us 2 list objects
     	DBObject origList = cursor.one();
@@ -748,10 +753,10 @@ public class WebController {
 		BasicDBObject[] itemList = items.toArray(new BasicDBObject[0]);
 		for(BasicDBObject i : itemList)
 		{
-			if(i.get("name").equals((itemName)))
-			{
+			//if(i.get("name").equals((itemName)))
+			//{
 				i.append("isChecked", isChecked);
-			}
+			//}
 			temp.add(i);
 		}
 		items = temp;
@@ -768,7 +773,8 @@ public class WebController {
      */
     @RequestMapping(value = "/cs480/splitCostOfList/{id}", method = RequestMethod.GET)
     public double splitCostOfList(
-    		@PathVariable("id") String id){
+    		@PathVariable("id") String id,
+    		@RequestParam("userId") String userId){
 
 	   	// List that we want to find
     	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));

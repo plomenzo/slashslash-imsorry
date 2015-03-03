@@ -29,10 +29,17 @@
     top: 50px;
     right: 10%;
 }
+.inviteUserButton{
+    color: #df6589;
+    color: #2fa8ec;
+    padding-left : 10%;
+    position : absolute;
+}
 
 .splitCostButton {
     position : absolute;
 }
+
 #splitCost{
     font-size : 2em;
 }
