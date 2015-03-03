@@ -12,32 +12,43 @@
 
 .delete_button {
     float:right;
+    cursor: pointer;
 }
 
 .plus_button{
     margin-left: 30px;
+    cursor: pointer;
+}
+
+.minus_button{
+    cursor: pointer;
 }
 
 .icon_times{
     float:right;
+    cursor: pointer;
 } 
 .icon_red {
     color : red;
 }
+
 .icon_removeList{
     position : absolute;
     top: 50px;
     right: 10%;
 }
+
 .inviteUserButton{
     color: #df6589;
     color: #2fa8ec;
     padding-left : 10%;
     position : absolute;
+    cursor: pointer;
 }
 
 .splitCostButton {
     position : absolute;
+    cursor: pointer;
 }
 
 #splitCost{
