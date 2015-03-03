@@ -98,7 +98,6 @@ import com.mongodb.BasicDBList;
  * each HTTP API Path to the correspondent method.
  *
  */
-
 @RestController
 public class WebController {
 
@@ -114,7 +113,6 @@ public class WebController {
     private UserManager userManager;
     
     
-
     //MongoDB Global Objects
     MongoClient mongoClient;
 	DB db; 
@@ -122,7 +120,7 @@ public class WebController {
 	DBCollection listsColl;
 
 	//Constructor for WebController to handle 1 time MongoDB initializations
-    public WebController() throws UnknownHostException{
+    public WebController() throws UnknownHostException {
     	//Initialize connection to MongoDB
     	//Do this once on the WebController constructor to prevent wasted connections
     	Boolean useLocal = false;
@@ -145,11 +143,10 @@ public class WebController {
 		listsColl = db.getCollection("lists");
 		
 		//Initialize VoiceRecognitionCorrector
-		// 		may take time depending on how large the corrections file is
-		// Uses singularity
+		//May take time depending on how large the corrections file is
+		//Uses singularity
 		VoiceRecognitionCorrector vrc = VoiceRecognitionCorrector.getVoiceRecognitionCorrector();
-    }
-    
+    }    
     
     /**
      * userExists()
@@ -158,9 +155,11 @@ public class WebController {
      */
     @RequestMapping(value = "/cs480/userExists/{userName}", method = RequestMethod.GET)
     public Boolean userExists(@PathVariable("userName") String userName) throws UnknownHostException {
+
     	DBObject query = new BasicDBObject("userName", userName); 
     	DBCursor cursor = usersColl.find(query);
     	DBObject result = cursor.one();
+    	
     	System.out.println("Call to userExists() :" + result);
     	Boolean userExists = !(result == null);
     	
@@ -178,7 +177,7 @@ public class WebController {
     @RequestMapping(value = "/cs480/createUser/{userName}", method = RequestMethod.POST)
     public Boolean createUser(
     		@PathVariable("userName") String userName ,
-    		@RequestParam("password") String pw){
+    		@RequestParam("password") String pw) {
 
     	DBObject user = new BasicDBObject("userName", userName)
     	                    .append("password", pw)
@@ -188,6 +187,7 @@ public class WebController {
     	DBObject query = new BasicDBObject("userName", userName); 
     	DBCursor cursor = usersColl.find(query);
     	DBObject result = cursor.one();
+    	
         //If username exists
     	if(result != null)
         {
@@ -233,14 +233,16 @@ public class WebController {
     	  	createdBy: userID
     	  	lastModified: (time_in_millis)
     	  }
+    	  
      * @param listName
      * @param userAccess
      * @return
-     */
+     */    
 	@RequestMapping(value = "/cs480/createList/{listName}", method = RequestMethod.POST)
     Boolean createList(
     		@PathVariable("listName") String listName ,
-    		@RequestParam("creatorUserID") String creatorUserID){
+    		@RequestParam("creatorUserID") String creatorUserID) {
+		
     	BasicDBList userAccess = new BasicDBList();
     	userAccess.add(creatorUserID);
     	DBObject list = new BasicDBObject("listName", listName)
@@ -252,47 +254,48 @@ public class WebController {
     	
     	listsColl.insert(list);
 
-    	// get the list oid to add to the user 
+    	//Get the list oid to add to the user 
     	String listId = (list.get("_id")).toString();
 
-    	// get user object
+    	//Get user object
     	BasicDBObject queryUser = new BasicDBObject("_id", new ObjectId(creatorUserID));
     	DBCursor cursorUser = usersColl.find(queryUser);
     	//Use the first user found from search
     	DBObject userObject = cursorUser.one();
 
-    	// get the lists that the user has access to
+    	//Get the lists that the user has access to
     	BasicDBList usersLists = (BasicDBList) userObject.get("userAccessibleLists");
 
-    	// add new list id
+    	//Add new list id
     	usersLists.add(listId);
-    	// put back the user accessible lists list
+    	//Put back the user accessible lists list
     	userObject.put("userAccessibleLists", usersLists);
-    	// get original user
+    	//Get original user
     	DBObject origUser = cursorUser.one();
-    	// update user object
+    	//Update user object
     	usersColl.update(origUser, userObject);
-    	// close cursor to user
+    	//Close cursor to user
     	cursorUser.close();
     	
     	System.out.println("Call to createList() :" + list.toString());
     	
     	return true;
-    }
-    
+    } 
     
     /**
      * getList()
      * Returns a list object matching the specified $oid of the list from the database.
      * @param id
-     */    
-    @RequestMapping(value = "/cs480/getList/{id}", method = RequestMethod.GET)
+     */   	
+    @RequestMapping(value = "/cs480/getList/{listId}", method = RequestMethod.GET)
 	public
     DBObject getList(
-    		@PathVariable("id") String id){
-    	try{
-	    	BasicDBObject query = new BasicDBObject("_id", new ObjectId(id));
+    		@PathVariable("listId") String listId) {
+    	
+    	try {
+	    	BasicDBObject query = new BasicDBObject("_id", new ObjectId(listId));
 	    	DBCursor cursor = listsColl.find(query);
+	    	
 	    	//Uses the first list found from search
 			DBObject listObject = cursor.one();
 	    	cursor.close();  	
@@ -314,25 +317,29 @@ public class WebController {
      * @param id $oid of list
      * @param itemName name of item to remove
      * @return the boolean value of true if item was removed, false if item failed to remove
-     */
-    @RequestMapping(value = "/cs480/removeItem/{id}/{itemName}", method = RequestMethod.POST)
+     */    
+    @RequestMapping(value = "/cs480/removeItem/{listId}/{itemName}", method = RequestMethod.POST)
 	public
     boolean removeItem(
-    		@PathVariable("id") String id,
-    		@PathVariable("itemName") String itemName){
+    		@PathVariable("listId") String listId,
+    		@PathVariable("itemName") String itemName) {
+    	
     	//List that we want to find
-    	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));
+    	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(listId));
     	//Item that we want to remove
     	DBObject item =  new BasicDBObject("name", itemName);
     	DBObject itemRemove = new BasicDBObject("items",item);
+    	
     	//Removes item from item list
     	listsColl.update(listObject,new BasicDBObject("$pull", itemRemove), false, false);
     	//Item we want to add to history
     	DBObject itemHistory = new BasicDBObject("itemHistory", item);
+    	
     	//Adds item to history
     	listsColl.update(listObject, new BasicDBObject("$push", itemHistory));
     	DBObject lastUpdated = new BasicDBObject("lastModified", System.currentTimeMillis());
         listsColl.update(listObject, new BasicDBObject("$set", lastUpdated), false, false);
+        
         System.out.println("Call to removeItem: " + itemName);
         return true;
     }
@@ -345,24 +352,24 @@ public class WebController {
      * @param price item price
      * @param isChecked is item "checked"
      * @return 
-     */
-    @RequestMapping(value = "/cs480/addItem/{listName}/{userId}", method = RequestMethod.POST)
+     */   
+    @RequestMapping(value = "/cs480/addItem/{listId}/{userId}", method = RequestMethod.POST)
     Boolean addItemToList(
-    		@PathVariable("listName") String id,
+    		@PathVariable("listId") String listId,
     		@PathVariable("userId") String userId,
     		@RequestParam("itemName") String name,
     		@RequestParam("price") double price,
     		@RequestParam("quantity") int quantity,
-    		@RequestParam("isChecked") boolean isChecked){
+    		@RequestParam("isChecked") boolean isChecked) {
     	
-    	// verify is the user is allowed to add to the list
-    	if(!verifyListAccess(id,userId))
+    	//Verify is the user is allowed to add to the list
+    	if(!verifyListAccess(listId,userId))
     	{
     		System.out.println("user doesnt have access");
     		return false;
     	}
     	
-    	BasicDBObject query = new BasicDBObject("_id",new ObjectId(id));
+    	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listId));
     	DBCursor cursor = listsColl.find(query);
     	DBObject listObject = cursor.one();
     	
@@ -383,6 +390,7 @@ public class WebController {
 								.append("price", price)
 								.append("isChecked", isChecked);
 								//.append("wantedBy", new BasicDBObject("userId", userId));
+		
 		//Checks to see if itemName is already present in list
 		BasicDBObject[] itemList = items.toArray(new BasicDBObject[0]);
 		for(BasicDBObject i : itemList)
@@ -393,20 +401,22 @@ public class WebController {
 			}
 		}
 
-		//add item to list
+		//Add item to list
 		items.add(item);
 		//Removes item in new list
-        listObject.put("items", items);        
+        listObject.put("items", items);    
+        
         //Copy constructor does not work for some reason
         //Thus orig = listObject will give us effectively
         //2 listObjects
     	DBObject orig = cursor.one();
     	//Replace old list with new list
         listsColl.update(orig,listObject);
-        // Updates lastUpdated to current time
+        //Updates lastUpdated to current time
         DBObject lastUpdated = new BasicDBObject("lastModified", System.currentTimeMillis());
         listsColl.update(listObject, new BasicDBObject("$set", lastUpdated), false, false);
-        //print to console
+        
+        //Print to console
     	System.out.println("Call to addItem() : "  +  listObject.toString());
         
         return true;	
@@ -422,18 +432,18 @@ public class WebController {
      * @param price item price
      * @param isChecked is item "checked"
      * @return 
-     */
-    @RequestMapping(value = "/cs480/editItem/{id}/{oldName}", method = RequestMethod.POST)
+     */    
+    @RequestMapping(value = "/cs480/editItem/{listId}/{oldName}", method = RequestMethod.POST)
     Boolean editItem(
-    		@PathVariable("id") String listId,
+    		@PathVariable("listId") String listId,
     		@PathVariable("oldName") String oldName,
-    		@RequestParam("name") String name,
+    		@RequestParam("name") String newName,
     		@RequestParam("userId") String userId,
     		@RequestParam("quantity") int quantity,
     		@RequestParam("price") double price,
     		@RequestParam("isChecked") boolean isChecked) {
     	
-    	// verify is the user is allowed to edit list
+    	//Verify is the user is allowed to edit list
     	if(!verifyListAccess(listId,userId))
     	{
     		System.out.println("user doesnt have access");
@@ -447,18 +457,20 @@ public class WebController {
 		//Get the items part of the list DBObject and cast as a list
 		BasicDBList items = (BasicDBList) listObject.get("items");
 		BasicDBList temp = new BasicDBList();
-		BasicDBObject[] itemList = items.toArray(new BasicDBObject[0]);
+		BasicDBObject[] itemList = items.toArray(new BasicDBObject[0]);		
 		for(BasicDBObject i : itemList)
 		{
 			if(i.get("name").equals((oldName)))
 			{
-				i.append("name",name).append("quantity", quantity).append("price",price).append("isChecked", isChecked);
+				i.append("name",newName).append("quantity", quantity).append("price",price).append("isChecked", isChecked);
 			}
 			temp.add(i);
 		}
+		//Update the list with the edited item
 		items = temp;
 		listObject.put("items", items);
 		listsColl.update(cursor.one(),listObject);
+		
     	return true;
     }	
     
@@ -466,12 +478,13 @@ public class WebController {
      * gets the user oid from userName
      * @param userName
      * @return oid
-     */
+     */   
     String getUserOIDFromName(String userName)
     {
     	DBObject query = new BasicDBObject("userName", userName); 
     	DBCursor cursor = usersColl.find(query);
     	DBObject result = cursor.one();
+    	
     	//return the oid
     	return result.get("_id").toString();
     }
@@ -481,19 +494,20 @@ public class WebController {
      * @param id List ID
      * @param userId The user oid you are adding
      * @return 
-     */
-    @RequestMapping(value = "/cs480/inviteUser/{id}", method = RequestMethod.POST)
+     */  
+    @RequestMapping(value = "/cs480/inviteUser/{listId}", method = RequestMethod.POST)
     Boolean inviteUser(
-    		@PathVariable("id") String listId,
-    		@RequestParam("userName") String userName){
-    	// Get The id using the username
+    		@PathVariable("listId") String listId,
+    		@RequestParam("userName") String userName) {
+    	
+    	//Get The id using the username
     	String userId = getUserOIDFromName(userName);
     	
     	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listId));
     	DBCursor cursor = listsColl.find(query);
     	DBObject listObject = cursor.one();
     	System.out.println(listObject);
-    	// check to see if they are already added to the list *not implemented yet
+    	//Check to see if they are already added to the list *not implemented yet
     	
 		//Get the UserAccess list
     	BasicDBList userList = (BasicDBList) listObject.get("userAccess");
@@ -502,37 +516,39 @@ public class WebController {
     	{
     		return true;
     	}
-    	//add user to userId
+    	//Add user to userId
 		userList.add(userId);
 		
-		// Add the user to userAccess
+		//Add the user to userAccess
         listObject.put("userAccess", userList);
         
         //orig = listObject will give us 2 list objects
     	DBObject origList = cursor.one();
     	
-    	//update the list collection with new user object
+    	//Update the list collection with new user object
     	listsColl.update(origList,listObject);
     	
-    	// get user object
+    	//Get user object
     	BasicDBObject queryUser = new BasicDBObject("_id", new ObjectId(userId));
     	DBCursor cursorUser = usersColl.find(queryUser);
     	//Use the first user found from search
     	DBObject userObject = cursorUser.one();
-    	// get the lists that the user has access to
+    	//Get the lists that the user has access to
     	BasicDBList usersLists = (BasicDBList) userObject.get("userAccessibleLists");
-    	// add new list id
+    	
     	System.out.println(usersLists);
     	System.out.println(listId);
-
+    	
+    	//Add new list id
     	usersLists.add(listId);
-    	// put back the user accessible lists list
+    	//Put back the user accessible lists list
     	userObject.put("userAccessibleLists", usersLists);
-    	// get original user
+    	//Get original user
     	DBObject origUser = cursorUser.one();
-    	// update user object
+    	
+    	//Update user object
     	usersColl.update(origUser, userObject);
-    	// close cursor to user
+    	//Close cursor to user
     	cursorUser.close();  	
     	
     	System.out.println("Call to inviteUser() : " + userObject.toString());
@@ -544,18 +560,19 @@ public class WebController {
      * Deletes an entire list
      * @param id List ID
      * @return 
-     */
-    @RequestMapping(value = "/cs480/deleteList/{id}", method = RequestMethod.POST)
+     */   
+    @RequestMapping(value = "/cs480/deleteList/{listId}", method = RequestMethod.POST)
     public boolean deleteList(
-    		@PathVariable("id") String id){
+    		@PathVariable("listId") String listId) {
 
 	   	//List that we want to find
-    	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));
+    	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(listId));
 		
     	//TEMP SOLUTION
     	//We find the list in the db
     	DBCursor listCursor = listsColl.find(listObject);
 		DBObject listObj = listCursor.one();
+		
         //We remove the list from each of the user's userAccessibleLists
 		BasicDBList userList =  (BasicDBList)(listObj.get("userAccess"));
         for(int i = 0; i < userList.size(); i++)
@@ -564,7 +581,9 @@ public class WebController {
         }
 		//Remove list
 	    listsColl.remove(listObject);
-	    System.out.println("Call to removeList: " + id);
+	    
+	    System.out.println("Call to removeList: " + listId);
+	    
 	    return true;
     }
     
@@ -573,7 +592,7 @@ public class WebController {
      * @param listId
      * @param userId
      * @return
-     */
+     */   
     public boolean verifyListAccess(String listId, String userId)
     {
     	BasicDBList userList = getUserLists(userId);
@@ -582,11 +601,14 @@ public class WebController {
 		{
 			if(i.get("oid").equals((listId)))
 			{
+				//User has access to list
 				return true;
 			}
 		}
-    	return false;
+		//No access
+    	return false; 
     }
+    
     /**
      * Authenticates a user/password
      * @param userName user name
@@ -594,12 +616,13 @@ public class WebController {
      * @return true if password is correct
      * @return false if password is incorrect
      * @return false if user doesn't not exist
-     */
+     */ 
     @RequestMapping(value = "/cs480/authenticate/{userName}", method = RequestMethod.POST)
     public String authenticate(
     		@PathVariable("userName") String userName,
-    		@RequestParam("password") String password){
-    	// find the user given the user name
+    		@RequestParam("password") String pw) {
+    	
+    	//Find the user given the user name
     	DBObject query = new BasicDBObject("userName", userName); 
     	DBCursor cursor = usersColl.find(query);
     	
@@ -607,25 +630,25 @@ public class WebController {
     	{
 	    	DBObject result = cursor.one();
 	    	
-	    	BasicDBObject userObject = new BasicDBObject("userName",userName).append("password", password);
-	    	// check to see if the passwords match
+	    	BasicDBObject userObject = new BasicDBObject("userName",userName).append("password", pw);
+	    	//Check to see if the passwords match
 	    	if(userObject.get("password").equals(result.get("password")))
 	    	{   	
-	    		// password is correct
+	    		//Password is correct
 	    		System.out.println(userName + "authenticated");
 	    		System.out.println(result.get("_id").toString());
 	    		return result.get("_id").toString();
 	    	}	
 	    	else
 	    	{
-	    		// password is incorrect
+	    		//Password is incorrect
 	    		System.out.println("password is incorrect");
 	    		return "Login failed";
 	    	}
     	}
     	catch (Exception e)
     	{
-    		// user name does not exist
+    		//User name does not exist
     		System.out.println(userName + " doesn't exist");
     		return "Login Failed";
     	}
@@ -639,7 +662,8 @@ public class WebController {
      */    
     @RequestMapping(value = "/cs480/getUserLists/{userId}", method = RequestMethod.GET)
     BasicDBList getUserLists(
-    		@PathVariable("userId") String userId){
+    		@PathVariable("userId") String userId) {
+    	
     	BasicDBObject userQuery = new BasicDBObject("_id", new ObjectId(userId));
     	
     	DBCursor userCursor = usersColl.find(userQuery);
@@ -649,11 +673,12 @@ public class WebController {
     	BasicDBList usersListsOIDs = (BasicDBList)userObject.get("userAccessibleLists");
     	BasicDBList lists = new BasicDBList();
     	
-    	for(int i=0; i<usersListsOIDs.size(); i++)
+    	for(int i = 0; i < usersListsOIDs.size(); i++)
     	{
     		BasicDBObject listQuery = new BasicDBObject("_id", new ObjectId(usersListsOIDs.get(i).toString()));
     		DBCursor listCursor = listsColl.find(listQuery);
     		DBObject listObj = listCursor.one();
+    		
     		String listName = (String)(listObj.get("listName"));
     		BasicDBObject currentList = new BasicDBObject("oid", usersListsOIDs.get(i))
     											.append("name", listName);
@@ -661,7 +686,8 @@ public class WebController {
     		lists.add(currentList);
 
     	}
-    	userCursor.close();  	
+    	userCursor.close();  
+    	
     	System.out.println("Call to getUserLists() of user: " + userObject.toString());
     	
     	return lists;
@@ -672,16 +698,18 @@ public class WebController {
      * @param listOID
      * @return
      */
-    @RequestMapping(value = "/cs480/getHistory/{listOID}", method = RequestMethod.GET)
+    @RequestMapping(value = "/cs480/getHistory/{listId}", method = RequestMethod.GET)
     public DBObject getHistory(
-    		@PathVariable("listOID") String listOID)
-    		{
-    			BasicDBObject query = new BasicDBObject("_id", new ObjectId(listOID));
+    		@PathVariable("listIDd") String listId) {
+    	
+    			BasicDBObject query = new BasicDBObject("_id", new ObjectId(listId));
     	    	//We find the list in the db
     	    	DBCursor listCursor = listsColl.find(query);
     			DBObject listObj = listCursor.one();
     			BasicDBList history = (BasicDBList)listObj.get("itemHistory");
-    			System.out.println("Call to get history() : " + listOID);
+    			
+    			System.out.println("Call to get history() : " + listId);
+    			
     			return history;
     		}
     
@@ -697,6 +725,7 @@ public class WebController {
     	DBCursor userCursor = usersColl.find(userQuery);
     	DBObject user = userCursor.one();
         System.out.println(user);
+        
     	//We get the userAccessibleLists
     	BasicDBList list = (BasicDBList) user.get("userAccessibleLists");
     	//We remove the list from the userAccessibleLists
@@ -704,6 +733,7 @@ public class WebController {
     	//We update the user object
         user.put("userAccessibleLists", list);
         DBObject userOrig = userCursor.one();
+        
         //We update the database user
         usersColl.update(userOrig,user);
     }
@@ -714,36 +744,41 @@ public class WebController {
      * @param id ID of the list
      * @return
      */
-    @RequestMapping(value = "/cs480/manualRemoveList/{listID}", method = RequestMethod.POST)
+    @RequestMapping(value = "/cs480/manualRemoveList/{listId}", method = RequestMethod.POST)
     public void manualRemoveList(
-    		@PathVariable("listID") String id,
-            @RequestParam("userID") String userID){
+    		@PathVariable("listId") String listId,
+            @RequestParam("userID") String userID) {
+    	
 	   	//List that we want to find
     	BasicDBObject userQuery= new BasicDBObject("_id",new ObjectId(userID));
     	//BasicDBObject listQuery = new BasicDBObject("_id",new ObjectId(id));
     	DBCursor userCursor = usersColl.find(userQuery);
     	DBObject user = userCursor.one();
+    	
         //We get the userAccessibleLists
     	BasicDBList list = (BasicDBList) user.get("userAccessibleLists");
         System.out.println(list);
+        
     	//We remove the list from the userAccessibleLists
-    	list.remove(id);
+    	list.remove(listId);
         System.out.println(list);
+        
     	//We update the user object
         user.put("userAccessibleLists", list);
         DBObject userOrig = userCursor.one();
+        
         //We update the database user
         usersColl.update(userOrig,user);
     	userCursor.close();
     }  
     
-    @RequestMapping(value = "/cs480/changeCheckState/{listOID}", method = RequestMethod.POST)
+    @RequestMapping(value = "/cs480/changeCheckState/{listId}", method = RequestMethod.POST)
     boolean changeCheckedState(
-        	@PathVariable("listOID") String listOID,
+        	@PathVariable("listId") String listId,
     		@RequestParam("itemName") String itemName,
-    		@RequestParam("isChecked") boolean isChecked){
+    		@RequestParam("isChecked") boolean isChecked) {
     	
-    	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listOID));
+    	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listId));
     	DBCursor cursor = listsColl.find(query);
     	DBObject listObject = cursor.one();
 
@@ -761,8 +796,11 @@ public class WebController {
 		}
 		items = temp;
 		listObject.put("items", items);
+		//Update the list with the new checked state
 		listsColl.update(cursor.one(),listObject);
-		System.out.println("Call to changeChekedState() : list: " + listOID + " " + " item : " + itemName + " checked : " + isChecked);
+		
+		System.out.println("Call to changeChekedState() : list: " + listId + " " + " item : " + itemName + " checked : " + isChecked);
+		
     	return true;
     }
     
@@ -771,47 +809,49 @@ public class WebController {
      * @param id List ID
      * @return 
      */
-    @RequestMapping(value = "/cs480/splitCostOfList/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/cs480/splitCostOfList/{listId}", method = RequestMethod.GET)
     public double splitCostOfList(
-    		@PathVariable("id") String id,
-    		@RequestParam("userId") String userId){
+    		@PathVariable("listId") String listId,
+    		@RequestParam("userId") String userId) {
 
-	   	// List that we want to find
-    	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(id));
+	   	//List that we want to find
+    	BasicDBObject listObject = new BasicDBObject("_id",new ObjectId(listId));
     	DBCursor listCursor = listsColl.find(listObject);
 		DBObject listObj = listCursor.one();
 		
-		// first sum up prices
+		//First sum up prices
 		double totalPrice = 0;
 		BasicDBList itemsList = (BasicDBList)(listObj.get("items"));
-		for(int i=0; i<itemsList.size(); i++)
+		for(int i = 0; i < itemsList.size(); i++)
 		{
 			BasicDBObject item  = (BasicDBObject)(itemsList.get(i));
 			double itemPrice = item.getDouble("price");
 			totalPrice += itemPrice;
 		}
 		System.out.println("totalPrice after adding is: " + totalPrice);
-		// short circuits if totalPrice is 0 then no need to calc numUsers
+		
+		//Short circuits if totalPrice is 0 then no need to calc numUsers
 		if(totalPrice == 0)
 		{
 			return 0.0;
 		}
 		
-		// second sum up number of users that use this list
+		//second sum up number of users that use this list
 		BasicDBList userList =  (BasicDBList)(listObj.get("userAccess"));
 		int numUsers = userList.size();
-		// short circuits divide if numUsers is 0 or 1
+		
+		//Short circuits divide if numUsers is 0 or 1
 		System.out.println("Number of users in list is: " + numUsers);
 		if((numUsers == 0) || (numUsers == 1))
 		{
 			return totalPrice;
 		}
 		
-		// third divide the summed price by number of users
+		//Third divide the summed price by number of users
 		double result = totalPrice / numUsers;
+		
 		System.out.println("Result of cost splitting:" + result);
 		
-		// return result
 		return result;
     }
 
@@ -826,7 +866,8 @@ public class WebController {
      * @throws IOException
      */
     @RequestMapping(value = "/cs480/storeprice/", method = RequestMethod.GET)
-    String getStorePrice() throws IOException{
+    String getStorePrice() throws IOException {
+    	
     	String result = "";
     	//Make the url's dynamic
     	String albertsonsURL = "http://albertsons.mywebgrocer.com/Circular/San-Dimas/8C4073634/Weekly/2/";
@@ -846,7 +887,8 @@ public class WebController {
     		result+="***********************\n";
     		result+="***********************\n";
 
-        	try{
+        	try
+        	{
             	int page = 1;
         		while(true)
         		{
@@ -875,11 +917,13 @@ public class WebController {
                 	page++;
         		}
 
-        	}catch(Exception e)
+        	}
+        	catch(Exception e)
         	{
         		continue;
         	}
     	}
+    	
     	return result;
 
     }
@@ -891,27 +935,28 @@ public class WebController {
      */
     @RequestMapping(value = "/cs480/commonsMathExample/", method = RequestMethod.GET)
 	public
-    String commonsMathExample()
-    {
-    	// Create a real matrix with two rows and three columns, using a factory
-    	// method that selects the implementation class for us.
+    String commonsMathExample() {
+    	
+    	//Create a real matrix with two rows and three columns, using a factory
+    	//method that selects the implementation class for us.
     	double[][] matrixData = { {1d,2d,3d}, {2d,5d,3d}};
     	RealMatrix m = MatrixUtils.createRealMatrix(matrixData);
 
-    	// One more with three rows, two columns, this time instantiating the
-    	// RealMatrix implementation class directly.
+    	//One more with three rows, two columns, this time instantiating the
+    	//RealMatrix implementation class directly.
     	double[][] matrixData2 = { {1d,2d}, {2d,5d}, {1d, 7d}};
     	RealMatrix n = new Array2DRowRealMatrix(matrixData2);
 
-    	// Note: The constructor copies  the input double[][] array in both cases.
+    	//Note: The constructor copies  the input double[][] array in both cases.
 
-    	// Now multiply m by n
+    	//Now multiply m by n
     	RealMatrix p = m.multiply(n);
     	System.out.println(p.getRowDimension());    // 2
     	System.out.println(p.getColumnDimension()); // 2
 
-    	// Invert p, using LU decomposition
+    	//Invert p, using LU decomposition
     	RealMatrix pInverse = new LUDecomposition(p).getSolver().getInverse();
+    	
     	return pInverse.toString();
     }
     
@@ -921,22 +966,22 @@ public class WebController {
      * @return
      */
     @RequestMapping(value = "/cs480/getDate", method = RequestMethod.GET)
-    boolean getDate(){
+    boolean getDate() {
     	
-    	// set up Data for LA
+    	//Set up Data for LA
     	DateTime utc = new DateTime(DateTimeZone.UTC);
     	DateTimeZone tz = DateTimeZone.forID("America/Los_Angeles");
     	DateTime losAngelesDateTime = utc.toDateTime(tz);
     	
-    	// Format the time to day/month/year
+    	//Format the time to day/month/year
     	DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yy");
-    	//print the time
+    	
+    	//Print the time
     	System.out.println(fmt.print(losAngelesDateTime));
     	
     	return true;
     }
-
-    
+ 
 //////////////////////////////////////OLD CODE/////////////////////////////////////////////    
 //////////////////////////////////////OLD CODE/////////////////////////////////////////////    
 //////////////////////////////////////OLD CODE/////////////////////////////////////////////    

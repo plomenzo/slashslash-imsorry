@@ -6,12 +6,12 @@ import java.util.Scanner;
 
 public class VoiceRecognitionCorrector
 {
-	// single instance of the voice recognition corrector
+	//Single instance of the voice recognition corrector
 	private static VoiceRecognitionCorrector instance;
-	// hashtable that stores all the "corrections"
-	// uses incorrect as key and correct as value
+	//Hashtable that stores all the "corrections"
+	//Uses incorrect as key and correct as value
 	private Hashtable<String, String> converter;
-	// Path to the text file containing the corrections
+	//Path to the text file containing the corrections
 	private static final String LOCAL_CORRECTIONS_FILE_PATH = "src/main/resources/static/documents/VoiceRecognitionCorrections.txt";
 	private static final String SERVER_CORRECTIONS_FILE_PATH = "/documents/VoiceRecognitionCorrections.txt";
 	
@@ -36,8 +36,8 @@ public class VoiceRecognitionCorrector
 	{
 		converter = new Hashtable<String, String>();
 		
-		// Starting here and going till the commented-out code is the hardcoded version
-		// When reverting delete or comment out this code and uncomment the previously commented code below
+		//Starting here and going till the commented-out code is the hardcoded version
+		//When reverting delete or comment out this code and uncomment the previously commented code below
 		String[] possibleInputs =   {"x",    "flower", "catch up"};
 		String[] correctedOutputs = {"eggs", "flour",  "ketchup"};
 		if(possibleInputs.length != correctedOutputs.length)
@@ -102,7 +102,7 @@ public class VoiceRecognitionCorrector
 			System.out.println("File path 2 exists: " + filePath2);
 			return file2;
 		}
-		// neither file exists so return null
+		//Neither file exists so return null
 		System.out.println("Neither file path exists: " + filePath1 + " , " + filePath2);
 		return null;
 	}
