@@ -718,7 +718,7 @@ public class WebController {
      */
     @RequestMapping(value = "/cs480/getHistory/{listId}", method = RequestMethod.GET)
     public DBObject getHistory(
-    		@PathVariable("listIDd") String listId) {
+    		@PathVariable("listId") String listId) {
     	
     			BasicDBObject query = new BasicDBObject("_id", new ObjectId(listId));
     	    	//We find the list in the db
