@@ -154,7 +154,7 @@ public class WebController {
      * @param userName
      */
     @RequestMapping(value = "/cs480/userExists/{userName}", method = RequestMethod.GET)
-    public Boolean userExists(@PathVariable("userName") String userName) throws UnknownHostException {
+    public Boolean userExists(@PathVariable("userName") String userName){
 
     	DBObject query = new BasicDBObject("userName", userName); 
     	DBCursor cursor = usersColl.find(query);
@@ -361,14 +361,15 @@ public class WebController {
     		@RequestParam("price") double price,
     		@RequestParam("quantity") int quantity,
     		@RequestParam("isChecked") boolean isChecked) {
-    	
+    	long start = System.currentTimeMillis();
     	//Verify is the user is allowed to add to the list
     	if(!verifyListAccess(listId,userId))
     	{
     		System.out.println("user doesnt have access");
     		return false;
     	}
-    	
+    	long end = System.currentTimeMillis();
+    	System.out.println("Finsihed user verification " + (end - start) + "ms");
     	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listId));
     	DBCursor cursor = listsColl.find(query);
     	DBObject listObject = cursor.one();
@@ -377,12 +378,12 @@ public class WebController {
 		BasicDBList items = (BasicDBList) listObject.get("items");
 		
 		//Voice Correct item name
-		String correction = VoiceRecognitionCorrector.getVoiceRecognitionCorrector().correct(name);
-		if(!name.equals(correction))
-		{
-			System.out.println("During addItem correction made to itemName: \"" + name + "\" corrected to \"" + correction + "\"");
-			name = correction;
-		}
+//		String correction = VoiceRecognitionCorrector.getVoiceRecognitionCorrector().correct(name);
+//		if(!name.equals(correction))
+//		{
+//			System.out.println("During addItem correction made to itemName: \"" + name + "\" corrected to \"" + correction + "\"");
+//			name = correction;
+//		}
 
 		//Create new item
 		BasicDBObject item = new BasicDBObject("name", name)
@@ -400,7 +401,8 @@ public class WebController {
 				return false;
 			}
 		}
-
+		end = System.currentTimeMillis();
+    	System.out.println("Finsihed checking list " + (end - start) + "ms");
 		//Add item to list
 		items.add(item);
 		//Removes item in new list
@@ -409,13 +411,14 @@ public class WebController {
         //Copy constructor does not work for some reason
         //Thus orig = listObject will give us effectively
         //2 listObjects
-    	DBObject orig = cursor.one();
+    	//DBObject orig = cursor.one();
     	//Replace old list with new list
-        listsColl.update(orig,listObject);
+        listsColl.update(query,listObject);
         //Updates lastUpdated to current time
         DBObject lastUpdated = new BasicDBObject("lastModified", System.currentTimeMillis());
         listsColl.update(listObject, new BasicDBObject("$set", lastUpdated), false, false);
-        
+        end = System.currentTimeMillis();
+    	System.out.println("Finsihed adding item " + (end - start) + "ms");
         //Print to console
     	System.out.println("Call to addItem() : "  +  listObject.toString());
         
@@ -477,14 +480,17 @@ public class WebController {
     /**
      * gets the user oid from userName
      * @param userName
-     * @return oid
+     * @return oid or "" if userName is not present
      */   
     String getUserOIDFromName(String userName)
     {
     	DBObject query = new BasicDBObject("userName", userName); 
     	DBCursor cursor = usersColl.find(query);
     	DBObject result = cursor.one();
-    	
+    	if(result == null)
+    	{
+    		return "";
+    	}
     	//return the oid
     	return result.get("_id").toString();
     }
@@ -499,10 +505,14 @@ public class WebController {
     Boolean inviteUser(
     		@PathVariable("listId") String listId,
     		@RequestParam("userName") String userName) {
-    	
+    	if(!userExists(userName))
+    	{
+    		return false;
+    	}
+
     	//Get The id using the username
     	String userId = getUserOIDFromName(userName);
-    	
+
     	BasicDBObject query = new BasicDBObject("_id",new ObjectId(listId));
     	DBCursor cursor = listsColl.find(query);
     	DBObject listObject = cursor.one();
@@ -595,11 +605,11 @@ public class WebController {
      */   
     public boolean verifyListAccess(String listId, String userId)
     {
-    	BasicDBList userList = getUserLists(userId);
-		BasicDBObject[] userArray = userList.toArray(new BasicDBObject[0]);
-		for(BasicDBObject i : userArray)
-		{
-			if(i.get("oid").equals((listId)))
+    	BasicDBList userList = getUserListId(userId);
+		String[] userArray = userList.toArray(new String[0]);
+		for(String oid : userArray)
+		{  
+			if(oid.equals(listId))
 			{
 				//User has access to list
 				return true;
@@ -663,13 +673,11 @@ public class WebController {
     @RequestMapping(value = "/cs480/getUserLists/{userId}", method = RequestMethod.GET)
     BasicDBList getUserLists(
     		@PathVariable("userId") String userId) {
-    	
     	BasicDBObject userQuery = new BasicDBObject("_id", new ObjectId(userId));
     	
     	DBCursor userCursor = usersColl.find(userQuery);
     	//Uses the first User found from search
     	DBObject userObject = userCursor.one();
-    	
     	BasicDBList usersListsOIDs = (BasicDBList)userObject.get("userAccessibleLists");
     	BasicDBList lists = new BasicDBList();
     	
@@ -687,10 +695,20 @@ public class WebController {
 
     	}
     	userCursor.close();  
-    	
     	System.out.println("Call to getUserLists() of user: " + userObject.toString());
     	
     	return lists;
+    }
+    
+    BasicDBList getUserListId(String userId)
+    {
+    	BasicDBObject userQuery = new BasicDBObject("_id", new ObjectId(userId));
+    	
+    	DBCursor userCursor = usersColl.find(userQuery);
+    	//Uses the first User found from search
+    	DBObject userObject = userCursor.one();
+    	BasicDBList usersListsOIDs = (BasicDBList)userObject.get("userAccessibleLists");
+    	return usersListsOIDs;
     }
   
     /**
