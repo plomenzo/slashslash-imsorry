@@ -772,6 +772,13 @@ public class WebController {
     	userCursor.close();
     }  
     
+    /**
+     * Changes checked state of item in list
+     * @param listId
+     * @param itemName
+     * @param isChecked
+     * @return
+     */
     @RequestMapping(value = "/cs480/changeCheckState/{listId}", method = RequestMethod.POST)
     boolean changeCheckedState(
         	@PathVariable("listId") String listId,

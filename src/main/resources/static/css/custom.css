@@ -54,6 +54,7 @@
 #splitCost{
     font-size : 2em;
 }
+
 #list_name {
     text-align: center;
     color: #df6589;
@@ -63,6 +64,9 @@
 
 }
 
+.col-md-12 {
+    background-color : #303030;
+}
 
 body {
     background-color: #333 ;
