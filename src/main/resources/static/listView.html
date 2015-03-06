@@ -90,7 +90,13 @@
 </div><!--Overall Wrapper for menu-->
 
 <div id="page">
-                <i class = "fa fa-times icon_times icon_red icon_removeList fa-4x" ng-click = "removeListAndUpdate()"></i>
+
+    <i class = "fa fa-times icon_times icon_red icon_removeList fa-4x" ng-click = "removeListAndUpdate()"></i>
+
+    <i class="fa fa-minus-circle icon_red icon_removeChecked fa-4x" ng-click = "removeAllCheckedItemsAndUpdate()"></i>
+
+
+
     <div>
 
 
@@ -247,7 +253,6 @@
                                                 </i>
 
 
-
                                             </li>
 
 
@@ -283,8 +288,7 @@
             </div>
             <div class="col-md-3 col-sm-4 col-xs-1 col-lg-4"></div>
         </div>
-        
-        <button ng-click = "removeAllCheckedItemsAndUpdate()">Remove Checked</button>
+
         </div>
     </div>
 </body>
