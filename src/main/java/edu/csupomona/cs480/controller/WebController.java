@@ -261,7 +261,20 @@ public class WebController {
     		@PathVariable("listName") String listName ,
     		@RequestParam("creatorUserID") String creatorUserID) {
 		
-    	BasicDBList userAccess = new BasicDBList();
+		DBObject list = createListInDatabase( creatorUserID, listName );
+		
+    	//Get the list oid to add to the user 
+		String listId = extractListID(list);
+    	
+		addNewListToUser(listId, creatorUserID);
+    	
+    	System.out.println("Call to createList() :" + list.toString());
+    	
+    	return true;
+    } 
+	
+	private DBObject createListInDatabase(String creatorUserID, String listName ){
+		BasicDBList userAccess = new BasicDBList();
     	userAccess.add(creatorUserID);
     	DBObject list = new BasicDBObject("listName", listName)
     					.append("items", new BasicDBList())
@@ -271,34 +284,49 @@ public class WebController {
     					.append("lastModified", System.currentTimeMillis());
     	
     	listsColl.insert(list);
-
-    	//Get the list oid to add to the user 
-    	String listId = (list.get("_id")).toString();
-
-    	//Get user object
+    	
+    	return list;
+		
+	}
+	
+	private String extractListID(DBObject list){
+	 	String listId = (list.get("_id")).toString();
+	 	return listId;	
+	}
+	
+	private void addNewListToUser(String listId, String creatorUserID){
+		//Get user object
     	BasicDBObject queryUser = new BasicDBObject("_id", new ObjectId(creatorUserID));
     	DBCursor cursorUser = usersColl.find(queryUser);
     	//Use the first user found from search
-    	DBObject userObject = cursorUser.one();
+    	DBObject oldUserObject = cursorUser.one();
 
-    	//Get the lists that the user has access to
+    	DBObject newUserObject = appendNewListToUserObject(oldUserObject, listId, cursorUser);
+    	
+    	updateUserObjectInDatabase(cursorUser,newUserObject);    			
+	}
+	
+	private void updateUserObjectInDatabase(DBCursor cursorToUser,DBObject newUserObject){
+		//Get original user
+    	DBObject origUser = cursorToUser.one();
+    	//Update user object
+    	usersColl.update(origUser, newUserObject);
+    	//Close cursor to user
+    	cursorToUser.close();
+	}
+	
+	private DBObject appendNewListToUserObject(DBObject userObject, String listId, DBCursor cursorUser){
+		//Get the lists that the user has access to
     	BasicDBList usersLists = (BasicDBList) userObject.get("userAccessibleLists");
 
     	//Add new list id
     	usersLists.add(listId);
     	//Put back the user accessible lists list
     	userObject.put("userAccessibleLists", usersLists);
-    	//Get original user
-    	DBObject origUser = cursorUser.one();
-    	//Update user object
-    	usersColl.update(origUser, userObject);
-    	//Close cursor to user
-    	cursorUser.close();
     	
-    	System.out.println("Call to createList() :" + list.toString());
-    	
-    	return true;
-    } 
+    	return userObject;
+	}
+	
     
     /**
      * getList()
