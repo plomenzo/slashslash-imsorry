@@ -8,6 +8,7 @@ import edu.csupomona.cs480.data.provider.UserManager;
 
 
 
+
 //Java imports
 import java.util.Arrays;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
+
 
 
 
@@ -45,11 +47,13 @@ import org.bson.types.ObjectId;
 
 
 
+
 //Google? import
 import static com.google.common.base.Preconditions.*;
 
 //Object Mapper? 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 
 
@@ -62,6 +66,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
 
 
 
@@ -100,6 +105,19 @@ import com.mongodb.BasicDBList;
  */
 @RestController
 public class WebController {
+	
+	private static WebController instance = null;
+	
+	   public static WebController getInstance() throws Exception 
+	   {
+	        if (instance == null) 
+	        {
+	            instance = new WebController();
+	        }
+	 
+	        return instance;
+	    }
+    
 
 	/**
 	 * When the class instance is annotated with
@@ -120,7 +138,7 @@ public class WebController {
 	DBCollection listsColl;
 
 	//Constructor for WebController to handle 1 time MongoDB initializations
-    public WebController() throws UnknownHostException {
+    private WebController() throws UnknownHostException {
     	//Initialize connection to MongoDB
     	//Do this once on the WebController constructor to prevent wasted connections
     	Boolean useLocal = false;

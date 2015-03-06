@@ -18,9 +18,9 @@ public class WebControllerSet1Test
 	private WebController web;
 	
 	@Before
-	public void setup() throws UnknownHostException
+	public void setup() throws Exception
 	{
-		web = new WebController();
+		web = WebController.getInstance();
 	}
 	
 	@Test
