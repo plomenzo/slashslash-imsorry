@@ -17,8 +17,11 @@ function attemptSignup() {
             },
             success : function(result) {
                 //console.log(result)
-                if(result == true)
-                    alert("You're awesome. Go sign in.")
+                if(result == true)  {
+                    alert("You're awesome. Please Login.")
+                    window.location.href = "login.html";
+
+                }
                 else {
                        alert("Username taken, try another.")
                 }
