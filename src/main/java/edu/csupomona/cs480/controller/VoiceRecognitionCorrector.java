@@ -38,8 +38,8 @@ public class VoiceRecognitionCorrector
 		
 		//Starting here and going till the commented-out code is the hardcoded version
 		//When reverting delete or comment out this code and uncomment the previously commented code below
-		String[] possibleInputs =   {"x",    "flower", "catch up"};
-		String[] correctedOutputs = {"eggs", "flour",  "ketchup"};
+		String[] possibleInputs =   {"x",    "flower", "catch up", "i scream"};
+		String[] correctedOutputs = {"eggs", "flour",  "ketchup", "ice cream"};
 		if(possibleInputs.length != correctedOutputs.length)
 		{
 			System.out.println("HARD CODED VALUES IN VOICE RECOGNITION CORRECTOR DO NOT ALL HAVE MATCHES");
