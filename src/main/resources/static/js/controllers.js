@@ -144,7 +144,7 @@ var app = angular.module('listView', [])
 		//Calls in
 		inviteUser($scope.listID, function(result){
 		    $scope.$apply(function(result) {
-		    
+		        
 		        //?
 		    })
 		    

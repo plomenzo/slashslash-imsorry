@@ -303,6 +303,7 @@ function removeItem(listID, item, callback) {
 function inviteUser(listID, callback)
 {
     var userName = $('#InviteUser').val();
+    $('#InviteUser').val("");
     $.ajax(
     {
         type : "POST",
