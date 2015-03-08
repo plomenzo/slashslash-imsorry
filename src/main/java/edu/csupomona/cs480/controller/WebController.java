@@ -424,12 +424,12 @@ public class WebController {
 		BasicDBList items = (BasicDBList) listObject.get("items");
 		
 		//Voice Correct item name
-//		String correction = VoiceRecognitionCorrector.getVoiceRecognitionCorrector().correct(name);
-//		if(!name.equals(correction))
-//		{
-//			System.out.println("During addItem correction made to itemName: \"" + name + "\" corrected to \"" + correction + "\"");
-//			name = correction;
-//		}
+		String correction = VoiceRecognitionCorrector.getVoiceRecognitionCorrector().correct(name);
+		if(!name.equals(correction))
+		{
+			System.out.println("During addItem correction made to itemName: \"" + name + "\" corrected to \"" + correction + "\"");
+			name = correction;
+		}
 
 		//Create new item
 		BasicDBObject item = new BasicDBObject("name", name)
