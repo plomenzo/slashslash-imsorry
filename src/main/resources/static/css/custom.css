@@ -40,6 +40,7 @@
 
 .icon_removeChecked{
     position : absolute;
+    cursor: pointer;
     top: 100px;
     right: 10%;
 }
