@@ -7,10 +7,11 @@
 
 var REPLACE_WITH_SESSION_SAVED_OID =  "54d6631c0fdcf8e36aa174d8";
 var REFRESH_INTERVAL = 5000;
+var currentListOID;
 
 //Warning: Changing AUTOUPDATE flag will cause the list to autoupdate,
 // which will use lots of GET AJAX calls
-var AUTOUPDATE = false;
+var AUTOUPDATE = true;
 
 var app = angular.module('listView', [])
 
@@ -19,10 +20,10 @@ var app = angular.module('listView', [])
     loadUserData();
 
     //TODO pull list of lists, possibly oids, listNames, need to write AJAX call/api method
-    $scope.lists = ['54d6631c0fdcf8e36aa174d8','54d6625a0fdcf0e2679092ad', '54cebe0d17ef75cddfb06a35']
+    //$scope.lists = ['54d6631c0fdcf8e36aa174d8','54d6625a0fdcf0e2679092ad', '54cebe0d17ef75cddfb06a35']
     $scope.editingItem = "";
     
-    pullListAndUpdate(REPLACE_WITH_SESSION_SAVED_OID);
+    //pullListAndUpdate(REPLACE_WITH_SESSION_SAVED_OID);
 
     initializeVoiceCommand();
 
@@ -32,7 +33,8 @@ var app = angular.module('listView', [])
 
     if(AUTOUPDATE){
         setInterval(function(){
-            pullListAndUpdate();
+            console.log("current List OID is: "+ currentListOID)
+            pullListAndUpdate(currentListOID);
 
 
         },REFRESH_INTERVAL);
@@ -56,6 +58,7 @@ var app = angular.module('listView', [])
     
     function setCurrentList(listOID){
         console.log("setCurrentList()"+"Switching lists to: " + listOID)
+        currentListOID = listOID;
         pullListAndUpdate(listOID)
 
     }
@@ -173,8 +176,11 @@ var app = angular.module('listView', [])
             //TODO: call getUserLists(_account.UserOID), then populate angular $scope.lists with it
             console.log("hello workd from loadUserData")
             getUserLists(_account.UserOID, function(result){
-                console.log(result)
-                pullListAndUpdate(result[0].oid);
+                var FirstListOIDFromBrowserStorage = result[0].oid;
+
+                currentListOID = FirstListOIDFromBrowserStorage;
+
+                pullListAndUpdate(currentListOID);
             });
             //Makes the User OID available to access by other funcitons
             $scope.UserOID = _account.UserOID;
