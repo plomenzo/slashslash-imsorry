@@ -238,7 +238,7 @@
 
                                             <li><input id="c2" name="cb2" type="checkbox" ng-checked="item.isChecked" id="{{$index}}"
                                                        ng-model="checkedState"
-                                                       ng-change="updateCheckedState( item,checkedState )" >
+                                                       ng-click="updateCheckedState( item,!item.isChecked )" >
                                                     <label ng-click="showEditModal(listID, item.name, UserOID, item.isChecked, item.price, item.quantity )"
                                                         data-toggle="modal" data-target="#myModal{{item.name}}">{{item.name}}
 
