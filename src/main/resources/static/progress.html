@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PROJECT NAME</title>
+
+    <!--Bootstrap-->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <!--Custom Assets-->
+    <link rel="stylesheet" href="css/custom.css">
+    <script src="js/custom.js"></script>
+
+</head>
+<body>
+<div class="jumbotron center-block" id="jumboTop">
+    <div id="insideJumbo" class="center-block">
+    <h1>Come to the <i>dark</i> side</h1>
+
+
+        <h3>Development Progress</h3>
+        <div  class="progress progress-striped active" style="width: 50%">
+            <div class="progress-bar" style="width: 70%"></div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script>
+    loadData()
+    function loadData(){
+        var _account = localStorage.getItem('_Account');
+        //parse to Object Literal the JSON object
+        if(_account) _account = JSON.parse(_account);
+        //Checks whether the stored data exists
+        if(_account) {
+            console.log(_account)
+            //(_account.User, _account.Pass);
+            //If you want to delete the object
+            //localStorage.removeItem('_Account');
+        }
+        else{
+            alert("You have not logged in.")
+        }
+    }
+
+</script>
+</body>
+</html>
