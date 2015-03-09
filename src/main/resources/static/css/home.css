@@ -41,3 +41,32 @@ a:hover, a:visited, a:link, a:active
     text-decoration: none;
 }
 
+#logo{
+    z-index: 5000;
+    font-size: 34px;
+}
+#spinner {
+    z-index: 10;
+    color:black;
+}
+
+#cart {
+    z-index: 9;
+    height:900px;
+}
+
+#container {
+    height: 500px;
+}
+
+
+#gitIcon {
+    position: absolute;
+    right: 20%;
+    top: 10%;
+    font-size:70px;
+}
+
+
+a { color: inherit; }
+
