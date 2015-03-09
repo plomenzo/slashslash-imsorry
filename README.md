@@ -1,9 +1,11 @@
-Overview
---------
+//Imsorry Presents
+----------------------
+http://groceriesfor.us
 
-The skeleton of the demo web project for CS480.
+A grocery list manager created as a team project for CS480, Software Engineering. This project was to designed to let us practice the different aspects of software engineering, such as version control, design, tests, build, deployment, and maintenance.
 
-This project is designed to let you practice the different aspects of software engineering, such as version control, design, tests, build, deployment, and maintenance.
+It is written in java using the spring framework and for the database we used MongoDB. 
+
 
 Environment Setup
 -----------------
@@ -25,10 +27,9 @@ Building the Project for the First Time
 
 Running the Project Locally
 ----------------------------------------
-1. Locate the App.java in src/main/java source folder and right-click on it->Run As->Java Application
-2. Verify the running process in your web browser by the following URLs:
+1. Download and have an instance of mongodb running locally (http://www.mongodb.org/downloads)
+2. Locate the App.java in src/main/java source folder and right-click on it->Run As->Java Application
+3. Verify the running process in your web browser by the following URLs:
 
 - http://localhost:8080/
-- http://localhost:8080/cs480/ping
-- http://localhost:8080/cs480/home
 
